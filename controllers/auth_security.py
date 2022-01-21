@@ -96,3 +96,25 @@ def auth_logout():
 def forget_password():
     return render_template('auth/forget_password.html')
 
+
+@auth_security.route('/loginForgot', methods=['POST'])
+def auth_loginForgot_post():
+    mycursor = get_db().cursor()
+    username = request.form.get('username')
+    mail = request.form.get('mail')
+    tuple_select = (username,mail)
+    sql = '''SELECT * FROM user WHERE username LIKE %s AND email LIKE %s'''
+    mycursor.execute(sql, tuple_select)
+    user = mycursor.fetchone()
+    if user:
+        session['username'] = user['username']
+        session['role'] = user['role']
+        session['user_id'] = user['id']
+        print(user['username'], user['role'])
+        if user['role'] == 'ROLE_admin':
+            return redirect('/admin/commande/index')
+        else:
+            return redirect('/client/article/show')
+    else:
+        flash(u'Vérifier votre login et essayer encore.')
+        return redirect('/login')
