@@ -1,39 +1,138 @@
-DROP TABLE IF EXISTS commande;
-DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS etat;
+-- drop
+drop table if exists Ligne;
+drop table if exists Commande;
+drop table if exists Client;
+drop table if exists Article;
 
-CREATE TABLE etat(
-    id int auto_increment,
-    libelle varchar(50),
-    PRIMARY KEY(id)
-);
+-- create
+create table if not exists Article(
+    idArticle int auto_increment,
+    designation varchar(50),
+    prix numeric(5,2),
 
-CREATE TABLE user(
-    id int auto_increment,
-    username varchar(255),
-    password varchar(255),
-    role varchar(255),
-    est_actif tinyint(1),
-    pseudo varchar(255),
-    email varchar(255),
-    PRIMARY KEY(id)
-);
+    primary key (idArticle)
+)character set 'utf8';
 
-CREATE TABLE commande(
-    id int auto_increment,
-    date_achat DATE,
-    user_id int,
-    etat_id int,
+create table if not exists Client(
+    idClient int auto_increment,
+    nom varchar(50),
+    ville varchar(50),
 
-    CONSTRAINT fk_commande_user
-        FOREIGN KEY(user_id) REFERENCES user(id),
-    CONSTRAINT fk_commande_etat
-        FOREIGN KEY(etat_id) REFERENCES etat(id),
-    PRIMARY KEY(id)
-);
+    primary key (idClient)
+)character set 'utf8';
+
+create table if not exists Commande(
+    idCommande int auto_increment,
+    dateCommande date,
+    idClient int,
+
+    primary key (idCommande),
+    constraint fk_commande_client
+        foreign key (idClient) references Client(idClient)
+)character set 'utf8';
+
+create table if not exists Ligne(
+    idCommande int,
+    idArticle int,
+    quantite int,
+
+    primary key (idCommande,idArticle),
+    constraint fk_ligne_commande
+        foreign key (idCommande) references Commande(idCommande),
+    constraint fk_ligne_article
+        foreign key (idArticle) references Article(idArticle)
+)character set 'utf8';
+
+-- insert / load
+LOAD DATA LOCAL INFILE 'data/Article.csv' INTO TABLE Article CHARACTER SET utf8
+FIELDS TERMINATED BY ',';
+LOAD DATA LOCAL INFILE 'data/Client.csv' INTO TABLE Client CHARACTER SET utf8
+FIELDS TERMINATED BY ',';
+LOAD DATA LOCAL INFILE 'data/Commande.csv' INTO TABLE Commande CHARACTER SET utf8
+FIELDS TERMINATED BY ',';
+LOAD DATA LOCAL INFILE 'data/Ligne.csv' INTO TABLE Ligne CHARACTER SET utf8
+FIELDS TERMINATED BY ',';
+
+alter table Commande drop foreign key fk_commande_client;
+alter table Ligne drop foreign key fk_ligne_article;
+alter table Ligne drop foreign key fk_ligne_commande;
+
+alter table Commande
+    add constraint fk_commande_client
+        foreign key (idClient) references Client(idClient) on delete cascade;
+alter table Ligne
+    add constraint fk_ligne_commande
+        foreign key (idCommande) references Commande(idCommande) on delete cascade;
+alter table Ligne
+    add constraint fk_ligne_article
+        foreign key (idArticle) references Article(idArticle) on delete cascade;
+
+show create table Commande;
+show create table Ligne;
+
+delete from Client where nom like 'Mutz';
+select * from Client;
+select * from Commande;
+
+-- r1
+select nom
+from Client
+where ville='Belfort'
+  and (nom like 'm%' or nom like 'e%' or nom like 'd%')
+order by nom;
+
+-- r2
+select designation,prix
+from Article
+where prix>=6 and prix<=10 and designation like '%lég%'
+order by designation;
+
+-- r3
+select nom,dateCommande
+from Client
+inner join Commande C on Client.idClient = C.idClient
+where nom like '%Mutz%';
+
+-- r4
+select nom,designation,prix,quantite,Commande.idCommande
+from Article
+inner join Ligne on Article.idArticle = Ligne.idArticle
+inner join Commande on Ligne.idCommande = Commande.idCommande
+inner join Client on Commande.idClient = Client.idClient
+where nom like '%Mutz%';
+
+-- r5
+select nom,designation,Commande.idCommande,prix*quantite as ca
+from Article
+inner join Ligne on Article.idArticle = Ligne.idArticle
+inner join Commande on Ligne.idCommande = Commande.idCommande
+inner join Client on Commande.idClient = Client.idClient
+where nom like '%Mutz%'
+order by ca desc;
+
+-- r6
+select nom,Commande.idCommande,SUM(prix*quantite) as prix_total
+from Article
+inner join Ligne on Article.idArticle = Ligne.idArticle
+inner join Commande on Ligne.idCommande = Commande.idCommande
+inner join Client on Commande.idClient = Client.idClient
+where nom='Mutz'
+group by Commande.idCommande, nom;
 
 
-INSERT INTO user (email, username, password, role,  est_actif) VALUES
-('admin@admin.fr', 'admin', 'sha256$pBGlZy6UukyHBFDH$2f089c1d26f2741b68c9218a68bfe2e25dbb069c27868a027dad03bcb3d7f69a', 'ROLE_admin', 1),
-('client@client.fr', 'client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1),
-('client2@client2.fr', 'client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client', 1);
+-- r7
+select nom,Commande.idCommande,SUM(prix*quantite) as prix_total,
+       SUM(prix*quantite)/5 as TVA, SUM(prix*quantite)*1.2 as prix_total_TTC
+from Article
+inner join Ligne on Article.idArticle = Ligne.idArticle
+inner join Commande on Ligne.idCommande = Commande.idCommande
+inner join Client on Commande.idClient = Client.idClient
+group by Commande.idCommande, nom
+order by SUM(prix*quantite);
+
+-- r8
+select designation,quantite as QteCommande,year(dateCommande),Commande.idCommande
+from Article
+left join  Ligne on Ligne.idArticle = Article.idArticle
+left join Commande on Ligne.idCommande = Commande.idCommande
+order by designation;
