@@ -12,9 +12,12 @@ client_article = Blueprint('client_article', __name__,
 @client_article.route('/client/article/show')      # remplace /client
 def client_article_show():                                 # remplace client_index
     mycursor = get_db().cursor()
-    articles = []
-    types_articles = []
+    mycursor.execute("SELECT * FROM casque")
+    articles = mycursor.fetchall()
+    mycursor.execute("SELECT * FROM type_casque")
+    types_articles = mycursor.fetchall()
     articles_panier = []
+    print(types_articles)
     prix_total = None
     return render_template('client/boutique/panier_article.html', articles=articles, articlesPanier=articles_panier, prix_total=prix_total, itemsFiltre=types_articles)
 

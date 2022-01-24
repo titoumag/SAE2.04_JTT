@@ -6,14 +6,14 @@
    {% if itemsFiltre is defined %}
     <div class="form-group">
         <h4>Types articles</h4>
-        {% for itemFiltre in itemsFiltre %}
-        <input type="checkbox" name="filter_types" value="{{ itemFiltre.id }}"
-               {% set idItem = itemFiltre.id | string %}
+        {% for item in itemsFiltre %}
+        <input type="checkbox" name="filter_types" value="{{ item.id }}"
+               {% set idItem = item.id | string %}
                {% if session['filter_types'] %}
                    {{ ' checked ' if (idItem in session['filter_types']) else '' }}
                {% endif %}
 
-            >  {{ itemFiltre.libelle }}
+            >  {{ item.libelle }}
             <br/>
         {% endfor %}
     </div>

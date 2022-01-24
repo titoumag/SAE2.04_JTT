@@ -2,12 +2,12 @@ DROP TABLE IF EXISTS ligne_commande;
 DROP TABLE IF EXISTS panier;
 DROP TABLE IF EXISTS commande;
 DROP TABLE IF EXISTS casque;
+DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS commande;
 DROP TABLE IF EXISTS taille;
 DROP TABLE IF EXISTS fabricant;
 DROP TABLE IF EXISTS couleur;
 DROP TABLE IF EXISTS type_casque;
-DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS etat;
 
 CREATE TABLE IF NOT EXISTS etat(
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS commande(
 
 CREATE TABLE IF NOT EXISTS type_casque(
    id int auto_increment,
-   libellle VARCHAR(50),
+   libelle VARCHAR(50),
    PRIMARY KEY(id)
 )character set 'utf8';
 
@@ -80,12 +80,14 @@ CREATE TABLE IF NOT EXISTS commande(
 
 CREATE TABLE IF NOT EXISTS casque(
    id int auto_increment,
-   N_serie INT,
+   libelle VARCHAR(50),
+   image VARCHAR(50),
+   stock INT,
+   prix DECIMAL(5,2),
    fabricant_id INT NOT NULL,
    taille_id INT NOT NULL,
    couleur_id INT NOT NULL,
    type_casque_id INT NOT NULL,
-
    CONSTRAINT fk_casque_fabriquant
        FOREIGN KEY(fabricant_id) REFERENCES fabricant(id),
    CONSTRAINT fk_casque_taille
@@ -131,3 +133,26 @@ INSERT INTO user (email, username, password, role,  est_actif) VALUES
 ('admin@admin.fr', 'admin', 'sha256$pBGlZy6UukyHBFDH$2f089c1d26f2741b68c9218a68bfe2e25dbb069c27868a027dad03bcb3d7f69a', 'ROLE_admin', 1),
 ('client@client.fr', 'client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1),
 ('client2@client2.fr', 'client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client', 1);
+
+INSERT INTO fabricant(nom,adresse) VALUES
+('Deutschland !','Berlin'),
+('Moto MC','Los Angeles');
+
+INSERT INTO taille(libelle) VALUES
+('Petit'),
+('Moyen'),
+('Grand');
+
+INSERT INTO couleur(libelle) VALUES
+('Gris'),
+('Noir');
+
+INSERT INTO type_casque(libelle) VALUES
+('Militaire'),
+('Musique'),
+('Protection'),
+('Fun');
+
+INSERT INTO casque(libelle,fabricant_id,taille_id,couleur_id,type_casque_id,image,stock,prix) VALUES
+('Casque à pointe',1,2,1,1,'casquePointe.png',5,100.99),
+('Casque Gamer METAL',2,2,2,2,'casqueGamer.png',50,5.99);
