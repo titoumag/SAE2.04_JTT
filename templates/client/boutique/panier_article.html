@@ -3,8 +3,8 @@
 {% extends "client/layout_client.html" %}
 {% block body %}
     <div class="container">
-        <div class="row align-self-right">
-            <div class="col-7">
+        <div class="row align-self-right m-3">
+            <div class="col-8 border">
             {% if articlesPanier | length >= 1 %}
                 <h3>Liste des articles dans mon panier</h3>
                 <table class="table table-hover table-responsive">
@@ -22,32 +22,36 @@
                         <td></td>
                         <td></td>
                     {% else %}
-                    {% for itemPanier in articlesPanier %}
-                        <tr>
-                            <td>{{itemPanier.libelle}}</td>
-                            <td>{{itemPanier.quantite}}</td>
-                            <td>{{itemPanier.prix}}</td>
-                            <td>{{ "{:,.2f} €".format((itemPanier.prix_unit   * itemPanier.quantite|int)) }}</td>
-                            <td>
+                        {% set tot=namespace(tot=0) %}
+                        {% for itemPanier in articlesPanier %}
+                            <tr>
+                                <td>{{itemPanier.libelle}}</td>
+                                <td>{{itemPanier.quantite}}</td>
+                                <td>{{itemPanier.prix}}</td>
+                                <td>{{ "{:,.2f} €".format((itemPanier.prix_unit   * itemPanier.quantite|int)) }}</td>
+                                    {% set tot.tot = tot.tot + (itemPanier.prix_unit*itemPanier.quantite|int) %}
+{#                                        {% tot.update({'v': tot.v+(itemPanier.prix_unit*itemPanier.quantite|int) }) %}#}
+                                <td>
 
-                                <form action="/client/panier/update" style="display: inline-block;"  method="post">
-                                        <input type="hidden" name="quantite" value="1">
+                                    <form action="/client/panier/update" style="display: inline-block;"  method="post">
+                                            <input type="hidden" name="quantite" value="1">
+                                            <input type="hidden" name="idArticle" value="{{ itemPanier.casque_id }}">
+                                        <button class="btn btn-primary" {% if itemPanier.stock <= itemPanier.quantite|int %} disabled {% endif %}> + </button>
+                                    </form>
+                                    <form action="/client/panier/update"  style="display: inline-block;"  method="post">
+                                        <input type="hidden" name="quantite" value="-1">
                                         <input type="hidden" name="idArticle" value="{{ itemPanier.casque_id }}">
-                                    <button class="btn btn-primary" {% if itemPanier.stock <= itemPanier.quantite|int %} disabled {% endif %}> + </button>
-                                </form>
-                                <form action="/client/panier/update"  style="display: inline-block;"  method="post">
-                                    <input type="hidden" name="quantite" value="-1">
-                                    <input type="hidden" name="idArticle" value="{{ itemPanier.casque_id }}">
-                                    <button class="btn btn-primary" {% if 1 >= itemPanier.quantite|int %} disabled {% endif %}> - </button>
-                                </form>
+                                        <button class="btn btn-primary" {% if 1 >= itemPanier.quantite|int %} disabled {% endif %}> - </button>
+                                    </form>
 
-                                <form action="/client/panier/delete/line" style="display: inline-block;"  method="post">
-                                    <input type="hidden" name="idArticle" value="{{ itemPanier.casque_id }}">
-                                    <button class="btn btn-primary" >Supprimer</button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
+                                    <form action="/client/panier/delete/line" style="display: inline-block;"  method="post">
+                                        <input type="hidden" name="idArticle" value="{{ itemPanier.casque_id }}">
+                                        <button class="btn btn-primary" >Supprimer</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        <p> Le panier total est de : {{ "{:.2f} € ".format(tot.tot) }}</p>
                     {% endif %}
                 </table>
                     <form action="/client/panier/vider" style="display: inline-block;"  method="post" >
@@ -63,7 +67,7 @@
             </div>
 
 
-            <div class="col">
+            <div class="col border">
               <h3>Les filtres</h3>
               Articles dont le nom est composé par :<br>
                  {% include('client/boutique/_filtre.html') %}
@@ -77,7 +81,7 @@
 
         <div class="row">
                 {% for article in articles  %}
-                        <div class="card col-4 mt-4">
+                        <div class="card col-3 mt-4">
                             <div class="card-body border-dark rounded">
                                 <a href="/client/article/details/{{ article.id }}">
                                 <h2 class="card-title">
