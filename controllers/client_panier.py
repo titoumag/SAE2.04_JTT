@@ -12,6 +12,19 @@ client_panier = Blueprint('client_panier', __name__,
 @client_panier.route('/client/panier/add', methods=['POST'])
 def client_panier_add():
     mycursor = get_db().cursor()
+    idArticle = request.form.get('idArticle')
+    quantite = request.form.get('quantite')
+    user_id=session['user_id']
+
+    sql="select prix from casque where id=%s"
+    mycursor.execute(sql, (idArticle))
+    prix = mycursor.fetchone()['prix']
+
+    sql="insert into panier value (null,CURDATE(),%s,%s,%s,%s)"
+    tuple=(prix,quantite,idArticle,user_id)
+    mycursor.execute(sql, tuple)
+    get_db().commit()
+
 
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
