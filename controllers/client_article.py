@@ -26,16 +26,18 @@ def client_article_show():                                 # remplace client_ind
         if debut: sql+=" WHERE type_casque_id in "+tpl
         else: sql+=" AND type_casque_id in "+tpl
         debut=False
-    if "filter_prix_min" in session.keys() !="":
+    if "filter_prix_min" in session.keys() and session["filter_prix_min"] !="":
         if debut: sql+=" WHERE prix > %s"
         else: sql+=" AND prix > %s"
         debut=False
         params.append(session['filter_prix_min'])
-    if "filter_prix_max" in session.keys() !="":
+    if "filter_prix_max" in session.keys() and session["filter_prix_max"] !="":
         if debut: sql+=" WHERE prix < %s"
         else: sql+=" AND prix < %s"
         params.append(session['filter_prix_max'])
 
+    print(sql)
+    print(params)
     mycursor.execute(sql,params)
     articles = mycursor.fetchall()
 
