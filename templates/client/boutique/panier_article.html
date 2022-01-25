@@ -1,3 +1,5 @@
+{# PAGE pour le lien : client/article/show #}
+{#  page générale coté client #}
 {% extends "client/layout_client.html" %}
 {% block body %}
     <div class="container">
@@ -22,10 +24,10 @@
                     {% else %}
                     {% for itemPanier in articlesPanier %}
                         <tr>
-                            <td>{{itemPanier.nom}}</td>
+                            <td>{{itemPanier.libelle}}</td>
                             <td>{{itemPanier.quantite}}</td>
                             <td>{{itemPanier.prix}}</td>
-                            <td>{{ "{:,.2f} €".format((itemPanier.prix * itemPanier.quantite)) }}</td>
+                            <td>{{ "{:,.2f} €".format((itemPanier.prix_unit  )) }}</td>{#  * itemPanier.quantite#}
                             <td>
                                {% if itemPanier.stock > 0 %}
                                 <form action="/client/panier/add" style="display: inline-block;"  method="post">
