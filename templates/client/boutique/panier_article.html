@@ -30,19 +30,20 @@
                             <td>{{ "{:,.2f} €".format((itemPanier.prix_unit  )) }}</td>{#  * itemPanier.quantite#}
                             <td>
                                {% if itemPanier.stock > 0 %}
-                                <form action="/client/panier/add" style="display: inline-block;"  method="post">
+                                <form action="/client/panier/update" style="display: inline-block;"  method="post">
                                         <input type="hidden" name="quantite" value="1">
-                                        <input type="hidden" name="idArticle" value="{{ itemPanier.article_id }}">
+                                        <input type="hidden" name="idArticle" value="{{ itemPanier.casque_id }}">
                                     <button class="btn btn-primary" > + </button>
                                 </form>
                                {% endif %}
-                                <form action="/client/panier/delete"  style="display: inline-block;"  method="post">
-                                    <input type="hidden" name="idArticle" value="{{ itemPanier.article_id }}">
+                                <form action="/client/panier/update"  style="display: inline-block;"  method="post">
+                                    <input type="hidden" name="quantite" value="-1">
+                                    <input type="hidden" name="idArticle" value="{{ itemPanier.casque_id }}">
                                     <button class="btn btn-primary" > - </button>
                                 </form>
 
                                 <form action="/client/panier/delete/line" style="display: inline-block;"  method="post">
-                                    <input type="hidden" name="idArticle" value="{{ itemPanier.article_id }}">
+                                    <input type="hidden" name="idArticle" value="{{ itemPanier.casque_id }}">
                                     <button class="btn btn-primary" >Supprimer</button>
                                 </form>
                             </td>

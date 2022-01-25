@@ -8,6 +8,28 @@ from connexion_db import get_db
 client_panier = Blueprint('client_panier', __name__,
                         template_folder='templates')
 
+# NOUVELLE FONCTION : ajoute et enleve a la quantite du panier
+@client_panier.route('/client/panier/update',methods=['POST'])
+def client_panier_update():
+    mycursor = get_db().cursor()
+    idArticle = request.form.get('idArticle')
+    direction = int(request.form.get('quantite'))
+    user_id = session['user_id']
+
+    sql = "select * from panier where casque_id=%s and user_id=%s"
+    mycursor.execute(sql, (idArticle,user_id))
+    quantite = int(mycursor.fetchone()['quantite']) + direction
+    sql = "select * from casque where id=%s"
+    mycursor.execute(sql, (idArticle))
+    stock = int(mycursor.fetchone()['stock'])
+
+    if (direction==-1 and quantite>0) or (direction==1 and quantite<stock+1):
+        sql="update panier set quantite=%s where casque_id=%s and user_id=%s "
+        mycursor.execute(sql, (quantite,idArticle, user_id))
+        get_db().commit()
+
+
+    return redirect('/client/article/show')
 
 @client_panier.route('/client/panier/add', methods=['POST'])
 def client_panier_add():
@@ -25,21 +47,26 @@ def client_panier_add():
     mycursor.execute(sql, tuple)
     get_db().commit()
 
-
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
 
+# ANCIENNE FONCTION PLUS UTILISEE : replacée par update()
 @client_panier.route('/client/panier/delete', methods=['POST'])
 def client_panier_delete():
     mycursor = get_db().cursor()
 
     return redirect('/client/article/show')
-    #return redirect(url_for('client_index'))
 
 
 @client_panier.route('/client/panier/vider', methods=['POST'])
 def client_panier_vider():
     mycursor = get_db().cursor()
+    user_id = session['user_id']
+
+    sql = 'DELETE FROM panier WHERE user_id=%s'
+    tuple = (user_id)
+    mycursor.execute(sql, tuple)
+    get_db().commit()
 
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
@@ -48,6 +75,15 @@ def client_panier_vider():
 @client_panier.route('/client/panier/delete/line', methods=['POST'])
 def client_panier_delete_line():
     mycursor = get_db().cursor()
+    idArticle = request.form.get('idArticle')
+    user_id = session['user_id']
+    print(idArticle,user_id)
+
+    sql = 'DELETE FROM panier WHERE user_id=%s and casque_id=%s'
+    tuple = (user_id, idArticle)
+    mycursor.execute(sql, tuple)
+    get_db().commit()
+
 
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
