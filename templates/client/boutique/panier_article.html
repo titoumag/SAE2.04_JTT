@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row align-self-right m-3">
             <div class="col-8 border">
-            {% if articlesPanier | length >= 1 %}
+{#            {% if articlesPanier | length >= 1 %}#}
                 <h3>Liste des articles dans mon panier</h3>
                 <table class="table table-hover table-responsive">
                     <tr>
@@ -15,7 +15,7 @@
                         <th style="width: 100px">Sous-Total</th>
                         <th style="width: 400px">Action</th>
                     </tr>
-                    {% if monPanier is defined %}
+                    {% if monPanier is defined or articlesPanier | length == 0 %}
                         <td>Votre panier est vide</td>
                         <td></td>
                         <td></td>
@@ -63,7 +63,7 @@
                     {% if prix_total %}
                     Total à payer : <strong>{{ "{:,.2f} €".format(prix_total) }}</strong>
                     {% endif %}
-            {% endif %}
+{#            {% endif %}#}
             </div>
 
 
@@ -98,7 +98,7 @@
                                 </div>
                                 </a>
                                 <div class="card-body">
-                                        <form  action="/client/panier/add" method="post">
+                                        <form  action="/client/panier/update" method="post">
                                             <input type="hidden" name="idArticle" value="{{ article.id }}">
                                             <button class="btn btn-success float-right">
                                                 <i class="fas fa-shopping-cart"></i>

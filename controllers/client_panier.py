@@ -18,43 +18,41 @@ def client_panier_update():
 
     sql = "select * from panier where casque_id=%s and user_id=%s"
     mycursor.execute(sql, (idArticle,user_id))
-    quantite = int(mycursor.fetchone()['quantite']) + direction
-    sql = "select * from casque where id=%s"
-    mycursor.execute(sql, (idArticle))
-    stock = int(mycursor.fetchone()['stock'])
+    res = mycursor.fetchall()
 
-    if (direction==-1 and quantite>0) or (direction==1 and quantite<stock+1):
-        sql="update panier set quantite=%s where casque_id=%s and user_id=%s "
-        mycursor.execute(sql, (quantite,idArticle, user_id))
+    if len(res) == 0:
+        sql = "select prix from casque where id=%s"
+        mycursor.execute(sql, (idArticle))
+        prix = mycursor.fetchone()['prix']
+
+        sql="insert into panier value (null,CURDATE(),%s,%s,%s,%s)"
+        tuple=(prix,direction,idArticle,user_id)
+        mycursor.execute(sql, tuple)
         get_db().commit()
 
+    else:
+        quantite = int(res[0]['quantite']) + direction
+        sql = "select * from casque where id=%s"
+        mycursor.execute(sql, (idArticle))
+        stock = int(mycursor.fetchone()['stock'])
+
+        if (direction==-1 and quantite>0) or (direction==1 and quantite<stock+1):
+            sql="update panier set quantite=%s where casque_id=%s and user_id=%s "
+            mycursor.execute(sql, (quantite,idArticle, user_id))
+            get_db().commit()
 
     return redirect('/client/article/show')
 
+
+# ANCIENNE FONCTION PLUS UTILISEE : replacée par update()
 @client_panier.route('/client/panier/add', methods=['POST'])
 def client_panier_add():
     mycursor = get_db().cursor()
-    idArticle = request.form.get('idArticle')
-    quantite = request.form.get('quantite')
-    user_id=session['user_id']
-
-    sql="select prix from casque where id=%s"
-    mycursor.execute(sql, (idArticle))
-    prix = mycursor.fetchone()['prix']
-
-    sql="insert into panier value (null,CURDATE(),%s,%s,%s,%s)"
-    tuple=(prix,quantite,idArticle,user_id)
-    mycursor.execute(sql, tuple)
-    get_db().commit()
-
-    return redirect('/client/article/show')
-    #return redirect(url_for('client_index'))
-
+    return redirect('/client/panier/update')
 # ANCIENNE FONCTION PLUS UTILISEE : replacée par update()
 @client_panier.route('/client/panier/delete', methods=['POST'])
 def client_panier_delete():
     mycursor = get_db().cursor()
-
     return redirect('/client/article/show')
 
 
