@@ -107,14 +107,8 @@ def auth_loginForgot_post():
     mycursor.execute(sql, tuple_select)
     user = mycursor.fetchone()
     if user:
-        session['username'] = user['username']
-        session['role'] = user['role']
-        session['user_id'] = user['id']
-        print(user['username'], user['role'])
-        if user['role'] == 'ROLE_admin':
-            return redirect('/admin/commande/index')
-        else:
-            return redirect('/client/article/show')
+        flash(u'Un mail (fictif) a été envoyé à '+mail+" .")
+        return redirect('/login')
     else:
         flash(u'Vérifier votre login et essayer encore.')
-        return redirect('/login')
+        return redirect('/loginForgot')
