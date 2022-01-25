@@ -12,6 +12,18 @@ client_commande = Blueprint('client_commande', __name__,
 @client_commande.route('/client/commande/add', methods=['POST'])
 def client_commande_add():
     mycursor = get_db().cursor()
+    user_id=session['user_id']
+    sql="select * from panier where user_id=%s"
+    mycursor.execute(sql, (user_id))
+    totPanier=mycursor.fetchall()
+
+    sql="insert into commande values (null,CURDATE(),%s,1)"
+    mycursor.execute(sql, (user_id))
+    get_db().commit()
+
+    #for ligne in totPanier:
+
+
     flash(u'Commande ajoutée')
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))

@@ -36,8 +36,6 @@ def client_article_show():                                 # remplace client_ind
         else: sql+=" AND prix < %s"
         params.append(session['filter_prix_max'])
 
-    print(sql)
-    print(params)
     mycursor.execute(sql,params)
     articles = mycursor.fetchall()
 
@@ -47,7 +45,6 @@ def client_article_show():                                 # remplace client_ind
     types_articles = mycursor.fetchall()
     mycursor.execute("SELECT * FROM panier INNER JOIN casque ON panier.casque_id=casque.id WHERE user_id=%s",session['user_id'])
     articles_panier = mycursor.fetchall()
-    print(types_articles)
     prix_total = None
     return render_template('client/boutique/panier_article.html', articles=articles, articlesPanier=articles_panier, prix_total=prix_total, itemsFiltre=types_articles)
 

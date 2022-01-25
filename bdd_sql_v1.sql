@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS ligne_commande(
    PRIMARY KEY(commande_id, casque_id)
 )character set 'utf8';
 
-
+insert into etat values (null,'en cours');
 
 INSERT INTO user (email, username, password, role,  est_actif) VALUES
 ('admin@admin.fr', 'admin', 'sha256$pBGlZy6UukyHBFDH$2f089c1d26f2741b68c9218a68bfe2e25dbb069c27868a027dad03bcb3d7f69a', 'ROLE_admin', 1),
