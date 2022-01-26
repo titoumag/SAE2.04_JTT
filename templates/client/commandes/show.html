@@ -57,7 +57,7 @@
                                 </td>
                                 <td style="text-align: center;">
                                     <form action="/client/commande/show" {# action="{{ url_for("client_commande_show") }}" #} style="display: inline-block;"  method="post">
-                                        <input type="hidden" name="idCommande" value="{{ commande.id }}">
+                                        <input type="hidden" id="idCommande" name="idCommande" value="{{ commande.id }}">
                                         <button class="btn btn-primary" > Details </button>
                                     </form>
                                 </td>
