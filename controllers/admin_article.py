@@ -79,7 +79,7 @@ def valid_edit_article():
 @admin_article.route('/reboot',methods=['GET'])
 def reboot():
     mycursor = get_db().cursor()
-    mycursor.execute("update casque set stock=150")
+    mycursor.execute("update casque set stock=5000")
     get_db().commit()
 
     return redirect('/admin/commande/index')
