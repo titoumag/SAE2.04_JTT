@@ -1,7 +1,39 @@
 {% extends "admin/layout_admin.html" %}
 {% block body %}
     <div class="container-fluid">
+        <table class="table table-hover table-responsive">
+            <th style="width: 300px">Client</th>
+            <th style="width: 300px">Nombre d'article</th>
+            <th style="width: 300px">etat de la commande</th>
+            <th style="width: 300px">date d'achat</th>
+            <th style="width: 300px">opérations</th>
 
+            {% if commandes | length == 0 %}
+                <tr>
+                    <td>Aucune commande a été passée</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% else %}
+                {% for commande in commandes %}
+                    <tr onclick="details({{ commande.id }})" onmouseover="linkCursor()" onmouseleave="normalCursor()">
+                        <td>{{ commande.user_id }}</td>
+                        <td>{{ commande.commande_quantite|int }}</td>
+                        <td>{{ commande.etat_id }}</td>
+                        <td>{{ commande.date_achat }}</td>
+                        <td>
+                            {% if (commande.etat_id != 2) %}
+                                <a href="/admin/commande/valider/{{ commande.id }}">
+                                    <button class="btn btn-outline-success">Valider</button>
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
     </div>
 
 {% endblock %}
+
