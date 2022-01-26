@@ -43,6 +43,23 @@ def client_panier_update():
 
     return redirect('/client/article/show')
 
+@client_panier.route('/client/panier/all', methods=['POST'])
+def client_panier_all():
+    mycursor = get_db().cursor()
+    user_id = session['user_id']
+
+    sql = "select * from casque"
+    mycursor.execute(sql)
+    totStock = mycursor.fetchall()
+
+    sql="insert into panier value (null,CURDATE(),%s,%s,%s,%s)"
+    for article in totStock:
+        tuple=(article['prix'],article['stock'],article['id'],user_id)
+        mycursor.execute(sql, tuple)
+    get_db().commit()
+
+    return redirect('/client/article/show')
+
 
 # ANCIENNE FONCTION PLUS UTILISEE : replacée par update()
 @client_panier.route('/client/panier/add', methods=['POST'])
