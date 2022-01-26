@@ -49,7 +49,14 @@ def client_commande_add():
 @client_commande.route('/client/commande/show', methods=['get','post'])
 def client_commande_show():
     mycursor = get_db().cursor()
-    commandes = None
+
+    sql = "select date_achat, count(*) as nbr_articles,sum(quantite) as nb_tot,sum(prix_unit*quantite) as prix_total,etat_id " \
+        "from commande " \
+        "inner join ligne_commande on commande.id=ligne_commande.commande_id " \
+        "where user_id=%s " \
+        "group by date_achat,etat_id;"#"inner join etat on etat.id=commande.etat_id "
+    mycursor.execute(sql,session['user_id'])
+    commandes = mycursor.fetchall();
     articles_commande = None
     return render_template('client/commandes/show.html', commandes=commandes, articles_commande=articles_commande)
 
