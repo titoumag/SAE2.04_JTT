@@ -75,3 +75,11 @@ def valid_edit_article():
     message = u'article modifié , nom:' + nom + '- type_article:' + type_article_id + ' - prix:' + prix + ' - stock:' + stock + ' - description:' + description + ' - image:' + image
     flash(message)
     return redirect(url_for('admin_article.show_article'))
+
+@admin_article.route('/reboot',methods=['GET'])
+def reboot():
+    mycursor = get_db().cursor()
+    mycursor.execute("update casque set stock=150")
+    get_db().commit()
+
+    return redirect('/admin/commande/index')
