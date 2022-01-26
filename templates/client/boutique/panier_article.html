@@ -54,6 +54,7 @@
                         <p> Le panier total est de : {{ "{:.2f} € ".format(tot.tot) }}</p>
                     {% endif %}
                 </table>
+                {% if not(monPanier is defined or articlesPanier | length == 0) %}
                     <form action="/client/panier/vider" style="display: inline-block;"  method="post" >
                         <button class="btn btn-primary"  > Éffacer tout </button>
                     </form>
@@ -63,7 +64,7 @@
                     {% if prix_total %}
                     Total à payer : <strong>{{ "{:,.2f} €".format(prix_total) }}</strong>
                     {% endif %}
-{#            {% endif %}#}
+                {% endif %}
             </div>
 
 

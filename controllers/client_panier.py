@@ -48,7 +48,7 @@ def client_panier_all():
     mycursor = get_db().cursor()
     user_id = session['user_id']
 
-    sql = "select * from casque"
+    sql = "select * from casque where stock>0"
     mycursor.execute(sql)
     totStock = mycursor.fetchall()
 

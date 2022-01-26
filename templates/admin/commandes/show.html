@@ -18,7 +18,7 @@
             {% else %}
                 {% for commande in commandes %}
                     <tr onclick="details({{ commande.id }})" onmouseover="linkCursor()" onmouseleave="normalCursor()">
-                        <td>{{ commande.user_id }}</td>
+                        <td>{{ commande.username }}</td>
                         <td>{{ commande.commande_quantite|int }}</td>
                         <td>{{ commande.etat_id }}</td>
                         <td>{{ commande.date_achat }}</td>

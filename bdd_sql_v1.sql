@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS panier(
    id int auto_increment,
    date_ajout DATE,
    prix_unit DECIMAL(15,2),
-   quantite VARCHAR(50),
+   quantite int,
    casque_id INT NOT NULL,
    user_id INT NOT NULL,
 
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS ligne_commande(
    commande_id INT,
    casque_id INT,
    prix_unit DECIMAL(6,2),
-   quantite DECIMAL(7,3),
+   quantite int,
 
    CONSTRAINT fk_ligne_commande_commande
        FOREIGN KEY(commande_id) REFERENCES commande(id),

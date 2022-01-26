@@ -9,7 +9,7 @@
             <tr>
                 <td>{{ article.libelle }}</td>
                 <td>{{ article.prix_unit }}</td>
-                <td>{{ article.quantite }}</td>
+                <td>{{ article.quantite|int }}</td>
                 <td>{{ article.prix_tot }}</td>
             </tr>
         {% endfor %}
