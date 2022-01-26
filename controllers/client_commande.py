@@ -17,16 +17,32 @@ def client_commande_add():
     mycursor.execute(sql, (user_id))
     totPanier=mycursor.fetchall()
 
-    sql="insert into commande values (null,CURDATE(),%s,1)"
+    # cree une ligne commande pour l'utilisateur
+    sql = "insert into commande values (null,CURDATE(),%s,1)"
+    mycursor.execute(sql, (user_id))
+    get_db().commit()
+    id = mycursor.lastrowid #recupere id commande
+
+    sql="insert into ligne_commande values (%s,%s,%s,%s)"
+    sql2 = "select * from casque where id=%s"
+    sql3="update casque set stock=%s where id=%s"
+    for ligne in totPanier:
+        # passe du panier a ligne_commande
+        tuple=(id,ligne['casque_id'],ligne['prix_unit'],ligne['quantite'])
+        mycursor.execute(sql,tuple)
+
+        # recupere etat du stock et soustrait la quantite achetee
+        mycursor.execute(sql2,(ligne['casque_id']))
+        quantite = mycursor.fetchone()['stock']-int(ligne['quantite'])
+        mycursor.execute(sql3, (quantite,ligne['casque_id']))
+
+    #efface panier du client
+    sql="delete from panier where user_id=%s"
     mycursor.execute(sql, (user_id))
     get_db().commit()
 
-    #for ligne in totPanier:
-
-
     flash(u'Commande ajoutée')
     return redirect('/client/article/show')
-    #return redirect(url_for('client_index'))
 
 
 
