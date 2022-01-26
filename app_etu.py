@@ -15,6 +15,7 @@ from controllers.client_commentaire import *
 from controllers.admin_article import *
 from controllers.admin_commande import *
 from controllers.admin_panier import *
+from controllers.admin_users import *
 
 app = Flask(__name__)
 app.secret_key = 'PANZERKAMPFWAGEN'
@@ -62,7 +63,7 @@ app.register_blueprint(client_panier)
 app.register_blueprint(admin_article)
 app.register_blueprint(admin_commande)
 app.register_blueprint(admin_panier)
-
+app.register_blueprint(admin_users)
 
 if __name__ == '__main__':
     app.run()
