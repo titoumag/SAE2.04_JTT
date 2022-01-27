@@ -4,6 +4,7 @@
         <table class="table table-hover table-responsive">
             <th style="width: 300px">Client</th>
             <th style="width: 300px">Nombre d'article</th>
+            <th style="width: 300px">Somme</th>
             <th style="width: 300px">etat de la commande</th>
             <th style="width: 300px">date d'achat</th>
             <th style="width: 300px">opérations</th>
@@ -14,13 +15,15 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                 </tr>
             {% else %}
                 {% for commande in commandes %}
                     <tr onclick="details({{ commande.id }})" onmouseover="linkCursor()" onmouseleave="normalCursor()">
                         <td>{{ commande.username }}</td>
                         <td>{{ commande.commande_quantite|int }}</td>
-                        <td>{{ commande.etat_id }}</td>
+                        <td>{{ commande.prix_tot }}</td>
+                        <td>{{ commande.libelle }}</td>
                         <td>{{ commande.date_achat }}</td>
                         <td>
                             {% if (commande.etat_id != 2) %}

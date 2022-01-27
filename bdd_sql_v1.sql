@@ -65,18 +65,6 @@ CREATE TABLE IF NOT EXISTS couleur(
    PRIMARY KEY(id)
 )character set 'utf8';
 
-CREATE TABLE IF NOT EXISTS commande(
-   id int auto_increment,
-   date_achat DATE,
-   user_id INT NOT NULL,
-   etat_id INT NOT NULL,
-
-   CONSTRAINT fk_commande_etat
-       FOREIGN KEY(etat_id) REFERENCES etat(id),
-   CONSTRAINT fk_commande_user
-       FOREIGN KEY(user_id) REFERENCES user(id),
-   PRIMARY KEY(id)
-)character set 'utf8';
 
 CREATE TABLE IF NOT EXISTS casque(
    id int auto_increment,

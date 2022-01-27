@@ -16,11 +16,13 @@ def admin_index():
 @admin_commande.route('/admin/commande/show', methods=['get', 'post'])
 def admin_commande_show():
     mycursor = get_db().cursor()
-    sql = "SELECT commande.id, username, SUM(quantite) as commande_quantite,SUM(quantite*prix_unit) as prix_tot, etat_id, date_achat " \
+    sql = "SELECT commande.id, username, SUM(quantite) as commande_quantite,SUM(quantite*prix_unit) as prix_tot, etat_id, date_achat,libelle " \
           "FROM ligne_commande " \
           "INNER JOIN commande on commande.id=ligne_commande.commande_id " \
           "INNER JOIN user on user.id = commande.user_id " \
-          "GROUP BY commande.id"
+          "INNER JOIN etat on etat.id = commande.etat_id " \
+          "GROUP BY commande.id " \
+          "ORDER BY etat_id,user_id,date_achat"
     mycursor.execute(sql)
     commandes = mycursor.fetchall()
 

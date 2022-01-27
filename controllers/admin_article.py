@@ -81,5 +81,7 @@ def reboot():
     mycursor = get_db().cursor()
     mycursor.execute("update casque set stock=5000")
     get_db().commit()
+    flash('Base rebootée')
+    lien=request.args.get('lien')
 
-    return redirect('/admin/commande/index')
+    return redirect(lien)
