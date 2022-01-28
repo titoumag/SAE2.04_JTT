@@ -50,10 +50,16 @@ def client_article_show():  # remplace client_index
 
     mycursor.execute("SELECT * FROM type_casque")
     types_articles = mycursor.fetchall()
+
     mycursor.execute("SELECT * FROM panier INNER JOIN casque ON panier.casque_id=casque.id WHERE user_id=%s",
                      session['user_id'])
     articles_panier = mycursor.fetchall()
-    prix_total = None
+
+    sql="select sum(quantite*prix_unit) as prix_tot " \
+        "FROM panier " \
+        "WHERE user_id=%s"
+    mycursor.execute(sql, session['user_id'])
+    prix_total = mycursor.fetchone()['prix_tot']
     return render_template('client/boutique/panier_article.html', articles=articles, articlesPanier=articles_panier,
                            prix_total=prix_total, itemsFiltre=types_articles)
 

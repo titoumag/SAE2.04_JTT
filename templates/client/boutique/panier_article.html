@@ -22,17 +22,13 @@
                         <td></td>
                         <td></td>
                     {% else %}
-                        {% set tot=namespace(tot=0) %}
                         {% for itemPanier in articlesPanier %}
                             <tr>
                                 <td>{{itemPanier.libelle}}</td>
                                 <td>{{itemPanier.quantite}}</td>
                                 <td>{{itemPanier.prix}}</td>
                                 <td>{{ "{:,.2f} €".format((itemPanier.prix_unit   * itemPanier.quantite|int)) }}</td>
-                                    {% set tot.tot = tot.tot + (itemPanier.prix_unit*itemPanier.quantite|int) %}
-{#                                        {% tot.update({'v': tot.v+(itemPanier.prix_unit*itemPanier.quantite|int) }) %}#}
                                 <td>
-
                                     <form action="/client/panier/update" style="display: inline-block;"  method="post">
                                             <input type="hidden" name="quantite" value="1">
                                             <input type="hidden" name="idArticle" value="{{ itemPanier.casque_id }}">
@@ -51,7 +47,7 @@
                                 </td>
                             </tr>
                         {% endfor %}
-                        <p> Le panier total est de : {{ "{:.2f} € ".format(tot.tot) }}</p>
+                        <p> Le panier total est de : {{ "{:.2f} € ".format(prix_total) }}</p>
                     {% endif %}
                 </table>
                 {% if not(monPanier is defined or articlesPanier | length == 0) %}
@@ -61,7 +57,7 @@
                     <form action="/client/commande/add" style="display: inline-block;"  method="post" >
                         <button class="btn btn-primary" > Passer ma commande </button>
                     </form>
-                    <div>Total à payer : <strong>{{ "{:.2f} €".format(tot.tot) }}</strong></div>
+                    <div>Total à payer : <strong>{{ "{:.2f} € ".format(prix_total) }}</strong></div>
                 {% endif %}
             </div>
 
