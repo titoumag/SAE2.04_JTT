@@ -7,3 +7,8 @@ Séance n°2 :
 - Titouan Magnin : Acheter les articles
 - Julien Oudot : Filtrer les articles
 - Titouan Nicot : Trouver les casques à vendre
+
+Séance n°3 :
+- Julien Oudot : Afficher les articles
+- Titouan Magnin : Commandes coté client
+- Titouan Nicot : Commandes coté admin
