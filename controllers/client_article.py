@@ -16,7 +16,7 @@ def client_article_show():  # remplace client_index
 
     debut = True
     params = []
-    sql = "SELECT * FROM casque"
+    sql = "SELECT id,libelle,image,stock,prix,fabricant_id,taille_id,couleur_id,type_casque_id,sum(avis.user_id) as n_avis,AVG(avis.note) as moy_notes FROM casque LEFT JOIN avis ON casque.id = avis.casque_id"
     if "filter_word" in session.keys():
         sql += " WHERE libelle LIKE %s"
         params.append("%" + session['filter_word'] + "%")
@@ -45,6 +45,7 @@ def client_article_show():  # remplace client_index
             sql += " AND prix < %s"
         params.append(session['filter_prix_max'])
 
+    sql+= "GROUP BY id"
     mycursor.execute(sql, params)
     articles = mycursor.fetchall()
 

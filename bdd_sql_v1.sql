@@ -119,14 +119,13 @@ CREATE TABLE IF NOT EXISTS ligne_commande(
 CREATE TABLE IF NOT EXISTS avis(
     casque_id INT NOT NULL,
     user_id INT NOT NULL,
-    libelle VARCHAR(255),
+    texte VARCHAR(255),
     note INT,
     PRIMARY KEY(casque_id,user_id),
    CONSTRAINT fk_avis_casque
        FOREIGN KEY(casque_id) REFERENCES casque(id),
    CONSTRAINT fk_avis_user
        FOREIGN KEY(user_id) REFERENCES user(id)
-
 )character set 'utf8';
 
 insert into etat values
@@ -203,3 +202,6 @@ INSERT INTO casque(libelle,fabricant_id,taille_id,couleur_id,type_casque_id,imag
 ('Casque SotrmTrooper',13,3,1,4,'CasqueStarWars2.jpeg',55,51.99),
 ('Casque Kilo Ren',13,3,2,4,'CasqueStarWars3.jpeg',48,37.99),
 ('Casque VR',8,2,2,4,'casqueVR1.jpg',13,105.99);
+
+INSERT INTO avis VALUES
+(1,2,'Incroyable',5);
