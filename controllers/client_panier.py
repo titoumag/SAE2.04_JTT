@@ -52,6 +52,8 @@ def client_panier_all():
     mycursor.execute(sql)
     totStock = mycursor.fetchall()
 
+    mycursor.execute("delete from panier where user_id=%s",user_id)
+
     sql="insert into panier value (null,CURDATE(),%s,%s,%s)"
     for article in totStock:
         tuple=(article['stock'],article['id'],user_id)
