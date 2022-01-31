@@ -46,7 +46,7 @@ def client_article_show():  # remplace client_index
             sql += " AND prix < %s"
         params.append(session['filter_prix_max'])
 
-    sql+= "GROUP BY id"
+    sql+= " GROUP BY id"
     mycursor.execute(sql, params)
     articles = mycursor.fetchall()
 
