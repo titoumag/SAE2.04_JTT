@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS avis;
 DROP TABLE IF EXISTS ligne_commande;
 DROP TABLE IF EXISTS panier;
 DROP TABLE IF EXISTS commande;
@@ -115,8 +116,22 @@ CREATE TABLE IF NOT EXISTS ligne_commande(
    PRIMARY KEY(commande_id, casque_id)
 )character set 'utf8';
 
-insert into etat values (null,'en cours');
-insert into etat values (null,'validé');
+CREATE TABLE IF NOT EXISTS avis(
+    casque_id INT NOT NULL,
+    user_id INT NOT NULL,
+    libelle VARCHAR(255),
+    note INT,
+    PRIMARY KEY(casque_id,user_id),
+   CONSTRAINT fk_avis_casque
+       FOREIGN KEY(casque_id) REFERENCES casque(id),
+   CONSTRAINT fk_avis_user
+       FOREIGN KEY(user_id) REFERENCES user(id)
+
+)character set 'utf8';
+
+insert into etat values
+(null,'en cours'),
+(null,'validé');
 
 INSERT INTO user (email, username, password, role,  est_actif) VALUES
 ('admin@admin.fr', 'admin', 'sha256$pBGlZy6UukyHBFDH$2f089c1d26f2741b68c9218a68bfe2e25dbb069c27868a027dad03bcb3d7f69a', 'ROLE_admin', 1),
