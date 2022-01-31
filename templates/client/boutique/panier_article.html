@@ -118,10 +118,10 @@
                                  {% endif %}
                             {% endif %}
                                 <br>
-                            {% if article.nb_notes is defined %}
-                            {% if article.nb_notes > 1 %}
+                            {% if article.nb_avis is defined %}
+                            {% if article.nb_avis > 0 %}
                                  <a  href="/client/article/details/{{ article.id }}">
-                                    <span style="color: #3A7734"> note : {{  "{:,.1f}".format(article.moy_notes) }}</span>
+                                    <span style="color: #3A7734"> note : {{  article.moy_notes | int }}</span>
                                  </a>
                             {% endif %}
                             {% endif %}
