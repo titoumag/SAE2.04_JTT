@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS casque(
 CREATE TABLE IF NOT EXISTS panier(
    id int auto_increment,
    date_ajout DATE,
-   prix_unit DECIMAL(15,2),
+--    prix_unit DECIMAL(15,2),
    quantite int,
    casque_id INT NOT NULL,
    user_id INT NOT NULL,
