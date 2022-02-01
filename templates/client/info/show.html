@@ -1,0 +1,41 @@
+{% extends "client/layout_client.html" %}
+{% block body %}
+    <div class="border m-auto p-3" style="width: 500px">
+        <table class="table">
+            <tr>
+                <td>Votre nom :</td>
+                <td>{{ user.nom }}</td>
+            </tr>
+            <tr>
+                <td>Votre prenom : </td>
+                <td>{{ user.prenom }}</td>
+            </tr>
+            <tr>
+                <td>Nom d'utilisateur :</td>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <td>Email : </td>
+                <td>{{ user.email }}</td>
+            </tr>
+
+            <tr>
+                <td>Solde personnel :</td>
+                <td style="color:grey"><div class="border p-2">{{ user.solde }} €</div></td>
+            </tr>
+            <tr>
+                <td>Numero carte :</td>
+                <td>{{ user.carte_numero }}</td>
+            </tr>
+        </table>
+        <div>
+            <a href="/client/info/solde-add" class="btn btn-primary m-2" >Ajouter de l'argent</a>
+            <a href="/client/info/edit"  class="btn btn-primary m-2" >Modifier son profil</a>
+            <button class="btn btn-primary m-2" onclick="alert('{{ user.carte_code }}')">
+                Voir le code de la carte bancaire
+            </button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
