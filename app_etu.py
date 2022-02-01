@@ -11,6 +11,7 @@ from controllers.client_article import *
 from controllers.client_panier import *
 from controllers.client_commande import *
 from controllers.client_commentaire import *
+from controllers.client_info import *
 
 from controllers.admin_article import *
 from controllers.admin_commande import *
@@ -59,6 +60,7 @@ app.register_blueprint(client_article)
 app.register_blueprint(client_commande)
 app.register_blueprint(client_commentaire)
 app.register_blueprint(client_panier)
+app.register_blueprint(client_info)
 
 app.register_blueprint(admin_article)
 app.register_blueprint(admin_commande)
