@@ -19,12 +19,17 @@ CREATE TABLE IF NOT EXISTS etat(
 
 CREATE TABLE IF NOT EXISTS user(
     id int auto_increment,
+
     username varchar(255),
+    nom varchar(50),
+    prenom varchar(50),
+    pseudo varchar(255),
+    email varchar(255),
+
     password varchar(255),
     role varchar(50),
     est_actif tinyint(1),
-    pseudo varchar(255),
-    email varchar(255),
+
     PRIMARY KEY(id)
 )character set 'utf8';
 
