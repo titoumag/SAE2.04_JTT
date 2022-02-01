@@ -21,12 +21,12 @@ def client_panier_update():
     res = mycursor.fetchall()
 
     if len(res) == 0:
-        sql = "select prix from casque where id=%s"
-        mycursor.execute(sql, (idArticle))
-        prix = mycursor.fetchone()['prix']
+        # sql = "select prix from casque where id=%s"
+        # mycursor.execute(sql, (idArticle))
+        # prix = mycursor.fetchone()['prix']
 
-        sql="insert into panier value (null,CURDATE(),%s,%s,%s,%s)"
-        tuple=(prix,direction,idArticle,user_id)
+        sql="insert into panier value (null,CURDATE(),%s,%s,%s)"
+        tuple=(direction,idArticle,user_id)
         mycursor.execute(sql, tuple)
         get_db().commit()
 
@@ -52,9 +52,11 @@ def client_panier_all():
     mycursor.execute(sql)
     totStock = mycursor.fetchall()
 
-    sql="insert into panier value (null,CURDATE(),%s,%s,%s,%s)"
+    mycursor.execute("delete from panier where user_id=%s",user_id)
+
+    sql="insert into panier value (null,CURDATE(),%s,%s,%s)"
     for article in totStock:
-        tuple=(article['prix'],article['stock'],article['id'],user_id)
+        tuple=(article['stock'],article['id'],user_id)
         mycursor.execute(sql, tuple)
     get_db().commit()
 

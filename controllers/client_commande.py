@@ -13,7 +13,7 @@ client_commande = Blueprint('client_commande', __name__,
 def client_commande_add():
     mycursor = get_db().cursor()
     user_id=session['user_id']
-    sql="select * from panier where user_id=%s"
+    sql="select * from panier INNER JOIN casque ON casque.id=panier.casque_id where user_id=%s"
     mycursor.execute(sql, (user_id))
     totPanier=mycursor.fetchall()
 
@@ -22,13 +22,14 @@ def client_commande_add():
     mycursor.execute(sql, (user_id))
     get_db().commit()
     id = mycursor.lastrowid #recupere id commande
+    # = '''select last_insert_id()'''
 
     sql="insert into ligne_commande values (%s,%s,%s,%s)"
     sql2 = "select * from casque where id=%s"
     sql3="update casque set stock=%s where id=%s"
     for ligne in totPanier:
         # passe du panier a ligne_commande
-        tuple=(id,ligne['casque_id'],ligne['prix_unit'],ligne['quantite'])
+        tuple=(id,ligne['casque_id'],ligne['prix'],ligne['quantite'])
         mycursor.execute(sql,tuple)
 
         # recupere etat du stock et soustrait la quantite achetee

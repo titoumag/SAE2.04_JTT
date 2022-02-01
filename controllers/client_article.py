@@ -57,8 +57,9 @@ def client_article_show():  # remplace client_index
                      session['user_id'])
     articles_panier = mycursor.fetchall()
 
-    sql="select sum(quantite*prix_unit) as prix_tot " \
+    sql="select sum(quantite*prix) as prix_tot " \
         "FROM panier " \
+        "INNER JOIN casque on casque.id=panier.casque_id " \
         "WHERE user_id=%s"
     mycursor.execute(sql, session['user_id'])
     prix_total = mycursor.fetchone()['prix_tot']

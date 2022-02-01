@@ -12,7 +12,7 @@
                         <th style="width: 300px">Nom</th>
                         <th style="width: 50px">Quantité</th>
                         <th style="width: 50px">Prix</th>
-                        <th style="width: 100px">Sous-Total</th>
+                        <th style="width: 150px">Sous-Total</th>
                         <th style="width: 400px">Action</th>
                     </tr>
                     {% if monPanier is defined or articlesPanier | length == 0 %}
@@ -27,7 +27,7 @@
                                 <td>{{itemPanier.libelle}}</td>
                                 <td>{{itemPanier.quantite}}</td>
                                 <td>{{itemPanier.prix}}</td>
-                                <td>{{ "{:,.2f} €".format((itemPanier.prix_unit   * itemPanier.quantite|int)) }}</td>
+                                <td>{{ "{:,.2f} €".format((itemPanier.prix   * itemPanier.quantite|int)) }}</td>
                                 <td>
                                     <form action="/client/panier/update" style="display: inline-block;"  method="post">
                                             <input type="hidden" name="quantite" value="1">
