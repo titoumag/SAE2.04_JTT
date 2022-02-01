@@ -46,7 +46,7 @@ def client_article_show():  # remplace client_index
             sql += " AND prix < %s"
         params.append(session['filter_prix_max'])
 
-    sql+= "GROUP BY id"
+    sql+= " GROUP BY id"
     mycursor.execute(sql, params)
     articles = mycursor.fetchall()
 
@@ -62,6 +62,8 @@ def client_article_show():  # remplace client_index
         "WHERE user_id=%s"
     mycursor.execute(sql, session['user_id'])
     prix_total = mycursor.fetchone()['prix_tot']
+
+
     return render_template('client/boutique/panier_article.html', articles=articles, articlesPanier=articles_panier,
                            prix_total=prix_total, itemsFiltre=types_articles)
 
@@ -69,8 +71,19 @@ def client_article_show():  # remplace client_index
 @client_article.route('/client/article/details/<int:id>', methods=['GET'])
 def client_article_details(id):
     mycursor = get_db().cursor()
-    article = None
-    commentaires = None
-    commandes_articles = None
+
+    mycursor.execute("SELECT * FROM casque where id = %s",(id))
+    article = mycursor.fetchone()
+
+    mycursor.execute("SELECT * FROM avis where casque_id = %s", (id))
+    commentaires = mycursor.fetchall()
+
+    mycursor.execute("SELECT * FROM ligne_commande INNER JOIN commande ON ligne_commande.commande_id = commande.id WHERE casque_id = %s AND user_id = %s", (id,session["user_id"]))
+    commandes_articles = mycursor.fetchall()
+
+
+    mycursor.execute("SELECT * FROM avis WHERE casque_id = %s AND user_id = %s",(id,session["user_id"]))
+    userHasMadeAComment = mycursor.fetchall() != ()
+
     return render_template('client/boutique/article_details.html', article=article, commentaires=commentaires,
-                           commandes_articles=commandes_articles)
+                           commandes_articles=commandes_articles,userHasMadeAComment=userHasMadeAComment)

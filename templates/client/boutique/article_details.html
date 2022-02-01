@@ -22,21 +22,26 @@
             <div class="col-12">
                  Vous avez commandé <strong>{{ commandes_articles | length }} </strong>fois  ce produit
             </div>
-            <form  action="/client/comment/add"  method="post">
-                <div class="col">
-                  <label for="inputAvis" class="form-label">Mettez un commentaire sur cet article : </label>
-                     <textarea name="commentaire" class="form-control" aria-label="Donnez votre avis" id="inputAvis"  placeholder="Donnez votre avis"></textarea>
-                </div>
-                <div class="col-12">
-                    <label for="inputNote" class="form-label">Donnez une note à cet article </label>
-                    <input type="number" name="note" id="inputNote" step="0.1" min="0" max="5" class="form-control" style="width: 8rem !important;" value="" >
-                </div>
-                <input type="hidden" name="idUser" value="{{ session['user_id'] }}">
-                <input type="hidden" name="idArticle" value="{{ article.id }}">
-                <form  action="/client/comment/add" style="display: inline-block;"  method="post" >
-                        <button class="btn btn-primary" > Ajouter un avis </button>
+            {% if userHasMadeAComment %}
+                    Vous avez déja fait un commentaire
+                {% else %}
+                <form  action="/client/comment/add"  method="post">
+                    <div class="col">
+                      <label for="inputAvis" class="form-label">Mettez un commentaire sur cet article : </label>
+                         <textarea name="commentaire" class="form-control" aria-label="Donnez votre avis" id="inputAvis"  placeholder="Donnez votre avis"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <label for="inputNote" class="form-label">Donnez une note à cet article </label>
+                        <input type="number" name="note" id="inputNote" step="0.1" min="0" max="5" class="form-control" style="width: 8rem !important;" value="" >
+                    </div>
+                    <input type="hidden" name="idUser" value="{{ session['user_id'] }}">
+                    <input type="hidden" name="idArticle" value="{{ article.id }}">
+                    <form  action="/client/comment/add" style="display: inline-block;"  method="post" >
+                            <button class="btn btn-primary" > Ajouter un avis </button>
+                    </form>
                 </form>
-            </form>
+                {% endif %}
+
 
 
         {% else %}
@@ -63,16 +68,15 @@
                 {% for commentaire in commentaires %}
                     <tr>
                         <td>{{ commentaire.user_id }}</td>
-                        <td>{{ commentaire.commentaire }}</td>
+                        <td>{{ commentaire.texte }}</td>
                         <td>{{ commentaire.note }}
                         {{ commentaire.__dict__ }}
                         </td>
                         <td>
                             {% if commentaire.user_id == session['user_id'] %}
                                   <form  action="/client/comment/delete"  style="display: inline-block;"  method="post" >
-                                      <input type="hidden" name="idArticle" value="{{ commentaire.article_id }}">
+                                      <input type="hidden" name="idArticle" value="{{ commentaire.casque_id }}">
                                       <input type="hidden" name="idUser" value="{{ commentaire.user_id }}">
-                                      <input type="hidden" name="idAvis" value="{{ commentaire.id }}">
                                       <button class="btn btn-primary" > supprimer </button>
                                   </form>
                             {% endif %}
