@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS mails;
 DROP TABLE IF EXISTS avis;
 DROP TABLE IF EXISTS ligne_commande;
 DROP TABLE IF EXISTS panier;
@@ -136,6 +137,19 @@ CREATE TABLE IF NOT EXISTS avis(
    CONSTRAINT fk_avis_user
        FOREIGN KEY(user_id) REFERENCES user(id)
 )character set 'utf8';
+
+CREATE TABLE IF NOT EXISTS mail(
+    id INT NOT NULL auto_increment,
+    sender_id INT,
+    receiver_id INT,
+    texteMail varchar(255),
+    dateEnvoi DATE,
+    PRIMARY KEY(id),
+    CONSTRAINT fk_mail_sender
+       FOREIGN KEY(sender_id) REFERENCES user(id),
+    CONSTRAINT fk_mail_receiver
+       FOREIGN KEY(receiver_id) REFERENCES user(id)
+);
 
 insert into etat values
 (null,'en cours'),
