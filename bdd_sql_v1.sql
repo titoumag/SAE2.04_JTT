@@ -27,9 +27,10 @@ CREATE TABLE IF NOT EXISTS user(
     email varchar(255),
     solde decimal(10,2),
     carte_numero varchar(16),
-    carte_code varchar(4),
 
+    carte_code varchar(4),
     password varchar(255),
+
     role varchar(50),
     est_actif tinyint(1),
 
@@ -140,10 +141,10 @@ insert into etat values
 (null,'en cours'),
 (null,'validé');
 
-INSERT INTO user (email, username, password, role,  est_actif,solde,carte_numero,carte_code) VALUES
-('admin@admin.fr', 'admin', 'sha256$pBGlZy6UukyHBFDH$2f089c1d26f2741b68c9218a68bfe2e25dbb069c27868a027dad03bcb3d7f69a', 'ROLE_admin', 1,0,0000000000000000,1234),
-('client@client.fr', 'client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1,0,0100010000100010,1234),
-('client2@client2.fr', 'client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client', 1,0,0200448056200082,1234);
+INSERT INTO user (email, username,nom,prenom, password, role,  est_actif,solde,carte_numero,carte_code) VALUES
+('admin@admin.fr', 'admin','admin','admin', 'sha256$pBGlZy6UukyHBFDH$2f089c1d26f2741b68c9218a68bfe2e25dbb069c27868a027dad03bcb3d7f69a', 'ROLE_admin', 1,0,0000000000000000,'1234'),
+('client@client.fr', 'client','client','client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1,0,0100010000100010,'1234'),
+('client2@client2.fr', 'client2','client2','client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client', 1,0,0200448056200082,'1234');
 
 INSERT INTO fabricant(nom,adresse) VALUES
 ('Deutschland !','Berlin'),

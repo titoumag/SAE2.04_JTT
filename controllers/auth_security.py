@@ -54,25 +54,28 @@ def auth_signup_post():
     email = request.form.get('email')
     username = request.form.get('username')
     password = request.form.get('password')
+    numCarte = request.form.get('numCarte')
+    codeCarte = request.form.get('codeCarte')
+    nom = request.form.get('nom')
+    prenom = request.form.get('prenom')
     tuple_select = (username, email)
     sql = '''SELECT * FROM user WHERE username LIKE %s AND email LIKE %s'''
     mycursor.execute(sql, tuple_select)
     user = mycursor.fetchone()
     if user:
-        flash(u'votre adresse <strong>Email</strong> ou  votre <strong>Username</strong> (login) existe déjà')
+        flash(u'votre adresse Email ou  votre Username(login) existe déjà')
         return redirect('/signup')
 
     # ajouter un nouveau user
     password = generate_password_hash(password, method='sha256')
-    tuple_insert = (username, email, password, 'ROLE_client',1)
-    sql = '''INSERT INTO user (username,email,password,role,est_actif) VALUES(%s,%s,%s,%s,%s)'''
+    tuple_insert = (username, email, password, 'ROLE_client',1,numCarte,codeCarte,nom,prenom,0)
+    sql = '''INSERT INTO user (username,email,password,role,est_actif,carte_numero,carte_code,nom,prenom,solde) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
     mycursor.execute(sql, tuple_insert)
     get_db().commit()                    # position de cette ligne discutatble !
     sql='''SELECT last_insert_id()'''
     mycursor.execute(sql)
     info_last_id = mycursor.fetchone()
     user_id = info_last_id['last_insert_id()']
-    print('last_insert_id', user_id)
     get_db().commit()
     session.pop('username', None)
     session.pop('role', None)
@@ -107,7 +110,9 @@ def auth_loginForgot_post():
     mycursor.execute(sql, tuple_select)
     user = mycursor.fetchone()
     if user:
-        flash(u'Un mail (fictif) a été envoyé à '+mail+" .")
+        flash(u'Un mail (facturé à 50€) a été envoyé à '+mail+" .")
+        mycursor.execute("UPDATE user SET solde = %s WHERE id = %s",(user["solde"]-50,user["id"]))
+        get_db().commit()
         return redirect('/login')
     else:
         flash(u'Vérifier votre login et essayer encore.')

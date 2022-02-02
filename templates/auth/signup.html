@@ -18,13 +18,23 @@
     <label>Pseudo</label>
     <input type="text" name="username" class="form-control" value="" required autofocus  placeholder="Username (login)">
 
-    <label for="_email">Email</label>
+    <label>Nom</label>
+    <input type="text" name="nom" class="form-control" value="" required  placeholder="Nom">
+
+    <label>Prenom</label>
+    <input type="text" name="prenom" class="form-control" value="" required  placeholder="Prenom">
+
+    <label for="email">Email</label>
     <input type="text" name="email" class="form-control" value="" required  placeholder="Email"  >
 
-    <label for="_password">Mot de passe</label>
+    <label for="password">Mot de passe</label>
     <input type="password" name="password" class="form-control" value="" required  placeholder="Password">
 
+    <label for="numCarte">Numéro de Carte Bleu</label>
+    <input type="text" name="numCarte" class="form-control" value="" required minlength="16" maxlength="16" placeholder="Numéro Carte Bleu">
 
+    <label for="codeCarte">Code de Carte Bleu</label>
+    <input type="password" name="codeCarte" class="form-control" value="" required minlength="4" maxlength="4" placeholder="Code Carte Bleu">
 
     <button class="btn btn-lg btn-primary mt-4" type="submit">
         Valider l'inscription (Sign Up)

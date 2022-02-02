@@ -16,7 +16,6 @@ def client_info_show():
     sql="select * from user where id=%s"
     mycursor.execute(sql,(user_id))
     user=mycursor.fetchone()
-    print(user)
 
     return render_template('/client/info/show.html',user=user)
 
@@ -28,7 +27,6 @@ def client_info_edit():
     sql="select * from user where id=%s"
     mycursor.execute(sql,(user_id))
     user=mycursor.fetchone()
-    print(user)
 
     return render_template('/client/info/edit.html',user=user)
 

@@ -11,6 +11,6 @@ admin_users = Blueprint('admin_users', __name__,
 @admin_users.route('/admin/users/show')
 def admin_users_show():
     cursor = get_db().cursor()
-    cursor.execute("SELECT username,role,est_actif,email,pseudo FROM user")
+    cursor.execute("SELECT * FROM user")
     users = cursor.fetchall()
     return render_template('admin/users/show_users.html', users=users)
