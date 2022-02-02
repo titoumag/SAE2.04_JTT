@@ -4,7 +4,7 @@
 from flask import Flask, request, render_template, redirect, url_for, abort, flash, session, g
 from flask import Blueprint
 
-
+from controllers.mails import *
 from controllers.auth_security import *
 
 from controllers.client_article import *
@@ -53,7 +53,7 @@ def before_request():
                 return redirect('/login')
                 #return redirect(url_for('auth_login'))
 
-
+app.register_blueprint(mails)
 app.register_blueprint(auth_security)
 
 app.register_blueprint(client_article)

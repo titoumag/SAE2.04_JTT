@@ -10,3 +10,7 @@ function linkCursor() {
 function normalCursor() {
     document.body.style.cursor = "default";
 }
+
+function afficherMessage(message){
+    alert(message);
+}

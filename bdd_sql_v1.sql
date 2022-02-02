@@ -27,9 +27,9 @@ CREATE TABLE IF NOT EXISTS user(
     pseudo varchar(255),
     email varchar(255),
     solde decimal(10,2),
-    carte_numero varchar(16),
+    carte_numero char(16),
 
-    carte_code varchar(4),
+    carte_code char(4),
     password varchar(255),
 
     role varchar(50),
@@ -138,10 +138,11 @@ CREATE TABLE IF NOT EXISTS avis(
        FOREIGN KEY(user_id) REFERENCES user(id)
 )character set 'utf8';
 
-CREATE TABLE IF NOT EXISTS mail(
+CREATE TABLE IF NOT EXISTS mails(
     id INT NOT NULL auto_increment,
     sender_id INT,
     receiver_id INT,
+    objetMail varchar(255),
     texteMail varchar(255),
     dateEnvoi DATE,
     PRIMARY KEY(id),

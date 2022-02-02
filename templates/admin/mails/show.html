@@ -1,0 +1,42 @@
+{% extends 'admin/layout_admin.html' %}
+
+{% block title %}
+    <title>Mails</title>
+{% endblock %}
+
+{% block body %}
+<h3>Mails</h3>
+<br><br>
+
+<div class="m-5">
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+             <th>De</th>
+             <th>A</th>
+             <th>Objet</th>
+             <th>Date d'Envoi</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if mails | length >= 1 %}
+        {% for ligne in mails %}
+           <tr onclick="afficherMessage('{{ ligne.texteMail }}')" onmouseover="linkCursor()" onmouseleave="normalCursor()">
+               <td>{{ ligne.sender }}</td>
+               <td>{{ ligne.receiver }}</td>
+               <td>{{ ligne.objetMail }}</td>
+               <td>{{ ligne.dateEnvoi }}</td>
+           </tr>
+        {% endfor %}
+    {% else %}
+          <tr>
+              <td>
+                  Personne ne vous aime :(
+              </td>
+         </tr>
+    {% endif %}
+    </tbody>
+</table>
+</div>
+
+{% endblock %}
