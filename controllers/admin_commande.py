@@ -34,6 +34,12 @@ def admin_commande_valider(id):
     mycursor = get_db().cursor()
     sql = '''UPDATE commande SET etat_id=2 WHERE commande.id=%s'''
     mycursor.execute(sql, id)
+
+    mycursor.execute("SELECT * FROM commande WHERE id = %s",(id))
+    commande = mycursor.fetchone()
+    mycursor.execute(
+        "INSERT INTO mails(sender_id,receiver_id,objetMail,texteMail,dateEnvoi) VALUES (%s,%s,%s,%s,CURDATE())",
+        (1, int(commande["user_id"]), "Validation de la commande n°"+str(id), "Bonjour, votre commande a été validée."))
     get_db().commit()
     return redirect('/admin/commande/show')
 

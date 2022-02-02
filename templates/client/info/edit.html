@@ -9,18 +9,6 @@
             <input type="hidden" name="id" size="18" value="9" id="id">
         <div class="mb-3">
                 <input id="user_id" type="hidden" value="{{ user.id }}" >
-
-{#                <label class="form-label" for="type_article_id">type de l'article</label>#}
-{#                <select class="form-select" name="type_article_id" required>#}
-{##}
-{#                    <option value="4"selected> Arrosage </option>#}
-{#                    <option value="6"> Divers </option>#}
-{#                    <option value="1"> Fourniture de bureau </option>#}
-{#                    <option value="2"> Mobilier </option>#}
-{#                    <option value="3"> Mobilier Jardin </option>#}
-{#                    <option value="5"> Outils </option>#}
-{#                </select><br>#}
-{#        </div>#}
         <div class="mb-3">
                 <label class="form-label" for="nom">nom : </label>
                 <input class="form-control" id="nom" type="text" required name="nom" {% if user.nom != "None" %}value="{{ user.nom }}" {% endif %} >
@@ -35,7 +23,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label" for="email">email : </label>
-            <input class="form-control" id="email" type="text" required name="email" {% if user.email != "None" %}value="{{ user.email }}" {% endif %} >
+            <input class="form-control" id="email" type="email" required name="email" {% if user.email != "None" %}value="{{ user.email }}" {% endif %} >
         </div>
 
         <div class="mb-3">
@@ -43,27 +31,9 @@
             <input class="form-control" id="carte_numero" type="text" required name="carte_numero" {% if user.carte_numero != "None" %} value="{{ user.carte_numero }}" {% endif %} >
         </div>
         <div class="mb-3">
-            <label class="form-label" for="carte_code">n° carte : </label>
+            <label class="form-label" for="carte_code">code carte : </label>
             <input class="form-control" id="carte_code" type="text" required name="carte_code" {% if user.carte_code != "None" %} value="{{ user.carte_code }}" {% endif %} >
         </div>
-            {#
-            <div class="mb-3">
-                <label class="form-label" for="stock">stock</label>
-                <input class="form-control" id="stock" type="number" required name="stock" size="18" value="0"
-                       placeholder="Saisir le stock">
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="description">description</label>
-                <input class="form-control" id="description" type="text" name="description" size="18" value="Sheeeeesh"
-                       placeholder="Saisir la description">
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="image">image</label>
-                <input class="form-control" id="image" type="text" name="image" size="18" value="arrosoir1.jpg"
-                       placeholder="Saisir le nom de l'image de l'article">
-            </div>
-
-#}
             <div class="col-12">
                 <button class="btn btn-primary" type="submit">Valider</button>
                 <a href="/client/info/show" class="btn btn-primary">Retour</a>

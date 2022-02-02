@@ -24,3 +24,6 @@ def mails_show():
         return render_template('client/mails/show.html', mails=mails)
     return render_template('admin/mails/show.html', mails=mails)
 
+@mails.route('/mails/write')
+def mails_write():
+    return render_template('mails/write.html', mails=mails)

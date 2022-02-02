@@ -117,5 +117,5 @@ def auth_loginForgot_post():
         get_db().commit()
         return redirect('/login')
     else:
-        flash(u'Vérifier votre login et essayer encore.')
+        flash(u'Vérifier votre login,votre email et essayez encore.')
         return redirect('/loginForgot')

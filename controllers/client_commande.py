@@ -40,8 +40,13 @@ def client_commande_add():
     #efface panier du client
     sql="delete from panier where user_id=%s"
     mycursor.execute(sql, (user_id))
-    get_db().commit()
 
+
+    mycursor.execute(
+        "INSERT INTO mails(sender_id,receiver_id,objetMail,texteMail,dateEnvoi) VALUES (%s,%s,%s,%s,CURDATE())",
+        (1, user_id, "Commande n°"+str(id), "Bonjour, votre commande est en cours de validation."))
+
+    get_db().commit()
     flash(u'Commande ajoutée')
     return redirect('/client/article/show')
 
