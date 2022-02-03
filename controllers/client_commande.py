@@ -24,9 +24,11 @@ def client_commande_add():
     id = mycursor.lastrowid #recupere id commande
     # = '''select last_insert_id()'''
 
+
     sql="insert into ligne_commande values (%s,%s,%s,%s)"
     sql2 = "select * from casque where id=%s"
     sql3="update casque set stock=%s where id=%s"
+    cout_tot=0
     for ligne in totPanier:
         # passe du panier a ligne_commande
         tuple=(id,ligne['casque_id'],ligne['prix'],ligne['quantite'])
@@ -35,16 +37,32 @@ def client_commande_add():
         # recupere etat du stock et soustrait la quantite achetee
         mycursor.execute(sql2,(ligne['casque_id']))
         quantite = mycursor.fetchone()['stock']-int(ligne['quantite'])
+        cout_tot+=float(ligne['quantite'])*float(ligne['prix'])
         mycursor.execute(sql3, (quantite,ligne['casque_id']))
 
     #efface panier du client
     sql="delete from panier where user_id=%s"
     mycursor.execute(sql, (user_id))
 
-
+    # envoie mail
     mycursor.execute(
         "INSERT INTO mails(sender_id,receiver_id,objetMail,texteMail,dateEnvoi) VALUES (%s,%s,%s,%s,CURDATE())",
         (1, user_id, "Commande n°"+str(id), "Bonjour, votre commande est en cours de validation."))
+
+    # reduit solde
+    mycursor.execute("select * from user where id=%s",(user_id))
+    solde=float(mycursor.fetchone()['solde'])-cout_tot
+    mycursor.execute("update user set solde=%s where id=%s", (solde,user_id))
+    if solde<0:
+        texte="Bonjour, vous avez un solde négatif a valeur de :"\
+              +str(solde)+"€. Veuillez vite le rembourser. " \
+                          "Chaque jour, il y aura un interet de 10%. Merci de votre compréhension. " \
+                          "Cordialement, les gérants du site"
+        print(len(texte))
+        print(texte)
+
+        sql="INSERT INTO mails(sender_id,receiver_id,objetMail,texteMail,dateEnvoi) VALUES (%s,%s,%s,%s,CURDATE())"
+        mycursor.execute(sql,(1, user_id, "Solde actuel négatif",texte))
 
     get_db().commit()
     flash(u'Commande ajoutée')
