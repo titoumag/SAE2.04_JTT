@@ -55,8 +55,8 @@ def client_commande_add():
     mycursor.execute("update user set solde=%s where id=%s", (solde,user_id))
     if solde<0:
         texte="Bonjour, vous avez un solde négatif a valeur de :"\
-              +str(solde)+"€. Veuillez vite le rembourser. " \
-                          "Chaque jour, il y aura un interet de 10%. Merci de votre compréhension. " \
+              +str(solde)+"€.<br> Veuillez vite le rembourser.<br> " \
+                          "Chaque jour, il y aura un interet de 10%.<br> Merci de votre compréhension.<br> " \
                           "Cordialement, les gérants du site"
         print(len(texte))
         print(texte)

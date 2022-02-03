@@ -25,7 +25,7 @@
             <a href="/mails/write" class="btn btn-primary m-2" >Ecrire un mail</a>
             {% if mails | length >= 1 %}
                 {% for ligne in mails %}
-                   <tr type="button" onclick="getContent('{{ ligne.sender }}', '{{ ligne.objetMail }}', '{{ ligne.texteMail }}', '{{ ligne.id }}')" onmouseover="linkCursor()" onmouseleave="normalCursor()" data-whatever="{{ ligne.sender }}" data-toggle="modal" data-target="#exampleModalCenter">
+                   <tr onclick="getContent('{{ ligne.sender }}', '{{ ligne.objetMail }}', '{{ ligne.texteMail }}', '{{ ligne.id }}')" onmouseover="linkCursor()" onmouseleave="normalCursor()" data-whatever="{{ ligne.sender }}" data-toggle="modal" data-target="#exampleModalCenter">
                            <td>{{ ligne.sender }}</td>
                            <td>{{ ligne.receiver }}</td>
                            <td>{{ ligne.objetMail }}</td>
