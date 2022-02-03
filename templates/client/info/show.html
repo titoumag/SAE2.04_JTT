@@ -1,5 +1,6 @@
 {% extends "client/layout_client.html" %}
 {% block body %}
+
     <div class="border m-auto p-3" style="width: 500px">
         <table class="table">
             <tr>
@@ -29,7 +30,8 @@
             </tr>
         </table>
         <div>
-            <a href="/client/info/solde-add" class="btn btn-primary m-2" >Ajouter de l'argent</a>
+{#            <button onclick="add_money()" class="btn btn-primary m-2" >Ajouter de l'argent</button>#}
+            <a href="/client/info/add_money" class="btn btn-primary m-2">Ajouter de l'argent</a>
             <a href="/client/info/edit"  class="btn btn-primary m-2" >Modifier son profil</a>
             <button class="btn btn-primary m-2" onclick="alert('{{ user.carte_code }}')">
                 Voir le code de la carte bancaire

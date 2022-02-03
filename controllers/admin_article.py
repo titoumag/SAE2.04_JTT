@@ -84,4 +84,6 @@ def reboot():
     flash('Base rebootée')
     lien=request.args.get('lien')
 
-    return redirect(lien)
+    if session["role"] == "ROLE_client":
+        return redirect('/client/article/show')
+    return redirect('/admin/commande/show')

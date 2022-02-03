@@ -47,3 +47,30 @@ def client_info_edit_recoit():
     get_db().commit()
 
     return redirect('/client/info/show')
+
+@client_info.route('/client/info/add_money', methods=['POST'])
+def client_info_add_money_recoit():
+    mycursor = get_db().cursor()
+    argent = int(request.form.get('argent'))
+    user_id = session["user_id"]
+    sql = "select * from user where id=%s"
+    mycursor.execute(sql, (user_id))
+    user = mycursor.fetchone()
+    argent+=+user['solde']
+
+    sql = "update user set solde=%s where id=%s"
+    tuple = (argent, user_id)
+    mycursor.execute(sql, tuple)
+    get_db().commit()
+
+    return redirect('/client/info/show')
+
+@client_info.route('/client/info/add_money')
+def client_info_add_money():
+    mycursor = get_db().cursor()
+    user_id = session["user_id"]
+    sql = "select * from user where id=%s"
+    mycursor.execute(sql,(user_id))
+    user=mycursor.fetchone()
+
+    return render_template('/client/info/add_money.html',user=user)
