@@ -27,9 +27,7 @@ CREATE TABLE IF NOT EXISTS user(
     pseudo varchar(255),
     email varchar(255),
     solde decimal(10,2),
-    carte_numero char(16),
 
-    carte_code char(4),
     password varchar(255),
 
     role varchar(50),

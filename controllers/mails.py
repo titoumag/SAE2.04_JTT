@@ -33,8 +33,10 @@ def mails_write():
 @mails.route('/mails/send', methods=['POST'])
 def mails_send():
     receiver = request.form.get("receiver_id",None)
-    objet = request.form.get("objet", None)
-    texte = request.form.get("texte", None)
+    objet = request.form.get("objet", None).replace("\"","\'")
+    texte = request.form.get("texte", None).replace("\"","\'")
+
+    texte = replaceAll(texte)
 
     mycursor = get_db().cursor()
     mycursor.execute(
@@ -52,3 +54,11 @@ def mails_delete():
     mycursor.execute("DELETE FROM mails WHERE id = %s",(int(id)))
     get_db().commit()
     return redirect("/mails/show")
+
+def replaceAll(string):
+    newString = ""
+    for char in string:
+        if char == "'":
+            newString+="\\"
+        newString+=char
+    return newString

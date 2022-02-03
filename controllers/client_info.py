@@ -38,11 +38,9 @@ def client_info_edit_recoit():
     prenom = request.form.get('prenom')
     username = request.form.get('username')
     email = request.form.get('email')
-    carte_numero = request.form.get('carte_numero')
-    carte_code = request.form.get('carte_code')
 
-    sql="update user set nom=%s,prenom=%s,username=%s,email=%s,carte_numero=%s,carte_code=%s where id=%s"
-    tuple=(nom,prenom,username,email,carte_numero,carte_code,user_id)
+    sql="update user set nom=%s,prenom=%s,username=%s,email=%s where id=%s"
+    tuple=(nom,prenom,username,email,user_id)
     mycursor.execute(sql,tuple)
     get_db().commit()
 
@@ -56,7 +54,7 @@ def client_info_add_money_recoit():
     sql = "select * from user where id=%s"
     mycursor.execute(sql, (user_id))
     user = mycursor.fetchone()
-    argent+=+user['solde']
+    argent += user['solde']
 
     sql = "update user set solde=%s where id=%s"
     tuple = (argent, user_id)

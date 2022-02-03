@@ -54,8 +54,6 @@ def auth_signup_post():
     email = request.form.get('email')
     username = request.form.get('username')
     password = request.form.get('password')
-    numCarte = request.form.get('numCarte')
-    codeCarte = request.form.get('codeCarte')
     nom = request.form.get('nom')
     prenom = request.form.get('prenom')
     tuple_select = (username, email)
@@ -68,8 +66,8 @@ def auth_signup_post():
 
     # ajouter un nouveau user
     password = generate_password_hash(password, method='sha256')
-    tuple_insert = (username, email, password, 'ROLE_client',1,numCarte,codeCarte,nom,prenom,0)
-    sql = '''INSERT INTO user (username,email,password,role,est_actif,carte_numero,carte_code,nom,prenom,solde) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
+    tuple_insert = (username, email, password, 'ROLE_client',1,nom,prenom,0)
+    sql = '''INSERT INTO user (username,email,password,role,est_actif,nom,prenom,solde) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)'''
     mycursor.execute(sql, tuple_insert)
     get_db().commit()                    # position de cette ligne discutatble !
     sql='''SELECT last_insert_id()'''

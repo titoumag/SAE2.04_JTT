@@ -24,18 +24,11 @@
                 <td>Solde personnel :</td>
                 <td style="color:grey"><div class="border p-2">{{ user.solde }} €</div></td>
             </tr>
-            <tr>
-                <td>Numero carte :</td>
-                <td>{{ user.carte_numero }}</td>
-            </tr>
         </table>
         <div>
 {#            <button onclick="add_money()" class="btn btn-primary m-2" >Ajouter de l'argent</button>#}
             <a href="/client/info/add_money" class="btn btn-primary m-2">Ajouter de l'argent</a>
             <a href="/client/info/edit"  class="btn btn-primary m-2" >Modifier son profil</a>
-            <button class="btn btn-primary m-2" onclick="alert('{{ user.carte_code }}')">
-                Voir le code de la carte bancaire
-            </button>
         </div>
     </div>
 </div>
