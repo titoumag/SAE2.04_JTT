@@ -12,3 +12,8 @@ Séance n°3 :
 - Julien Oudot : Afficher les articles
 - Titouan Magnin : Commandes coté client
 - Titouan Nicot : Commandes coté admin
+
+Séance n°4 :
+- Julien Oudot : 
+- Titouan Magnin : 
+- Titouan NICOT : 

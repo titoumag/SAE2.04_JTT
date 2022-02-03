@@ -8,44 +8,60 @@
 {% endblock %}
 
 {% block body %}
-<h3>Mails</h3>
-<br><br>
+    <h3>Mails</h3>
+    <br><br>
 
-<div class="m-5">
-<table class="table">
-    <thead class="thead-dark">
-        <tr>
-             <th>De</th>
-             <th>A</th>
-             <th>Objet</th>
-             <th>Date d'Envoi</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-    <a href="/mails/write" class="btn btn-primary m-2" >Ecrire un mail</a>
-    {% if mails | length >= 1 %}
-        {% for ligne in mails %}
-           <tr onclick="afficherMessage('{{ ligne.texteMail }}')" onmouseover="linkCursor()" onmouseleave="normalCursor()">
-                   <td>{{ ligne.sender }}</td>
-                   <td>{{ ligne.receiver }}</td>
-                   <td>{{ ligne.objetMail }}</td>
-                   <td>{{ ligne.dateEnvoi }}</td>
-               <td>
-                   <a class="btn btn-danger" href="/mails/delete?id={{ ligne.id }}" onclick="return confirm('Confirmer ?')">Supprimer</a>
-               </td>
-
-           </tr>
-        {% endfor %}
-    {% else %}
-          <tr>
-              <td>
-                  Personne ne vous aime :(
-              </td>
-         </tr>
-    {% endif %}
-    </tbody>
-</table>
-</div>
-
+    <div class="m-5">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                     <th>De</th>
+                     <th>A</th>
+                     <th>Objet</th>
+                     <th>Date d'Envoi</th>
+                </tr>
+            </thead>
+            <tbody>
+            <a href="/mails/write" class="btn btn-primary m-2" >Ecrire un mail</a>
+            {% if mails | length >= 1 %}
+                {% for ligne in mails %}
+                   <tr type="button" onclick="getContent('{{ ligne.sender }}', '{{ ligne.objetMail }}', '{{ ligne.texteMail }}', '{{ ligne.id }}')" onmouseover="linkCursor()" onmouseleave="normalCursor()" data-whatever="{{ ligne.sender }}" data-toggle="modal" data-target="#exampleModalCenter">
+                           <td>{{ ligne.sender }}</td>
+                           <td>{{ ligne.receiver }}</td>
+                           <td>{{ ligne.objetMail }}</td>
+                           <td>{{ ligne.dateEnvoi }}</td>
+                   </tr>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 id="Mtitle" class="modal-title" id="exampleModalLongTitle"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div id="Mbody" class="modal-body">
+                          </div>
+                          <div class="modal-footer2">
+                              <div id="Mfooter"></div>
+                              <div>
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <a id="Mfooter2" class="btn btn-danger" href="/mails/delete?id=" onclick="return confirm('Confirmer ?')">Supprimer</a>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                  <tr>
+                      <td>
+                          Personne ne vous aime :(
+                      </td>
+                 </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
