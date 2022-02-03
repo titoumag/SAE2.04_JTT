@@ -3,7 +3,9 @@
 {% extends "client/layout_client.html" %}
 {% block body %}
     <div class="container">
-        <div style="text-align: center">Solde actuel : <span class="border"> {{ user.solde }}€</span></div>
+        <div class="border m-auto" style="width: 200px">
+            Solde actuel : <span class="border"> {{ user.solde }}€</span>
+        </div>
         <div class="row align-self-right m-3">
             <div class="col-8 border">
 {#            {% if articlesPanier | length >= 1 %}#}
