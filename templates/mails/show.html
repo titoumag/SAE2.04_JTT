@@ -1,5 +1,8 @@
-{% extends 'admin/layout_admin.html' %}
-
+{% if session["role"] == "ROLE_client" %}
+    {% extends 'client/layout_client.html' %}
+{% else %}
+    {% extends 'admin/layout_admin.html' %}
+{% endif %}
 {% block title %}
     <title>Mails</title>
 {% endblock %}
@@ -16,16 +19,22 @@
              <th>A</th>
              <th>Objet</th>
              <th>Date d'Envoi</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
+    <a href="/mails/write" class="btn btn-primary m-2" >Ecrire un mail</a>
     {% if mails | length >= 1 %}
         {% for ligne in mails %}
            <tr onclick="afficherMessage('{{ ligne.texteMail }}')" onmouseover="linkCursor()" onmouseleave="normalCursor()">
-               <td>{{ ligne.sender }}</td>
-               <td>{{ ligne.receiver }}</td>
-               <td>{{ ligne.objetMail }}</td>
-               <td>{{ ligne.dateEnvoi }}</td>
+                   <td>{{ ligne.sender }}</td>
+                   <td>{{ ligne.receiver }}</td>
+                   <td>{{ ligne.objetMail }}</td>
+                   <td>{{ ligne.dateEnvoi }}</td>
+               <td>
+                   <a class="btn btn-danger" href="/mails/delete?id={{ ligne.id }}" onclick="return confirm('Confirmer ?')">Supprimer</a>
+               </td>
+
            </tr>
         {% endfor %}
     {% else %}
