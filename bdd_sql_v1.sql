@@ -138,12 +138,15 @@ CREATE TABLE IF NOT EXISTS avis(
 
 CREATE TABLE IF NOT EXISTS mails(
     id INT NOT NULL auto_increment,
+    owner_id INT,
     sender_id INT,
     receiver_id INT,
     objetMail varchar(255),
     texteMail varchar(255),
     dateEnvoi DATE,
     PRIMARY KEY(id),
+    CONSTRAINT fk_mail_owner
+       FOREIGN KEY(owner_id) REFERENCES user(id),
     CONSTRAINT fk_mail_sender
        FOREIGN KEY(sender_id) REFERENCES user(id),
     CONSTRAINT fk_mail_receiver

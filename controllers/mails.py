@@ -17,8 +17,8 @@ def mails_show():
                      "FROM mails "
                      "INNER JOIN user receiver on mails.receiver_id = receiver.id "
                      "INNER JOIN user sender on sender_id = sender.id "
-                     "WHERE sender_id = %s OR receiver_id = %s",
-                     (session["user_id"], session["user_id"]))
+                     "WHERE owner_id = %s",
+                     (session["user_id"]))
     mails = mycursor.fetchall()
     return render_template('mails/show.html', mails=mails)
 
@@ -41,8 +41,10 @@ def mails_send():
 
     mycursor = get_db().cursor()
     mycursor.execute(
-        "INSERT INTO mails(sender_id,receiver_id,objetMail,texteMail,dateEnvoi) VALUES (%s,%s,%s,%s,CURDATE())",
-        (session["user_id"], receiver, objet, texte))
+        "INSERT INTO mails(owner_id,sender_id,receiver_id,objetMail,texteMail,dateEnvoi) "
+        "VALUES (%s,%s,%s,%s,%s,CURDATE()),(%s,%s,%s,%s,%s,CURDATE())",
+        (session["user_id"],session["user_id"], receiver, objet, texte,
+         receiver,session["user_id"], receiver, objet, texte))
     get_db().commit()
     flash("Votre mail a bien été envoyé !")
     return redirect("/mails/show")
