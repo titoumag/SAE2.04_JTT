@@ -12,6 +12,7 @@ function getContent(sender, objetMail, message, id) {
     let body = document.getElementById('Mbody');
     let from = document.getElementById('Mfooter');
     let idDelete = document.getElementById('Mfooter2');
+
     title.innerHTML = objetMail;
     body.innerHTML = message;
     from.innerHTML = 'from : ' + sender;
