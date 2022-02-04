@@ -35,7 +35,7 @@ def mails_write():
 def mails_send():
     receiver = request.form.get("receiver_id", None)
     objet = request.form.get("objet", None).replace("\"","\'")
-    texte = request.form.get("texte", None).replace("\"","\'")
+    texte = request.form.get("texte", None).replace("\"","\'").replace("\r\n","<br>")
 
     texte = replaceAll(texte)
 
@@ -60,6 +60,9 @@ def mails_delete():
 def replaceAll(string):
     newString = ""
     for char in string:
+        if char in ["r","n"] and newString[-1] == "\\":
+            newString = newString[:-2]
+            continue
         if char == "'":
             newString+="\\"
         newString+=char
