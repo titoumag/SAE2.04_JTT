@@ -17,12 +17,16 @@ def client_commande_add():
     mycursor.execute(sql, (user_id))
     totPanier=mycursor.fetchall()
 
+    typeLivraison = request.form.get("type_id",None)
+
     # cree une ligne commande pour l'utilisateur
-    sql = "insert into commande values (null,CURDATE(),%s,1)"
-    mycursor.execute(sql, (user_id))
+    sql = "insert into commande(date_achat,user_id,etat_id,type_livraison_id) values (CURDATE(),%s,1,%s)"
+    mycursor.execute(sql, (user_id,typeLivraison))
     get_db().commit()
     id = mycursor.lastrowid #recupere id commande
-    # = '''select last_insert_id()'''
+
+    mycursor.execute("select * from type_livraison where id=%s",(typeLivraison))
+    tLivraison = mycursor.fetchone()
 
 
     sql="insert into ligne_commande values (%s,%s,%s,%s)"
@@ -51,7 +55,7 @@ def client_commande_add():
 
     # reduit solde
     mycursor.execute("select * from user where id=%s",(user_id))
-    solde=float(mycursor.fetchone()['solde'])-cout_tot
+    solde=float(mycursor.fetchone()['solde'])-cout_tot*float(tLivraison["valeurAjoute"])
     mycursor.execute("update user set solde=%s where id=%s", (solde,user_id))
     if solde<0:
         texte="Bonjour, vous avez un solde négatif a valeur de :"\
@@ -96,5 +100,8 @@ def client_commande_show():
         articles_commande = mycursor.fetchall()
     else:
         articles_commande = None
+
+
+
     return render_template('client/commandes/show.html', commandes=commandes, articles_commande=articles_commande)
 

@@ -11,6 +11,14 @@ DROP TABLE IF EXISTS fabricant;
 DROP TABLE IF EXISTS couleur;
 DROP TABLE IF EXISTS type_casque;
 DROP TABLE IF EXISTS etat;
+DROP TABLE IF EXISTS type_livraison;
+
+CREATE TABLE IF NOT EXISTS type_livraison(
+    id INT NOT NULL auto_increment,
+    libelle VARCHAR(50),
+    valeurAjoute NUMERIC(4,2),
+    PRIMARY KEY(id)
+);
 
 CREATE TABLE IF NOT EXISTS etat(
     id int auto_increment,
@@ -41,7 +49,9 @@ CREATE TABLE IF NOT EXISTS commande(
     date_achat DATE,
     user_id int,
     etat_id int,
-
+    type_livraison_id INT,
+    CONSTRAINT fk_commande_type_livraison
+        FOREIGN KEY(type_livraison_id) REFERENCES type_livraison(id),
     CONSTRAINT fk_commande_user
         FOREIGN KEY(user_id) REFERENCES user(id),
     CONSTRAINT fk_commande_etat
@@ -152,6 +162,13 @@ CREATE TABLE IF NOT EXISTS mails(
     CONSTRAINT fk_mail_receiver
        FOREIGN KEY(receiver_id) REFERENCES user(id)
 );
+
+
+
+INSERT INTO type_livraison(libelle,valeurAjoute) VALUES
+('Normal',1.0),
+('Supplément McDonald',1.2),
+('Livraison Express Pierre',1.5);
 
 insert into etat values
 (null,'en cours'),

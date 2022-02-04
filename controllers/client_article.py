@@ -67,9 +67,11 @@ def client_article_show():  # remplace client_index
     mycursor.execute("select * from user where id=%s", session['user_id'])
     user=mycursor.fetchone()
 
+    mycursor.execute("SELECT * FROM type_livraison")
+    type_livraison = mycursor.fetchall()
 
     return render_template('client/boutique/panier_article.html', articles=articles, articlesPanier=articles_panier,
-                           prix_total=prix_total, itemsFiltre=types_articles,user=user)
+                           prix_total=prix_total, itemsFiltre=types_articles,user=user,type_livraison=type_livraison)
 
 
 @client_article.route('/client/article/details/<int:id>', methods=['GET'])

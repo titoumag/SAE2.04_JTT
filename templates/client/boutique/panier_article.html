@@ -62,11 +62,9 @@
                             <img style="width: 48px" class="rounded" src="{{url_for('static', filename='images_asset/deletePanier.jpeg')}}">
                         </button>
                     </form>
-                    <form action="/client/commande/add" style="display: inline-block;"  method="post" >
-                        <button class="btn btn-white" >
-                            <img style="width: 200px" src="{{url_for('static', filename='images_asset/addCommande.jpeg')}}">
-                        </button>
-                    </form>
+                    <button class="btn btn-white" data-toggle="modal" data-target="#exampleModalCenter" >
+                        <img style="width: 200px" src="{{url_for('static', filename='images_asset/addCommande.jpeg')}}">
+                    </button>
                     <div>Total à payer : <strong>{{ "{:.2f} € ".format(prix_total) }}</strong></div>
                 {% endif %}
             </div>
@@ -145,5 +143,41 @@
                         </div>
                 {% endfor %}
         </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Type de Livraison</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div id="Mbody" class="modal-body">
+              Merci de choisir votre type de livraison :
+                <form method="post" action="/client/commande/add" >
+                <fieldset>
+                    <label for="type_id">Type</label><br>
+                    <select  id="type_id" name="type_id" required>
+                        <option value="">Sélectionner le type de livraison</option>
+                        {% for type in type_livraison %}
+                             <option value="{{ type.id }}"> {{ type.libelle }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <input type="submit" value="Commander" name="commander" >
+                </fieldset>
+              </form>
+          </div>
+          <div class="modal-footer2">
+              <div id="Mfooter" style="font-size: 5px">(Des frais supplémentaires peuvent être appliqués)</div>
+              <div>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+          </div>
+        </div>
+      </div>
     </div>
 {% endblock %}
