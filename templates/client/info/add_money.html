@@ -24,14 +24,14 @@
             </tr>
             <tr>
                 <td>Code : </td>
-                <td><input type="text" name="code" required minlength="4" maxlength="4" ></td>
+                <td><input type="password" name="code" required minlength="4" maxlength="4" ></td>
             </tr>
             <tr>
-                <td colspan="2">Rentrer désormais le montant que vous voulez ajouter.</td>
+                <td colspan="2">Rentrez désormais le montant que vous voulez ajouter.</td>
             </tr>
             <tr>
                 <td>Montant :</td>
-                <td><input type="number" name="argent" required></td>
+                <td><input type="number" min="0.00" max="999999999.99" name="argent" required></td>
             </tr>
         </table>
         <button class="btn btn-primary" type="submit">Valider</button>

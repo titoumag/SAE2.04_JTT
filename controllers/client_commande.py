@@ -46,8 +46,8 @@ def client_commande_add():
 
     # envoie mail
     mycursor.execute(
-        "INSERT INTO mails(sender_id,receiver_id,objetMail,texteMail,dateEnvoi) VALUES (%s,%s,%s,%s,CURDATE())",
-        (1, user_id, "Commande n°"+str(id), "Bonjour, votre commande est en cours de validation."))
+        "INSERT INTO mails(owner_id,sender_id,receiver_id,objetMail,texteMail,dateEnvoi) VALUES (%s,%s,%s,%s,%s,CURDATE())",
+        (user_id,1, user_id, "Commande n°"+str(id), "Bonjour, votre commande est en cours de validation."))
 
     # reduit solde
     mycursor.execute("select * from user where id=%s",(user_id))
@@ -61,8 +61,8 @@ def client_commande_add():
         print(len(texte))
         print(texte)
 
-        sql="INSERT INTO mails(sender_id,receiver_id,objetMail,texteMail,dateEnvoi) VALUES (%s,%s,%s,%s,CURDATE())"
-        mycursor.execute(sql,(1, user_id, "Solde actuel négatif",texte))
+        sql="INSERT INTO mails(owner_id,sender_id,receiver_id,objetMail,texteMail,dateEnvoi) VALUES (%s,%s,%s,%s,%s,CURDATE())"
+        mycursor.execute(sql,(user_id,1, user_id, "Solde actuel négatif",texte))
 
     get_db().commit()
     flash(u'Commande ajoutée')

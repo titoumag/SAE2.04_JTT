@@ -110,8 +110,8 @@ def auth_loginForgot_post():
     if user:
         flash(u'Un mail (facturé à 50€) a été envoyé à '+mail+" .")
         mycursor.execute("UPDATE user SET solde = %s WHERE id = %s",(user["solde"]-50,user["id"]))
-        mycursor.execute("INSERT INTO mails(sender_id,receiver_id,objetMail,texteMail,dateEnvoi) VALUES (%s,%s,%s,%s,CURDATE())",
-                         (1,user["id"],"Oubli de Mot de Passe","Bonjour, merci de vous souvenir de votre mot de passe." ))
+        mycursor.execute("INSERT INTO mails(owner_id,sender_id,receiver_id,objetMail,texteMail,dateEnvoi) VALUES (%s,%s,%s,%s,%s,CURDATE())",
+                         (user["id"],1,user["id"],"Oubli de Mot de Passe","Bonjour, merci de vous souvenir de votre mot de passe." ))
         get_db().commit()
         return redirect('/login')
     else:
