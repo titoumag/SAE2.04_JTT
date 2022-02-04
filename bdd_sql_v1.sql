@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS user(
     prenom varchar(50),
     pseudo varchar(255),
     email varchar(255),
-    solde decimal(10,2),
+    solde decimal(12,2),
 
     password varchar(255),
 
@@ -214,7 +214,7 @@ INSERT INTO casque(libelle,fabricant_id,taille_id,couleur_id,type_casque_id,imag
 ('Casque Contremaitre',10,2,4,3,'casqueChantier2.jpg',25,17.99),
 ('Casque Colonial',8,2,5,3,'casqueColonial.jpg',45,8.99),
 ('Casque GIGN',11,2,1,1,'casqueMilitaire1.jpg',37,25.99),
-('Casque Soviétique',12,2,2,1,'casqueMilitaire2.jpg',28,18.99),
+('Casque Soviétique',12,2,2,3,'casqueMilitaire2.jpg',28,18.99),
 ('Casque Chat',9,2,7,2,'CasqueMusique1.jpg',48,3.99),
 ('Casque Wookie',9,2,6,2,'CasqueMusique2.jpg',150,8.99),
 ('Casque Musique Pas Fun',9,2,2,2,'CasqueMusique3.jpg',21,4.99),
@@ -227,7 +227,16 @@ INSERT INTO casque(libelle,fabricant_id,taille_id,couleur_id,type_casque_id,imag
 ('Casque VR Sony',8,2,2,5,'casqueVR1.jpg',13,105.99),
 ('Casque LaserScope',8,2,1,5,'laserScope.jpg',28,98.99),
 ('Occulus Rift',8,2,2,5,'occulusRift.jpeg',27,352.99),
-('PediSedate (Game Boy)',8,2,2,5,'pediSedate.jpeg',27,67.99);
-
-INSERT INTO avis VALUES
-(1,2,'Incroyable',5);
+('PediSedate (Game Boy)',8,2,2,5,'pediSedate.jpeg',58,67.99),
+('Passoir Pastafariste',9,2,1,3,'casquePassoir.png',98,48.99),
+('Picole Nationale',9,2,6,3,'casquePicole.png',45,36.99),
+('Casque Power Ranger',9,2,3,3,'casquePowerRanger.png',12,53.99),
+('Casque Romain',6,2,1,1,'casqueRomain.jpeg',68,89.99),
+('Casque Samurai',5,2,1,1,'casqueSamurai.png',78,168.99),
+('Casque Dark Vador',13,2,2,4,'casqueVador.jpg',69,75.99),
+('Casque Ailettes',3,2,1,1,'casqueEpic1.png',35,258.99),
+('Casque Garde',3,2,1,1,'casqueSkyrim1.png',48,142.99),
+('Casque Sommeil',3,2,1,1,'CasqueSkyrim2.jpeg',39,274.99),
+('Casque Ponpon',9,2,5,3,'CasquePonpon.jpg',39,29.99),
+('Casque Anglais',1,2,2,3,'casqueAnglais.jpg',29,139.99),
+('Casque Invisible',8,2,3,3,'casqueInvisible.png',287,896.99);

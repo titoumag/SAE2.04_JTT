@@ -49,12 +49,17 @@ def client_info_edit_recoit():
 @client_info.route('/client/info/add_money', methods=['POST'])
 def client_info_add_money_recoit():
     mycursor = get_db().cursor()
-    argent = int(request.form.get('argent'))
+    argent = int(request.form.get('argent',None))
     user_id = session["user_id"]
     sql = "select * from user where id=%s"
     mycursor.execute(sql, (user_id))
     user = mycursor.fetchone()
     argent += user['solde']
+    if argent > 9999999999.99:
+        argent = 9999999999.99
+
+    if argent < -9999999999.99:
+        argent = -9999999999.99
 
     sql = "update user set solde=%s where id=%s"
     tuple = (argent, user_id)
