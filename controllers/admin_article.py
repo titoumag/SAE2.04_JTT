@@ -12,7 +12,9 @@ admin_article = Blueprint('admin_article', __name__,
 @admin_article.route('/admin/article/show')
 def show_article():
     mycursor = get_db().cursor()
-    articles = None
+    sql = '''select * from casque'''
+    mycursor.execute(sql)
+    articles = mycursor.fetchall()
     # print(articles)
     return render_template('admin/article/show_article.html', articles=articles)
 
@@ -54,8 +56,12 @@ def delete_article():
 @admin_article.route('/admin/article/edit/<int:id>', methods=['GET'])
 def edit_article(id):
     mycursor = get_db().cursor()
-    article = None
-    types_articles = None
+    sql = '''select * from casque where id=%s'''
+    mycursor.execute(sql, id)
+    article = mycursor.fetchall()
+    sql = '''select * from type_casque'''
+    mycursor.execute(sql)
+    types_articles = mycursor.fetchall()
     return render_template('admin/article/edit_article.html', article=article, types_articles=types_articles)
 
 
@@ -76,13 +82,14 @@ def valid_edit_article():
     flash(message)
     return redirect(url_for('admin_article.show_article'))
 
-@admin_article.route('/reboot',methods=['GET'])
+
+@admin_article.route('/reboot', methods=['GET'])
 def reboot():
     mycursor = get_db().cursor()
     mycursor.execute("update casque set stock=5000")
     get_db().commit()
     flash('Base rebootée')
-    lien=request.args.get('lien')
+    lien = request.args.get('lien')
 
     if session["role"] == "ROLE_client":
         return redirect('/client/article/show')

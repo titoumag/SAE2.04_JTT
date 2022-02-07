@@ -5,9 +5,63 @@
 {% endblock %}
 
 {% block body %}
-<h3>articles</h3>
-<a  class="btn btn-outline-success" href="/admin/article/add">ajouter un article</a>
-<br><br>
+    <h3>articles</h3>
+    <a  class="btn btn-outline-success" href="/admin/article/add">ajouter un article</a>
+    <br><br>
+    <div class="row">
+        {% for article in articles  %}
+            <div class="card col-3 mt-4">
+                <div class="card-body border-dark rounded">
+                    <a href="/admin/article/details/{{ article.id }}">
+                    <h2 class="card-title">
+                        <span style="color: #0b2e13">{{ article.libelle }}</span><br>
+                    </h2>
+                    <div class="card-body">
+                         {%  if article.image is not none %}
+                            <img class="card-img-top rounded mx-auto d-block"  style="width:100px;height:100px"  src="{{ url_for('static', filename = 'images/' + article['image']) }}"  alt="image  de {{ article.nom }}" >
+                        {% else %} <img class="card-img-top rounded mx-auto d-block"   style="width:100px;height:100px"   src="{{ url_for('static', filename='images/no_photo.jpeg')}}"  alt="image  de {{ article.nom }}" >
+                        {% endif %}
+                        <hr>
+                    </div>
+                    </a>
+                    <div class="card-body">
+                            <form  action="/admin/article/edit/{{ article.id }}" method="post">
+                                <input type="hidden" name="idArticle" value="{{ article.id }}">
+                                <button class="btn btn-white float-right border-dark">
+                                    <img style="width: 30px" src="{{url_for('static', filename='images_asset/ajoutPanier.jpeg')}}" alt="ajoutStock.png">
+                                 </button>
+
+                                <h4>{{ article.prix }} €</h4>
+                            </form>
+                    </div>
+                </div>
+                <div class="card-footer">
+                {% if article.stock is defined %}
+                     {% if article.stock > 0 %}
+                        <small class="text-muted">Stock restant : {{ article.stock }}</small>
+                     {% else %}
+                        <small class="text-muted">article  momentanément indisponible</small>
+                     {% endif %}
+                {% endif %}
+                    <br>
+                {% if article.nb_avis is defined %}
+                {% if article.nb_avis > 0 %}
+                     <a  href="/client/article/details/{{ article.id }}">
+                        <span style="color: #3A7734"> note : {{  article.moy_notes | int }}</span>
+                     </a>
+                {% endif %}
+                {% endif %}
+                {% if article.nb_avis is defined %}
+                {% if article.nb_avis > 0 %}
+                     <a href="/client/article/details/{{ article.id }}">
+                        <span style="color: #3A7734">({{ article.nb_avis }} avis)</span>
+                     </a>
+                {% endif %}
+                {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
 
 {% endblock %}

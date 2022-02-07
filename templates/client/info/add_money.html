@@ -12,15 +12,15 @@
             </tr>
             <tr>
                 <td>Verifier votre carte :</td>
-                <td><input type="text" name="numero" required value="{{ user.carte_numero }}" minlength="16" maxlength="16" ></td>
+                <td><label for="numero"><input type="text" name="numero" required value="{{ user.carte_numero }}" minlength="16" maxlength="16" ></label></td>
             </tr>
             <tr>
-                <td>Numero à 3 chiffre derriere la carte : </td>
-                <td><input type="text" name="picto" required minlength="3" maxlength="3" ></td>
+                <td>CVV : </td>
+                <td><label for="picto"><input type="text" name="picto" required minlength="3" maxlength="3" ></label></td>
             </tr>
             <tr>
                 <td>Date d'expiration (MM/AAAA): </td>
-                <td><input type="text" name="expi" required minlength="7" maxlength="7" ></td>
+                <td><label for="expi"><input type="text" name="expi" required minlength="7" maxlength="7" ></label></td>
             </tr>
             <tr>
                 <td>Code : </td>
