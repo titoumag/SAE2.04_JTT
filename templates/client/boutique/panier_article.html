@@ -159,7 +159,6 @@
               Merci de choisir votre type de livraison :
                 <form method="post" action="/client/commande/add" >
                 <fieldset>
-                    <label for="type_id">Type</label><br>
                     <select  id="type_id" name="type_id" required>
                         <option value="">Sélectionner le type de livraison</option>
                         {% for type in type_livraison %}
@@ -167,12 +166,13 @@
                         {% endfor %}
                     </select>
                     <br>
+                <br>
                     <input type="submit" value="Commander" name="commander" >
                 </fieldset>
               </form>
           </div>
           <div class="modal-footer2">
-              <div id="Mfooter" style="font-size: 5px">(Des frais supplémentaires peuvent être appliqués)</div>
+              <div id="Mfooter" style="font-size: 10px">(Des frais supplémentaires peuvent être appliqués)</div>
               <div>
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
               </div>
