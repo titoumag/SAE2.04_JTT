@@ -1,21 +1,20 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
 from flask import Blueprint
-from flask import Flask, request, render_template, redirect, url_for, abort, flash, session, g
-from datetime import datetime
+from flask import request, render_template, redirect, flash, session
 from connexion_db import get_db
 
 client_commande = Blueprint('client_commande', __name__,
-                        template_folder='templates')
+                            template_folder='templates')
 
 
 @client_commande.route('/client/commande/add', methods=['POST'])
 def client_commande_add():
     mycursor = get_db().cursor()
-    user_id=session['user_id']
-    sql="select * from panier INNER JOIN casque ON casque.id=panier.casque_id where user_id=%s"
-    mycursor.execute(sql, (user_id))
-    totPanier=mycursor.fetchall()
+    user_id = session['user_id']
+    sql = "select * from panier INNER JOIN casque ON casque.id=panier.casque_id where user_id=%s"
+    mycursor.execute(sql, user_id)
+    totPanier = mycursor.fetchall()
 
     typeLivraison = request.form.get("type_id",None)
 
@@ -23,30 +22,31 @@ def client_commande_add():
     sql = "insert into commande(date_achat,user_id,etat_id,type_livraison_id) values (CURDATE(),%s,1,%s)"
     mycursor.execute(sql, (user_id,typeLivraison))
     get_db().commit()
-    id = mycursor.lastrowid #recupere id commande
+
+    # recupere id commande
+    id = mycursor.lastrowid
 
     mycursor.execute("select * from type_livraison where id=%s",(typeLivraison))
     tLivraison = mycursor.fetchone()
 
-
-    sql="insert into ligne_commande values (%s,%s,%s,%s)"
+    sql = "insert into ligne_commande values (%s,%s,%s,%s)"
     sql2 = "select * from casque where id=%s"
-    sql3="update casque set stock=%s where id=%s"
-    cout_tot=0
+    sql3 = "update casque set stock=%s where id=%s"
+    cout_tot = 0
     for ligne in totPanier:
         # passe du panier a ligne_commande
-        tuple=(id,ligne['casque_id'],ligne['prix'],ligne['quantite'])
-        mycursor.execute(sql,tuple)
+        tuple = (id, ligne['casque_id'], ligne['prix'], ligne['quantite'])
+        mycursor.execute(sql, tuple)
 
         # recupere etat du stock et soustrait la quantite achetee
-        mycursor.execute(sql2,(ligne['casque_id']))
-        quantite = mycursor.fetchone()['stock']-int(ligne['quantite'])
-        cout_tot+=float(ligne['quantite'])*float(ligne['prix'])
-        mycursor.execute(sql3, (quantite,ligne['casque_id']))
+        mycursor.execute(sql2, (ligne['casque_id']))
+        quantite = mycursor.fetchone()['stock'] - int(ligne['quantite'])
+        cout_tot += float(ligne['quantite']) * float(ligne['prix'])
+        mycursor.execute(sql3, (quantite, ligne['casque_id']))
 
-    #efface panier du client
-    sql="delete from panier where user_id=%s"
-    mycursor.execute(sql, (user_id))
+    # efface panier du client
+    sql = "delete from panier where user_id=%s"
+    mycursor.execute(sql, user_id)
 
     # envoie mail
     mycursor.execute(
@@ -73,21 +73,20 @@ def client_commande_add():
     return redirect('/client/article/show')
 
 
-
-@client_commande.route('/client/commande/show', methods=['GET','POST'])
+@client_commande.route('/client/commande/show', methods=['GET', 'POST'])
 def client_commande_show():
     mycursor = get_db().cursor()
 
-    currentCommande = request.form.get("idCommande",'')
-    print("commande : ",currentCommande)
+    currentCommande = request.form.get("idCommande", '')
+    print("commande : ", currentCommande)
 
     sql = "select commande.id,libelle,date_achat, count(*) as nbr_articles,sum(quantite) as nb_tot,sum(prix_unit*quantite) as prix_total,etat_id " \
-        "from commande " \
-        "inner join ligne_commande on commande.id=ligne_commande.commande_id " \
-        "inner join etat on commande.etat_id=etat.id" \
+          "from commande " \
+          "inner join ligne_commande on commande.id=ligne_commande.commande_id " \
+          "inner join etat on commande.etat_id=etat.id" \
           " where user_id=%s " \
           "group by commande.id,date_achat,etat_id;"
-    mycursor.execute(sql,session['user_id'])
+    mycursor.execute(sql, session['user_id'])
     commandes = mycursor.fetchall()
 
     if currentCommande is not None:
@@ -96,12 +95,8 @@ def client_commande_show():
               "INNER JOIN casque ON casque_id = casque.id " \
               "WHERE commande_id = %s " \
               "GROUP BY casque.id"
-        mycursor.execute(sql,(currentCommande))
+        mycursor.execute(sql, currentCommande)
         articles_commande = mycursor.fetchall()
     else:
         articles_commande = None
-
-
-
-    return render_template('client/commandes/show.html', commandes=commandes, articles_commande=articles_commande)
-
+    return render_template('client/commandes/show.html', commandes=commandes, articles_commande=articles_commande, commande_id=currentCommande)
