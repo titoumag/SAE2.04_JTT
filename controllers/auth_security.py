@@ -34,6 +34,7 @@ def auth_login_post():
             session['username'] = user['username']
             session['role'] = user['role']
             session['user_id'] = user['id']
+            session['clic'] = 0
             print(user['username'], user['role'])
             if user['role'] == 'ROLE_admin':
                 return redirect('/admin/commande/index')
@@ -81,6 +82,7 @@ def auth_signup_post():
     session['username'] = username
     session['role'] = 'ROLE_client'
     session['user_id'] = user_id
+    session['clic'] = 0
     return redirect('/client/article/show')
     #return redirect(url_for('client_index'))
 
@@ -90,6 +92,7 @@ def auth_logout():
     session.pop('username', None)
     session.pop('role', None)
     session.pop('user_id', None)
+    session.pop('clic',None)
     return redirect('/')
     #return redirect(url_for('main_index'))
 
