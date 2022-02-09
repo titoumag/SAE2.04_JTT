@@ -7,7 +7,12 @@
             Solde actuel :
             <strong {% if user.solde <= 0 %} style="color: red" {% else %} style="color: green" {% endif %}>
             {{ user.solde }} €
-        </strong>
+            </strong>
+            <hr>
+            nombre clic :
+            <strong>
+            {{ clic }}
+            </strong>
         </div>
         <div class="row align-self-right m-3">
             <div class="col-8 border">

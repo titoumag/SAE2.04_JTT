@@ -41,6 +41,8 @@ def show_accueil():
 
 @app.before_request
 def before_request():
+     if 'clic' in session:
+        session['clic']+=1
      if request.path.startswith('/admin') or request.path.startswith('/client'):
         if 'role' not in session:
             return redirect('/login')

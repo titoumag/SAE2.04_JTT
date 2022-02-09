@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 from flask import Blueprint
 from flask import request, render_template, redirect, flash, session
-from connexion_db import get_db
+from connexion_db import get_db,update_property
 
 client_commande = Blueprint('client_commande', __name__,
                             template_folder='templates')
@@ -54,19 +54,7 @@ def client_commande_add():
         (user_id,1, user_id, "Commande n°"+str(id), "Bonjour, votre commande est en cours de validation."))
 
     # reduit solde
-    mycursor.execute("select * from user where id=%s",(user_id))
-    solde=float(mycursor.fetchone()['solde'])-cout_tot*float(tLivraison["valeurAjoute"])
-    mycursor.execute("update user set solde=%s where id=%s", (solde,user_id))
-    if solde<0:
-        texte="Bonjour, vous avez un solde négatif a valeur de :"\
-              +str(solde)+"€.<br> Veuillez vite le rembourser.<br> " \
-                          "Chaque jour, il y aura un interet de 10%.<br> Merci de votre compréhension.<br> " \
-                          "Cordialement, les gérants du site"
-        print(len(texte))
-        print(texte)
-
-        sql="INSERT INTO mails(owner_id,sender_id,receiver_id,objetMail,texteMail,dateEnvoi) VALUES (%s,%s,%s,%s,%s,CURDATE())"
-        mycursor.execute(sql,(user_id,1, user_id, "Solde actuel négatif",texte))
+    update_property("solde",-cout_tot * float(tLivraison["valeurAjoute"]))
 
     get_db().commit()
     flash(u'Commande ajoutée')

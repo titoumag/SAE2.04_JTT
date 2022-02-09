@@ -14,6 +14,8 @@ def client_panier_update():
     mycursor = get_db().cursor()
     idArticle = request.form.get('idArticle')
     direction = int(request.form.get('quantite'))
+    if (direction<-5):
+        return redirect('/client/article/show')
     user_id = session['user_id']
 
     sql = "select * from panier where casque_id=%s and user_id=%s"

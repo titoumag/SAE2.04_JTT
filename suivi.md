@@ -16,4 +16,9 @@ Séance n°3 :
 Séance n°4 :
 - Julien Oudot : 
 - Titouan Magnin : 
-- Titouan NICOT : 
+- Titouan Nicot : js Mails, liste article admin
+
+Séance n°5:
+- Julien Oudot :
+- Titouan Magnin :
+- Titouan Nicot :
