@@ -89,8 +89,15 @@ def reboot():
     mycursor.execute("update casque set stock=5000")
     get_db().commit()
     flash('Base rebootée')
-    lien = request.args.get('lien')
 
     if session["role"] == "ROLE_client":
         return redirect('/client/article/show')
     return redirect('/admin/commande/show')
+
+
+@admin_article.route('/admin/article/bilan')
+def dataviz_article():
+    mycursor = get_db().cursor()
+    mycursor.execute("SELECT type_casque_id,type_casque.libelle,SUM(prix) as prix_total FROM casque INNER JOIN type_casque ON type_casque_id=type_casque.id GROUP BY type_casque_id")
+    casques = mycursor.fetchall()
+    return render_template('admin/dataviz/etat_article_vente.html', casques=casques)
