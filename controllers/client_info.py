@@ -17,7 +17,11 @@ def client_info_show():
     mycursor.execute(sql,(user_id))
     user=mycursor.fetchone()
 
-    return render_template('/client/info/show.html',user=user)
+    sql="select * from liste_adresse inner join adresse on liste_adresse.Id_Adresse=adresse.id  where Id_User=%s"
+    mycursor.execute(sql,(user_id))
+    adresse=mycursor.fetchall()
+
+    return render_template('/client/info/show.html',user=user,liste=adresse)
 
 @client_info.route('/client/info/edit', methods=['GET'])
 def client_info_edit():
@@ -69,3 +73,46 @@ def client_info_add_money():
     user=mycursor.fetchone()
 
     return render_template('/client/info/add_money.html',user=user)
+
+@client_info.route('/client/info/delete_adresse',methods=['POST'])
+def client_info_delete_adresse():
+    mycursor = get_db().cursor()
+    user_id = session["user_id"]
+    adresse= request.form.get('adresse')
+
+    sql = "delete from liste_adresse where Id_User=%s and Id_Adresse=%s"
+    mycursor.execute(sql, (user_id,adresse))
+    get_db().commit()
+
+    return redirect('/client/info/show')
+
+@client_info.route('/client/info/add_adresse')
+def client_info_add_adresse():
+    mycursor = get_db().cursor()
+    user_id = session["user_id"]
+    sql = "select * from user where id=%s"
+    mycursor.execute(sql,(user_id))
+    user=mycursor.fetchone()
+
+    return render_template('/client/info/add_adresse.html',user=user)
+
+@client_info.route('/client/info/add_adresse',methods=['POST'])
+def client_info_add_adresse_recoit():
+    mycursor = get_db().cursor()
+    user_id = session["user_id"]
+    ville = request.form.get('ville')
+    rue = request.form.get('rue')
+    numero = request.form.get('numero')
+    code= request.form.get('code')
+    print(ville,numero,code,rue)
+
+    sql = "insert into adresse values (null,%s,%s,%s,%s)"
+    mycursor.execute(sql, (ville,rue,numero,code))
+    get_db().commit()
+    id = mycursor.lastrowid
+
+    sql = "insert into liste_adresse values (%s,%s)"
+    mycursor.execute(sql, (user_id, id))
+    get_db().commit()
+
+    return redirect('/client/info/show')

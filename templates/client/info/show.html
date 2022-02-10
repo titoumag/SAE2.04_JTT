@@ -1,6 +1,7 @@
 {% extends "client/layout_client.html" %}
 {% block body %}
-
+<div class="m-auto" style="width: 500px">
+    <div class="m-auto" style="width: 500px"><h2>Mes informations :</h2></div>
     <div class="border m-auto p-3" style="width: 500px">
         <table class="table">
             <tr>
@@ -25,12 +26,49 @@
                 <td style="color:grey"><div class="border p-2">{{ user.solde }} €</div></td>
             </tr>
         </table>
+
         <div>
 {#            <button onclick="add_money()" class="btn btn-primary m-2" >Ajouter de l'argent</button>#}
             <a href="/client/info/add_money" class="btn btn-primary m-2">Ajouter de l'argent</a>
             <a href="/client/info/edit"  class="btn btn-primary m-2" >Modifier son profil</a>
         </div>
     </div>
+    <br>
+
+    <div ><h2>Mes adresses :</h2></div>
+    <table class="table border m-auto p-3" style="width: 500px">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Ville</th>
+                    <th>Rue</th>
+                    <th>Numero</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for adresse in liste %}
+                    <tr>
+                        <td>{{ adresse.ville }} ({{ adresse.code }})</td>
+                        <td>{{ adresse.rue }}</td>
+                        <td>{{ adresse.numero }}</td>
+                        <td>
+                            <form action="/client/info/edit_adresse" style="display: inline-block;"  method="post">
+                                <input type="hidden" id="idCommande" name="adresse" value="{{ adresse.id }}">
+                                <button class="btn btn-primary" > Modifier </button>
+                            </form>
+                            <form action="/client/info/delete_adresse" style="display: inline-block;"  method="post">
+                                <input type="hidden" id="idCommande" name="adresse" value="{{ adresse.id }}">
+                                <button class="btn btn-primary" > Supprimer </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div>
+            <a href="/client/info/add_adresse" class="btn btn-primary m-2">Ajouter une adresse</a>
+        </div>
+
 </div>
 
 {% endblock %}

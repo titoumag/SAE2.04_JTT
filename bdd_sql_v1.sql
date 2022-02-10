@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS ligne_commande;
 DROP TABLE IF EXISTS panier;
 DROP TABLE IF EXISTS commande;
 DROP TABLE IF EXISTS casque;
+DROP TABLE IF EXISTS liste_adresse;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS commande;
 DROP TABLE IF EXISTS taille;
@@ -12,6 +13,17 @@ DROP TABLE IF EXISTS couleur;
 DROP TABLE IF EXISTS type_casque;
 DROP TABLE IF EXISTS etat;
 DROP TABLE IF EXISTS type_livraison;
+DROP TABLE IF EXISTS adresse;
+
+CREATE TABLE IF NOT EXISTS adresse(
+    id INT NOT NULL auto_increment,
+    ville VARCHAR(50),
+    rue VARCHAR(100),
+    numero int,
+    code int,
+
+    primary key(id)
+);
 
 CREATE TABLE IF NOT EXISTS type_livraison(
     id INT NOT NULL auto_increment,
@@ -44,18 +56,35 @@ CREATE TABLE IF NOT EXISTS user(
     PRIMARY KEY(id)
 )character set 'utf8';
 
+CREATE TABLE IF NOT EXISTS liste_adresse(
+   Id_User INT,
+   Id_Adresse INT,
+   PRIMARY KEY(Id_User, Id_Adresse),
+    CONSTRAINT fk_liste_adresse_adresse
+        FOREIGN KEY(Id_User) REFERENCES user(id),
+    CONSTRAINT fk_liste_adresse_user
+       FOREIGN KEY(Id_Adresse) REFERENCES adresse(id)
+);
+
 CREATE TABLE IF NOT EXISTS commande(
     id int auto_increment,
     date_achat DATE,
     user_id int,
     etat_id int,
     type_livraison_id INT,
+    adresse_id_livraison INT,
+    adresse_id_facturation INT,
+
     CONSTRAINT fk_commande_type_livraison
         FOREIGN KEY(type_livraison_id) REFERENCES type_livraison(id),
     CONSTRAINT fk_commande_user
         FOREIGN KEY(user_id) REFERENCES user(id),
     CONSTRAINT fk_commande_etat
         FOREIGN KEY(etat_id) REFERENCES etat(id),
+    CONSTRAINT fk_commande_livraison
+        FOREIGN KEY(adresse_id_livraison) REFERENCES adresse(id),
+    CONSTRAINT fk_commande_facturation
+        FOREIGN KEY(adresse_id_facturation) REFERENCES adresse(id),
     PRIMARY KEY(id)
 )character set 'utf8';
 
@@ -163,6 +192,9 @@ CREATE TABLE IF NOT EXISTS mails(
        FOREIGN KEY(receiver_id) REFERENCES user(id)
 );
 
+INSERT INTO adresse VALUE
+    (null,'Belfort','rue au hasard',10,90000),
+    (null,'Besancon','boulevard',5,25000);
 
 
 INSERT INTO type_livraison(libelle,valeurAjoute) VALUES
@@ -178,6 +210,10 @@ INSERT INTO user (email, username,nom,prenom, password, role,  est_actif,solde) 
 ('admin@admin.fr', 'admin','admin','admin', 'sha256$pBGlZy6UukyHBFDH$2f089c1d26f2741b68c9218a68bfe2e25dbb069c27868a027dad03bcb3d7f69a', 'ROLE_admin', 1,0),
 ('client@client.fr', 'client','client','client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1,0),
 ('client2@client2.fr', 'client2','client2','client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client', 1,0);
+
+INSERT INTO liste_adresse VALUE
+    (2,1),
+    (2,2);
 
 INSERT INTO fabricant(nom,adresse) VALUES
 ('Deutschland !','Berlin'),
