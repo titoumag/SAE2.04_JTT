@@ -164,14 +164,20 @@
               Merci de choisir votre type de livraison :
                 <form method="post" action="/client/commande/add" >
                 <fieldset>
-                    <select  id="type_id" name="type_id" required>
+                    <select  id="type_id" name="type_id" required onchange="updatePrice({{ clic }},{{ prix_total }})">
                         <option value="">Sélectionner le type de livraison</option>
                         {% for type in type_livraison %}
                              <option value="{{ type.id }}"> {{ type.libelle }}</option>
+                            <p class="hidden" id="valAjoute">{{ type.valeurAjoute }}</p>
                         {% endfor %}
                     </select>
                     <br>
-                <br>
+                    <p>
+                        Prix total :
+                        <strong id="resultPrixTotal"></strong>
+                        €
+                    </p>
+                    <br>
                     <input type="submit" value="Commander" name="commander" >
                 </fieldset>
               </form>
