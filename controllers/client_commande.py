@@ -54,7 +54,7 @@ def client_commande_add():
         (user_id,1, user_id, "Commande n°"+str(id), "Bonjour, votre commande est en cours de validation."))
 
     # reduit solde
-    update_property("solde",-cout_tot * float(tLivraison["valeurAjoute"]))
+    update_property("solde",(-cout_tot * float(tLivraison["valeurAjoute"]))-session["clic"])
 
     get_db().commit()
     flash(u'Commande ajoutée')
@@ -66,7 +66,6 @@ def client_commande_show():
     mycursor = get_db().cursor()
 
     currentCommande = request.form.get("idCommande", '')
-    print("commande : ", currentCommande)
 
     sql = "select commande.id,libelle,date_achat, count(*) as nbr_articles,sum(quantite) as nb_tot,sum(prix_unit*quantite) as prix_total,etat_id " \
           "from commande " \

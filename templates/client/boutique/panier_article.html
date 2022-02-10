@@ -168,10 +168,13 @@
                         <option value="">Sélectionner le type de livraison</option>
                         {% for type in type_livraison %}
                              <option value="{{ type.id }}"> {{ type.libelle }}</option>
-                            <p class="hidden" id="valAjoute">{{ type.valeurAjoute }}</p>
                         {% endfor %}
                     </select>
                     <br>
+
+                    {% for type in type_livraison %}
+                        <span class="text-white" id="va{{ type.id }}">{{ type.valeurAjoute }}</span>
+                    {% endfor %}
                     <p>
                         Prix total :
                         <strong id="resultPrixTotal"></strong>
