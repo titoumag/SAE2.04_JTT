@@ -259,4 +259,4 @@ INSERT INTO casque(libelle,fabricant_id,taille_id,couleur_id,type_casque_id,imag
 ('Casque Sommeil',3,2,1,1,'CasqueSkyrim2.jpeg',39,274.99),
 ('Casque Ponpon',9,2,5,3,'CasquePonpon.jpg',39,29.99),
 ('Casque Anglais',1,2,2,3,'casqueAnglais.jpg',29,139.99),
-('Casque Invisible',8,2,3,3,'casqueInvisible.png',287,896.99);
+('Casque Invisible',8,2,3,3,'casqueInvisible.png',56,896.99);

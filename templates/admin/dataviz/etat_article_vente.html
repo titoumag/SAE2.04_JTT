@@ -16,11 +16,114 @@
 {% endblock %}
 
 {% block body %}
-<br>
+    <br>
+    <h2>Données sur les types de casque</h2>
+        <div class="m-5">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                     <th>Libelle</th>
+                     <th>Id</th>
+                     <th>Nombres d'articles</th>
+                     <th>Cout du stock</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if tableau | length >= 1 %}
+                {% for ligne in tableau %}
+                   <tr>
+                       <td>{{ ligne.libelle }}</td>
+                       <td>{{ ligne.id }}</td>
+                       <td>{{ ligne.stockTotal }}</td>
+                       <td>{{ ligne.coutTotal }}</td>
+                   </tr>
+                {% endfor %}
+            {% else %}
+                  <tr>
+                      <td>
+                          Aucun casque ?????????!!!!!!!!!!!!!!!!!
+                      </td>
+                 </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    <h2 class="text-center">Valeur du stock par type de casque</h2>
+    <canvas id="chart2"  width="400" height="400"></canvas>
 
-<h2>visualisation de données : graph.js</h2>
-<h3>Documentation</h3>
-<br>
+    <h2 class="text-center">Répartition de la valeur du stock</h2>
+    <canvas id="chart1"  width="400" height="400"></canvas>
+    <br>
 
+    <script>
+    const ctx1 = document.getElementById('chart1').getContext('2d');
+    const ctx2 = document.getElementById('chart2').getContext('2d');
+
+    let liste = [
+        {% for element in libelle %}
+            "{{ element }}",
+        {% endfor %}
+    ];
+
+
+    const chart1 = new Chart(ctx1, {
+        type: 'pie',
+        height:400,
+        width:400,
+        data: {
+            labels: liste,
+            datasets: [{
+                label: '# de stock',
+                data: {{ percentages }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+    });
+
+    const chart2 = new Chart(ctx2, {
+        type: 'bar',
+        height:400,
+        width:400,
+        data: {
+            labels: liste,
+            datasets: [{
+                label: "Prix totaux en €",
+                data: {{ totaux }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+    });
+    </script>
 
 {% endblock %}

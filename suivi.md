@@ -14,8 +14,8 @@ Séance n°3 :
 - Titouan Nicot : Commandes coté admin
 
 Séance n°4 :
-- Julien Oudot : 
-- Titouan Magnin : 
+- Julien Oudot : ajout de plus de casques
+- Titouan Magnin : MCD + rapport
 - Titouan Nicot : js Mails, liste article admin
 
 Séance n°5:

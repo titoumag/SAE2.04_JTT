@@ -98,6 +98,29 @@ def reboot():
 @admin_article.route('/admin/article/bilan')
 def dataviz_article():
     mycursor = get_db().cursor()
-    mycursor.execute("SELECT type_casque_id,type_casque.libelle,SUM(prix) as prix_total FROM casque INNER JOIN type_casque ON type_casque_id=type_casque.id GROUP BY type_casque_id")
+    mycursor.execute("SELECT type_casque_id,type_casque.libelle as libelle,SUM(prix*stock) as prix_total FROM casque INNER JOIN type_casque ON type_casque_id=type_casque.id GROUP BY type_casque_id")
     casques = mycursor.fetchall()
-    return render_template('admin/dataviz/etat_article_vente.html', casques=casques)
+    lPercentage = []
+    lLibelle = []
+    lTotaux = []
+
+    maxi = 0.0
+    for type in casques:
+        maxi+=float(type["prix_total"])
+
+    for type in casques:
+        lTotaux.append(float(type["prix_total"]))
+        lPercentage.append( (float(type["prix_total"])/maxi) * 100)
+        lLibelle.append(type["libelle"])
+
+
+    mycursor.execute("SELECT type_casque.libelle as libelle, type_casque.id as id, SUM(stock) as stockTotal,"
+                     " SUM(stock*prix) as coutTotal "
+                     "FROM type_casque "
+                     "LEFT JOIN casque on casque.type_casque_id=type_casque.id "
+                     "GROUP BY type_casque.id")
+    tableau = mycursor.fetchall()
+
+    return render_template('admin/dataviz/etat_article_vente.html',tableau=tableau, casques=casques,
+                                                                                percentages = lPercentage,
+                                                                                libelle = lLibelle,totaux=lTotaux)
