@@ -28,6 +28,9 @@ def mails_write():
     mycursor = get_db().cursor()
     mycursor.execute("SELECT * FROM user WHERE NOT id = %s", (session['user_id']))
     users = mycursor.fetchall()
+
+    if 'clic' in session:
+        session['clic'] += 1
     return render_template('mails/write.html', users=users)
 
 

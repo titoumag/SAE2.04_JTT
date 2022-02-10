@@ -86,4 +86,7 @@ def client_commande_show():
         articles_commande = mycursor.fetchall()
     else:
         articles_commande = None
+
+    if 'clic' in session:
+        session['clic'] += 1
     return render_template('client/commandes/show.html', commandes=commandes, articles_commande=articles_commande, commande_id=currentCommande)

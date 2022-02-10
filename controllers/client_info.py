@@ -17,10 +17,13 @@ def client_info_show():
     mycursor.execute(sql,(user_id))
     user=mycursor.fetchone()
 
-    sql="select * from liste_adresse inner join adresse on liste_adresse.Id_Adresse=adresse.id  where Id_User=%s"
+    #sql="select * from liste_adresse inner join adresse on liste_adresse.Id_Adresse=adresse.id  where Id_User=%s"
+    sql = "select * from adresse where user_id=%s"
     mycursor.execute(sql,(user_id))
     adresse=mycursor.fetchall()
 
+    if 'clic' in session:
+        session['clic'] += 1
     return render_template('/client/info/show.html',user=user,liste=adresse)
 
 @client_info.route('/client/info/edit', methods=['GET'])
@@ -32,6 +35,8 @@ def client_info_edit():
     mycursor.execute(sql,(user_id))
     user=mycursor.fetchone()
 
+    if 'clic' in session:
+        session['clic'] += 1
     return render_template('/client/info/edit.html',user=user)
 
 @client_info.route('/client/info/edit', methods=['POST'])
@@ -72,6 +77,8 @@ def client_info_add_money():
     mycursor.execute(sql,(user_id))
     user=mycursor.fetchone()
 
+    if 'clic' in session:
+        session['clic'] += 1
     return render_template('/client/info/add_money.html',user=user)
 
 @client_info.route('/client/info/delete_adresse',methods=['POST'])
@@ -80,8 +87,9 @@ def client_info_delete_adresse():
     user_id = session["user_id"]
     adresse= request.form.get('adresse')
 
-    sql = "delete from liste_adresse where Id_User=%s and Id_Adresse=%s"
-    mycursor.execute(sql, (user_id,adresse))
+    #sql = "delete from liste_adresse where Id_User=%s and Id_Adresse=%s"
+    sql = "delete from adresse where id=%s"
+    mycursor.execute(sql, (adresse))
     get_db().commit()
 
     return redirect('/client/info/show')
@@ -94,6 +102,8 @@ def client_info_add_adresse():
     mycursor.execute(sql,(user_id))
     user=mycursor.fetchone()
 
+    if 'clic' in session:
+        session['clic'] += 1
     return render_template('/client/info/add_adresse.html',user=user)
 
 @client_info.route('/client/info/add_adresse',methods=['POST'])
@@ -104,15 +114,47 @@ def client_info_add_adresse_recoit():
     rue = request.form.get('rue')
     numero = request.form.get('numero')
     code= request.form.get('code')
-    print(ville,numero,code,rue)
 
-    sql = "insert into adresse values (null,%s,%s,%s,%s)"
-    mycursor.execute(sql, (ville,rue,numero,code))
+    sql = "insert into adresse values (null,%s,%s,%s,%s,%s)"
+    mycursor.execute(sql, (user_id,ville,rue,numero,code))
     get_db().commit()
     id = mycursor.lastrowid
 
-    sql = "insert into liste_adresse values (%s,%s)"
-    mycursor.execute(sql, (user_id, id))
+    # sql = "insert into liste_adresse values (%s,%s)"
+    # mycursor.execute(sql, (user_id, id))
+    # get_db().commit()
+
+    return redirect('/client/info/show')
+
+@client_info.route('/client/info/edit_adresse')
+def client_info_edit_adresse():
+    mycursor = get_db().cursor()
+    user_id = session["user_id"]
+    adresse_id=request.args.get('adresse')
+
+    sql = "select * from user where id=%s"
+    mycursor.execute(sql,(user_id))
+    user=mycursor.fetchone()
+    sql = "select * from adresse where id=%s"
+    mycursor.execute(sql, (adresse_id))
+    adresse = mycursor.fetchone()
+
+    if 'clic' in session:
+        session['clic'] += 1
+    return render_template('/client/info/edit_adresse.html',user=user,adresse=adresse)
+
+@client_info.route('/client/info/edit_adresse',methods=['POST'])
+def client_info_edit_adresse_recoit():
+    mycursor = get_db().cursor()
+    user_id = session["user_id"]
+    ville = request.form.get('ville')
+    rue = request.form.get('rue')
+    numero = request.form.get('numero')
+    code= request.form.get('code')
+    adresse_id = request.form.get('id')
+
+    sql = "update adresse set ville=%s,rue=%s,numero=%s,code=%s where id=%s"
+    mycursor.execute(sql, (ville,rue,numero,code,adresse_id))
     get_db().commit()
 
     return redirect('/client/info/show')

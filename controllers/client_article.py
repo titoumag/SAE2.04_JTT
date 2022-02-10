@@ -70,9 +70,14 @@ def client_article_show():  # remplace client_index
     mycursor.execute("SELECT * FROM type_livraison")
     type_livraison = mycursor.fetchall()
 
+    mycursor.execute("SELECT * FROM adresse WHERE user_id=%s", session['user_id'])
+    adresse= mycursor.fetchall()
+
+    if 'clic' in session:
+        session['clic'] += 1
     return render_template('client/boutique/panier_article.html', articles=articles, articlesPanier=articles_panier,
                            prix_total=prix_total, itemsFiltre=types_articles,user=user,type_livraison=type_livraison,
-                           clic=session['clic'])
+                           clic=session['clic'],liste_adresse=adresse)
 
 
 @client_article.route('/client/article/details/<int:id>', methods=['GET'])
@@ -92,5 +97,7 @@ def client_article_details(id):
     mycursor.execute("SELECT * FROM avis WHERE casque_id = %s AND user_id = %s",(id,session["user_id"]))
     userHasMadeAComment = mycursor.fetchall() != ()
 
+    if 'clic' in session:
+        session['clic'] += 1
     return render_template('client/boutique/article_details.html', article=article, commentaires=commentaires,
                            commandes_articles=commandes_articles,userHasMadeAComment=userHasMadeAComment)

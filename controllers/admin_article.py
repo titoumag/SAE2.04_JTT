@@ -98,7 +98,11 @@ def reboot():
 @admin_article.route('/admin/article/bilan')
 def dataviz_article():
     mycursor = get_db().cursor()
-    mycursor.execute("SELECT type_casque_id,type_casque.libelle as libelle,SUM(prix*stock) as prix_total FROM casque INNER JOIN type_casque ON type_casque_id=type_casque.id GROUP BY type_casque_id")
+    sql="SELECT type_casque_id,type_casque.libelle as libelle,SUM(prix*stock) as prix_total " \
+        "FROM casque " \
+        "INNER JOIN type_casque ON type_casque_id=type_casque.id " \
+        "GROUP BY type_casque_id"
+    mycursor.execute(sql)
     casques = mycursor.fetchall()
     lPercentage = []
     lLibelle = []
@@ -108,9 +112,13 @@ def dataviz_article():
     for type in casques:
         maxi+=float(type["prix_total"])
 
+
     for type in casques:
         lTotaux.append(float(type["prix_total"]))
-        lPercentage.append( (float(type["prix_total"])/maxi) * 100)
+        if maxi == 0.0:
+            lPercentage.append(0.0)
+        else:
+            lPercentage.append( (float(type["prix_total"])/maxi) * 100)
         lLibelle.append(type["libelle"])
 
 

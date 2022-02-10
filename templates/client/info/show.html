@@ -52,7 +52,7 @@
                         <td>{{ adresse.rue }}</td>
                         <td>{{ adresse.numero }}</td>
                         <td>
-                            <form action="/client/info/edit_adresse" style="display: inline-block;"  method="post">
+                            <form action="/client/info/edit_adresse" style="display: inline-block;"  method="get">
                                 <input type="hidden" id="idCommande" name="adresse" value="{{ adresse.id }}">
                                 <button class="btn btn-primary" > Modifier </button>
                             </form>

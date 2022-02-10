@@ -171,6 +171,24 @@
                         {% endfor %}
                     </select>
                     <br>
+                    <br>
+                    <select  id="adresse_fac" name="adresse_fac" required>
+                        <option value="">Sélectionner l'adresse de facturation</option>
+                        {% for adresse in liste_adresse %}
+                             <option value="{{ adresse.id }}">{{ adresse.ville }} ({{ adresse.code }})
+                                 {{ adresse.numero }} {{ adresse.rue }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <br>
+                    <select  id="adresse_livraison" name="adresse_livraison" required>
+                        <option value="">Sélectionner l'adresse de livraison</option>
+                        {% for adresse in liste_adresse %}
+                             <option value="{{ adresse.id }}">{{ adresse.ville }} ({{ adresse.code }})
+                                 {{ adresse.numero }} {{ adresse.rue }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
 
                     {% for type in type_livraison %}
                         <span class="text-white" id="va{{ type.id }}">{{ type.valeurAjoute }}</span>

@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS adresse;
 
 CREATE TABLE IF NOT EXISTS adresse(
     id INT NOT NULL auto_increment,
+    user_id int,
     ville VARCHAR(50),
     rue VARCHAR(100),
     numero int,
@@ -56,15 +57,15 @@ CREATE TABLE IF NOT EXISTS user(
     PRIMARY KEY(id)
 )character set 'utf8';
 
-CREATE TABLE IF NOT EXISTS liste_adresse(
-   Id_User INT,
-   Id_Adresse INT,
-   PRIMARY KEY(Id_User, Id_Adresse),
-    CONSTRAINT fk_liste_adresse_adresse
-        FOREIGN KEY(Id_User) REFERENCES user(id),
-    CONSTRAINT fk_liste_adresse_user
-       FOREIGN KEY(Id_Adresse) REFERENCES adresse(id)
-);
+-- CREATE TABLE IF NOT EXISTS liste_adresse(
+--    Id_User INT,
+--    Id_Adresse INT,
+--    PRIMARY KEY(Id_User, Id_Adresse),
+--     CONSTRAINT fk_liste_adresse_adresse
+--         FOREIGN KEY(Id_User) REFERENCES user(id),
+--     CONSTRAINT fk_liste_adresse_user
+--        FOREIGN KEY(Id_Adresse) REFERENCES adresse(id)
+-- );
 
 CREATE TABLE IF NOT EXISTS commande(
     id int auto_increment,
@@ -193,8 +194,8 @@ CREATE TABLE IF NOT EXISTS mails(
 );
 
 INSERT INTO adresse VALUE
-    (null,'Belfort','rue au hasard',10,90000),
-    (null,'Besancon','boulevard',5,25000);
+    (null,2,'Belfort','rue au hasard',10,90000),
+    (null,2,'Besancon','boulevard',5,25000);
 
 
 INSERT INTO type_livraison(libelle,valeurAjoute) VALUES
@@ -211,9 +212,9 @@ INSERT INTO user (email, username,nom,prenom, password, role,  est_actif,solde) 
 ('client@client.fr', 'client','client','client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1,0),
 ('client2@client2.fr', 'client2','client2','client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client', 1,0);
 
-INSERT INTO liste_adresse VALUE
-    (2,1),
-    (2,2);
+-- INSERT INTO liste_adresse VALUE
+--     (2,1),
+--     (2,2);
 
 INSERT INTO fabricant(nom,adresse) VALUES
 ('Deutschland !','Berlin'),
