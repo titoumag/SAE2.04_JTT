@@ -15,7 +15,7 @@ from controllers.client_info import *
 
 from controllers.admin_article import *
 from controllers.admin_commande import *
-from controllers.admin_panier import *
+from controllers.admin_main import *
 from controllers.admin_users import *
 
 app = Flask(__name__)
@@ -64,7 +64,7 @@ app.register_blueprint(client_info)
 
 app.register_blueprint(admin_article)
 app.register_blueprint(admin_commande)
-app.register_blueprint(admin_panier)
+app.register_blueprint(admin_main)
 app.register_blueprint(admin_users)
 
 if __name__ == '__main__':

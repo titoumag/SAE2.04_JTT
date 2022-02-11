@@ -37,7 +37,7 @@ def auth_login_post():
             session['clic'] = 0
             print(user['username'], user['role'])
             if user['role'] == 'ROLE_admin':
-                return redirect('/admin/commande/index')
+                return redirect('/admin/main')
             else:
                 return redirect('/client/article/show')
     else:

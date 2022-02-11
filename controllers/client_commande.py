@@ -19,8 +19,8 @@ def client_commande_add():
     typeLivraison = request.form.get("type_id",None)
 
     # cree une ligne commande pour l'utilisateur
-    sql = "insert into commande(date_achat,user_id,etat_id,type_livraison_id) values (CURDATE(),%s,1,%s)"
-    mycursor.execute(sql, (user_id,typeLivraison))
+    sql = "insert into commande(date_achat,user_id,etat_id,type_livraison_id,clic) values (CURDATE(),%s,1,%s,%s)"
+    mycursor.execute(sql, (user_id,typeLivraison,session["clic"]))
     get_db().commit()
 
     # recupere id commande

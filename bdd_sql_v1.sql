@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS commande(
     type_livraison_id INT,
     adresse_id_livraison INT,
     adresse_id_facturation INT,
+    clic INT,
 
     CONSTRAINT fk_commande_type_livraison
         FOREIGN KEY(type_livraison_id) REFERENCES type_livraison(id),
