@@ -191,7 +191,9 @@ INSERT INTO adresse VALUE
 INSERT INTO type_livraison(libelle,valeurAjoute) VALUES
 ('Normal',1.0),
 ('Supplément McDonald',1.2),
-('Livraison Express Pierre',1.5);
+('Livraison Express Pierre',1.5),
+('Garder Baptiste pour une reduction',0.5),
+('Livraison par le gérant de eCasques',5.0);
 
 insert into etat values
 (null,'en cours'),
@@ -202,9 +204,6 @@ INSERT INTO user (email, username,nom,prenom, password, role,  est_actif,solde) 
 ('client@client.fr', 'client','client','client', 'sha256$Q1HFT4TKRqnMhlTj$cf3c84ea646430c98d4877769c7c5d2cce1edd10c7eccd2c1f9d6114b74b81c4', 'ROLE_client', 1,0),
 ('client2@client2.fr', 'client2','client2','client2', 'sha256$ayiON3nJITfetaS8$0e039802d6fac2222e264f5a1e2b94b347501d040d71cfa4264cad6067cf5cf3', 'ROLE_client', 1,0);
 
--- INSERT INTO liste_adresse VALUE
---     (2,1),
---     (2,2);
 
 INSERT INTO fabricant(nom,adresse) VALUES
 ('Deutschland !','Berlin'),
