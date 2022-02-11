@@ -56,16 +56,6 @@ CREATE TABLE IF NOT EXISTS user(
     PRIMARY KEY(id)
 )character set 'utf8';
 
--- CREATE TABLE IF NOT EXISTS liste_adresse(
---    Id_User INT,
---    Id_Adresse INT,
---    PRIMARY KEY(Id_User, Id_Adresse),
---     CONSTRAINT fk_liste_adresse_adresse
---         FOREIGN KEY(Id_User) REFERENCES user(id),
---     CONSTRAINT fk_liste_adresse_user
---        FOREIGN KEY(Id_Adresse) REFERENCES adresse(id)
--- );
-
 CREATE TABLE IF NOT EXISTS commande(
     id int auto_increment,
     date_achat DATE,

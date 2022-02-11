@@ -7,7 +7,8 @@
 {% block body %}
     <h3>Bonjour Administrateur :</h3>
     <br><br>
-    <h4>Notre chiffre d'affaire est de : <strong> {{ "{:,.2f} €".format(chiffreAffaire) }} € </strong> </h4>
+    <h4>Notre chiffre d'affaire est de : <strong> {{ "{:,.2f} €".format(chiffreAffaire) }}</strong> </h4>
     <br><br>
-    <h4>Notre meilleur client est : {{ user.name }} ({{ "{:,.2f} €".format(user.total) }}€)</h4>
+    <h4>Notre meilleur client est : {{ user.name }} </h4>
+    <h4>Il est endetté de {{ "{:,.2f} €".format(user.total) }} envers nous</h4>
 {% endblock %}

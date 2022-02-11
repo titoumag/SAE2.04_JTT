@@ -31,7 +31,7 @@ def close_connection(exception):
 
 @app.route('/')
 def show_accueil():
-    return render_template('auth/layout.html')
+    return render_template('auth/mainPage.html')
 
 ##################
 # Authentification
