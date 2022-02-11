@@ -1,8 +1,8 @@
 {% extends "client/layout_client.html" %}
 {% block body %}
-<div class="m-auto" style="width: 500px">
-    <div class="m-auto" style="width: 500px"><h2>Mes informations :</h2></div>
-    <div class="border m-auto p-3" style="width: 500px">
+<div class="m-auto" style="width: 700px">
+    <div style="text-align: center"><h2>Mes informations :</h2></div>
+    <div class="border m-auto p-3">
         <table class="table">
             <tr>
                 <td>Votre nom :</td>
@@ -35,8 +35,9 @@
     </div>
     <br>
 
-    <div ><h2>Mes adresses :</h2></div>
-    <table class="table border m-auto p-3" style="width: 500px">
+    <div style="text-align: center"><h2 >Mes adresses :</h2></div>
+    <div class="border m-auto p-3">
+        <table class="table border">
             <thead class="thead-dark">
                 <tr>
                     <th>Ville</th>
@@ -67,6 +68,10 @@
         </table>
         <div>
             <a href="/client/info/add_adresse" class="btn btn-primary m-2">Ajouter une adresse</a>
+        </div>
+    </div>
+        <div>
+            <a href="/client/article/show" class="btn btn-primary m-2">Retour aux articles </a>
         </div>
 
 </div>

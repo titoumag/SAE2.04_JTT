@@ -175,6 +175,7 @@
                     </select>
                     <br>
                     <br>
+                {% if liste_adresse | length > 0 %}
                     <select  id="adresse_fac" name="adresse_fac" required>
                         <option value="">Sélectionner l'adresse de facturation</option>
                         {% for adresse in liste_adresse %}
@@ -191,8 +192,10 @@
                                  {{ adresse.numero }} {{ adresse.rue }}</option>
                         {% endfor %}
                     </select>
+                {%  else %}
+                    <a href="/client/info/show"  class="btn btn-primary">Ajouter adresse</a>
+                {% endif %}
                     <br>
-
                     {% for type in type_livraison %}
                         <span class="text-white" style="display: none" id="va{{ type.id }}">{{ type.valeurAjoute }}</span>
                     {% endfor %}

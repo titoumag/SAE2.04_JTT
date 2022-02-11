@@ -17,10 +17,12 @@ def client_commande_add():
     totPanier = mycursor.fetchall()
 
     typeLivraison = request.form.get("type_id",None)
+    adresse_factu = request.form.get("adresse_fac", None)
+    adresse_livraison = request.form.get("adresse_livraison", None)
 
     # cree une ligne commande pour l'utilisateur
-    sql = "insert into commande(date_achat,user_id,etat_id,type_livraison_id) values (CURDATE(),%s,1,%s)"
-    mycursor.execute(sql, (user_id,typeLivraison))
+    sql = "insert into commande values (null,CURDATE(),%s,1,%s,%s,%s)"
+    mycursor.execute(sql, (user_id,typeLivraison,adresse_livraison,adresse_factu))
     get_db().commit()
 
     # recupere id commande
@@ -67,14 +69,20 @@ def client_commande_show():
 
     currentCommande = request.form.get("idCommande", '')
 
-    sql = "select commande.id,libelle,date_achat, count(*) as nbr_articles,sum(quantite) as nb_tot,sum(prix_unit*quantite) as prix_total,etat_id " \
+    sql = "select commande.id,libelle,date_achat,etat_id," \
+                "count(*) as nbr_articles," \
+                "sum(quantite) as nb_tot," \
+                "sum(prix_unit*quantite) as prix_total," \
+                "adresse.ville as ville " \
           "from commande " \
           "inner join ligne_commande on commande.id=ligne_commande.commande_id " \
-          "inner join etat on commande.etat_id=etat.id" \
-          " where user_id=%s " \
-          "group by commande.id,date_achat,etat_id;"
+          "inner join etat on commande.etat_id=etat.id " \
+          "left join adresse on adresse.id=commande.adresse_id_livraison "\
+          "where commande.user_id=%s " \
+          "group by commande.id"
     mycursor.execute(sql, session['user_id'])
     commandes = mycursor.fetchall()
+    print(commandes)
 
     if currentCommande is not None:
         sql = "SELECT quantite,prix_unit as prix,casque.libelle as nom,sum(prix_unit*quantite) as prix_ligne " \
