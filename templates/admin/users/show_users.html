@@ -30,7 +30,7 @@
                <td>{{ ligne.prenom }}</td>
                <td>{{ ligne.email }}</td>
                <td>{{ ligne.role }}</td>
-               <td>{{ ligne.solde }}</td>
+               <td {% if ligne.solde >= 0 %} style="color: red" {% else %} style="color: green" {% endif %}>{{ ligne.solde }}</td>
                {% if ligne.est_actif == 1 %}
                     <td> VRAI </td>
                 {% else %}

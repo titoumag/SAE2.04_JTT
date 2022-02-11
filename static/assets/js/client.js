@@ -6,5 +6,5 @@ function updatePrice(clic,prixTot){
     }
 
     let valAjout = document.getElementById("va"+idType).innerHTML;
-    document.getElementById("resultPrixTotal").innerHTML = ((prixTot)*valAjout) + clic;
+    document.getElementById("resultPrixTotal").innerHTML = (((prixTot)*valAjout) + clic).toFixed(2);
 }

@@ -67,7 +67,7 @@
                             <img style="width: 48px" class="rounded" src="{{url_for('static', filename='images_asset/deletePanier.jpeg')}}">
                         </button>
                     </form>
-                    <button class="btn btn-white" data-toggle="modal" data-target="#exampleModalCenter" >
+                    <button class="btn btn-white" data-toggle="modal" data-target="#exampleModalCenter" onclick="updatePrice({{ clic }},{{ prix_total }})" >
                         <img style="width: 200px" src="{{url_for('static', filename='images_asset/addCommande.jpeg')}}">
                     </button>
                     <div>Total à payer : <strong>{{ "{:.2f} € ".format(prix_total) }}</strong></div>
@@ -165,9 +165,12 @@
                 <form method="post" action="/client/commande/add" >
                 <fieldset>
                     <select  id="type_id" name="type_id" required onchange="updatePrice({{ clic }},{{ prix_total }})">
-                        <option value="">Sélectionner le type de livraison</option>
                         {% for type in type_livraison %}
-                             <option value="{{ type.id }}"> {{ type.libelle }}</option>
+                             <option value="{{ type.id }}"
+                             {% if type.id == 1 %}
+                                     selected
+                             {% endif %}
+                             > {{ type.libelle }}</option>
                         {% endfor %}
                     </select>
                     <br>
@@ -191,8 +194,9 @@
                     <br>
 
                     {% for type in type_livraison %}
-                        <span class="text-white" id="va{{ type.id }}">{{ type.valeurAjoute }}</span>
+                        <span class="text-white" style="display: none" id="va{{ type.id }}">{{ type.valeurAjoute }}</span>
                     {% endfor %}
+                    <br>
                     <p>
                         Prix total :
                         <strong id="resultPrixTotal"></strong>
