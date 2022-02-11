@@ -69,15 +69,16 @@ def client_commande_show():
 
     currentCommande = request.form.get("idCommande", '')
 
-    sql = "select commande.id,libelle,date_achat,etat_id," \
+    sql = "select commande.id,etat.libelle,date_achat,etat_id," \
                 "count(*) as nbr_articles," \
                 "sum(quantite) as nb_tot," \
-                "sum(prix_unit*quantite) as prix_total," \
+                "sum(prix_unit*quantite)*valeurAjoute+clic as prix_total," \
                 "adresse.ville as ville " \
           "from commande " \
           "inner join ligne_commande on commande.id=ligne_commande.commande_id " \
           "inner join etat on commande.etat_id=etat.id " \
-          "left join adresse on adresse.id=commande.adresse_id_livraison "\
+          "inner join type_livraison on type_livraison.id=type_livraison_id " \
+          "left join adresse on adresse.id=commande.adresse_id_livraison " \
           "where commande.user_id=%s " \
           "group by commande.id"
     mycursor.execute(sql, session['user_id'])
@@ -91,9 +92,20 @@ def client_commande_show():
               "GROUP BY casque.id"
         mycursor.execute(sql, currentCommande)
         articles_commande = mycursor.fetchall()
+
+        sql="select libelle,valeurAjoute,clic, " \
+            "sum(prix_unit*quantite)*(valeurAjoute-1) as supplement, " \
+            "sum(prix_unit*quantite)*valeurAjoute+clic as total " \
+            "from type_livraison " \
+             "inner join commande on type_livraison_id=type_livraison.id " \
+            "inner join ligne_commande on commande.id=ligne_commande.commande_id "\
+             "WHERE commande.id = %s"
+        mycursor.execute(sql, currentCommande)
+        suplement = mycursor.fetchone()
+        print(suplement)
     else:
         articles_commande = None
 
     if 'clic' in session:
         session['clic'] += 1
-    return render_template('client/commandes/show.html', commandes=commandes, articles_commande=articles_commande, commande_id=currentCommande)
+    return render_template('client/commandes/show.html', commandes=commandes, articles_commande=articles_commande, commande_id=currentCommande,suplementL=suplement)
