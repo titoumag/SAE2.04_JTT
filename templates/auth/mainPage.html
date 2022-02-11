@@ -13,24 +13,24 @@
         <img style="width:500px;"src="{{url_for('static', filename='bg.jpg')}}">
         <br>
         <br>
-        <p id="phrase"></p>
+        <p id="phrase" style="border-style: groove;border-width: 1px;padding: 5px;width: 500px;margin: auto;"></p>
     </div>
     <script>
         phrases = [
             "Notre site de vente propose des casques de qualité.",
             "Nos casques sont certifiés et en très bon état !",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
+            "Le casque à pointe est très bon marché !",
+            "100% de nos utilisateurs aiment notre site.",
+            "Bientot disponible : Le casque Chaise !",
+            "Nouveauté : Casque Samurai.",
+            "Nous avons une grande collection de casque de chevalier.",
+            "Votre passage sur ce site nous fait gagner de l'argent.",
+            "Donald Trump adore le <strong>casque invisible</strong>.",
+            "N'oubliez pas de regarder notre casque Chat.",
+            "Nos casques sont certifiés qualité Bhutanaise",
+            "Pierre est notre seul et meilleur livreur.",
+            "Pierre vous passe le bonjour !",
+            "Nous allons vous arnaquer.",
         ];
         document.getElementById("phrase").innerHTML=phrases[Math.floor(Math.random()*phrases.length)];
     </script>
