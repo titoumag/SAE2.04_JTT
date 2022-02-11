@@ -71,6 +71,12 @@
               <p>Votre compte ne peux pas être supprimé.</p>
               <h5>Article 10 :</h5>
               <p>Pierre prend un pourboire de 50€ par livraison. (A regler lors de la reception du colis avec Pierre)</p>
+              <h5>Article 11 :</h5>
+              <p>Votre nombre de clic est ajouté au montant total de votre commande.</p>
+              <h5>Article 12 :</h5>
+              <p>Si l'article 11 vous semble frauduleux, vous n'avez qu'a cliquer moins et commander plus vite.</p>
+              <h5>Article 13 :</h5>
+              <p>eCasques est sponsorisé par <strong id="sponsor"></strong>.</p>
           </div>
           <div class="modal-footer2">
               <div>
@@ -80,6 +86,11 @@
         </div>
       </div>
     </div>
+
+    <script>
+        sponsors = ["Vladimir Poutine","Kim Jung-Un","Hilary Clinton","Eric Zemmour","Xi Jinping"];
+        document.getElementById("sponsor").innerHTML=sponsors[Math.floor(Math.random()*sponsors.length)];
+    </script>
 
 {% endblock %}
 

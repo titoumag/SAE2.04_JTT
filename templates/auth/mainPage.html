@@ -13,7 +13,25 @@
         <img style="width:500px;"src="{{url_for('static', filename='bg.jpg')}}">
         <br>
         <br>
-        <p>Notre site de vente propose des casques de qualité.</p>
+        <p id="phrase"></p>
     </div>
-
+    <script>
+        phrases = [
+            "Notre site de vente propose des casques de qualité.",
+            "Nos casques sont certifiés et en très bon état !",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+        ];
+        document.getElementById("phrase").innerHTML=phrases[Math.floor(Math.random()*phrases.length)];
+    </script>
 {% endblock %}
