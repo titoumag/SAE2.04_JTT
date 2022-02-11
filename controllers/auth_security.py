@@ -48,6 +48,10 @@ def auth_login_post():
 def auth_signup():
     return render_template('auth/signup.html')
 
+@auth_security.route('/info')
+def info():
+    return render_template('info/info.html')
+
 
 @auth_security.route('/signup', methods=['POST'])
 def auth_signup_post():

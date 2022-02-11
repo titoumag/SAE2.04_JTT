@@ -1,0 +1,56 @@
+{% extends 'auth/layout.html' %}
+
+{% block title %}
+    <title>Informations</title>
+{% endblock %}
+
+{% block body %}
+    <h3>Informations</h3>
+    <br><br>
+    <p>Notre site propose des casques de qualité et à des prix abordables.</p>
+    <br>
+    <p>Notre équipe se compose de membres de <strong> qualité </strong> :</p>
+    <ul>
+        <li>
+            PDG : <strong>Titouan NICOT</strong>
+            <br>
+            <p>Notre PDG s'assure de fournir à nos utilisateurs un site de <strong> qualité </strong>.</p>
+        </li>
+        <li>
+            Directeur Developpement : <strong>Titouan MAGNIN</strong>
+            <br>
+            <p>Le <strong> meilleur </strong> informaticien au monde.</p>
+        </li>
+        <li>
+            Directeur des Finances/Marketing : <strong>Julien OUDOT</strong>
+            <p>Capable de générer des hausses de revenus de <strong>258% </strong>. </p>
+        </li>
+        <li>
+            Livreur : <strong>Pierre</strong>
+            <p>A livré <strong id="nbLivraison"></strong> lots de casques aujourd'hui.</p>
+        </li>
+    </ul>
+
+    <br>
+    <h3>Nos partenaires</h3>
+    <ul>
+        <li>Microsoft</li>
+        <li>Twinings</li>
+        <li>National Rifle Association</li>
+        <li>Compagnie russe d'Amérique</li>
+        <li>Gaz de France</li>
+        <li>The Religious Tract Society</li>
+        <li>Fonderie Paccard</li>
+        <li>Pacific Fur Company</li>
+        <li>Aperture Science</li>
+    </ul>
+
+    <script>
+        function updateNbLivraison(current){
+            document.getElementById("nbLivraison").innerText=current;
+            setTimeout(function(){updateNbLivraison(current+1); }, 500);
+        }
+
+        updateNbLivraison(parseInt((Math.random()*1000).toFixed(0)));
+    </script>
+{% endblock %}
