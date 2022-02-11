@@ -16,6 +16,22 @@
                                 <td>{{ ligne.prix_ligne }} €  </td>
                             </tr>
                         {% endfor %}
+                        <tr class="table-info">
+                            <td>SUPPLEMENT LIVRAISON :</td>
+                            <td colspan="2">{{ suplementL.libelle }} (X {{ suplementL.valeurAjoute }})</td>
+                            <td> {{ suplementL.supplement }}</td>
+                        </tr>
+                        <tr class="table-info">
+                            <td>SUPPLEMENT CLIC :</td>
+                            <td colspan="2">Correspond au nombre de clic</td>
+                            <td>{{ suplementL.clic }}</td>
+                        </tr>
+                        <tr class="table-danger">
+                            <td>TOTAL COMMANDE :</td>
+                            <td></td>
+                            <td></td>
+                            <td>{{ suplementL.total }}</td>
+                        </tr>
 
                 </tbody>
             </table>
