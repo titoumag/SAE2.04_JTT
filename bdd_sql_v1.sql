@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS coupons;
 DROP TABLE IF EXISTS mails;
 DROP TABLE IF EXISTS avis;
 DROP TABLE IF EXISTS ligne_commande;
@@ -65,6 +66,7 @@ CREATE TABLE IF NOT EXISTS commande(
     adresse_id_livraison INT,
     adresse_id_facturation INT,
     clic INT,
+    reduction INT,
 
     CONSTRAINT fk_commande_type_livraison
         FOREIGN KEY(type_livraison_id) REFERENCES type_livraison(id),
@@ -181,6 +183,15 @@ CREATE TABLE IF NOT EXISTS mails(
        FOREIGN KEY(sender_id) REFERENCES user(id),
     CONSTRAINT fk_mail_receiver
        FOREIGN KEY(receiver_id) REFERENCES user(id)
+);
+
+CREATE TABLE IF NOT EXISTS coupons(
+  id INT NOT NULL auto_increment,
+  valeur INT,
+  user_id INT,
+  CONSTRAINT fk_coupons_user
+    FOREIGN KEY(user_id) REFERENCES user(id),
+  PRIMARY KEY (id)
 );
 
 INSERT INTO adresse VALUE

@@ -73,11 +73,14 @@ def client_article_show():  # remplace client_index
     mycursor.execute("SELECT * FROM adresse WHERE user_id=%s", session['user_id'])
     adresse= mycursor.fetchall()
 
+    mycursor.execute("SELECT * FROM coupons WHERE user_id=%s",session["user_id"])
+    coupons = mycursor.fetchall()
+
     if 'clic' in session:
         session['clic'] += 1
     return render_template('client/boutique/panier_article.html', articles=articles, articlesPanier=articles_panier,
                            prix_total=prix_total, itemsFiltre=types_articles,user=user,type_livraison=type_livraison,
-                           clic=session['clic'],liste_adresse=adresse)
+                           clic=session['clic'],liste_adresse=adresse,coupons=coupons)
 
 
 @client_article.route('/client/article/details/<int:id>', methods=['GET'])
