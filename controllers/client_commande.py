@@ -3,6 +3,7 @@
 from flask import Blueprint
 from flask import request, render_template, redirect, flash, session
 from connexion_db import get_db,update_property
+import random
 
 client_commande = Blueprint('client_commande', __name__,
                             template_folder='templates')
@@ -16,6 +17,7 @@ def client_commande_add():
     mycursor.execute(sql, user_id)
     totPanier = mycursor.fetchall()
 
+    idCoupon = request.form.get("coupon_id",None)
     typeLivraison = request.form.get("type_id",None)
     adresse_factu = request.form.get("adresse_fac", None)
     adresse_livraison = request.form.get("adresse_livraison", None)
@@ -56,7 +58,21 @@ def client_commande_add():
         (user_id,1, user_id, "Commande n°"+str(id), "Bonjour, votre commande est en cours de validation."))
 
     # reduit solde
-    update_property("solde",(-cout_tot * float(tLivraison["valeurAjoute"]))-session["clic"])
+
+    valCoupon = 0
+    if not idCoupon in ("IGNORE",None):
+        mycursor.execute("SELECT * FROM coupons WHERE id = %s",idCoupon)
+        valCoupon = int(mycursor.fetchone()["valeur"])
+        mycursor.execute("DELETE FROM coupons WHERE id = %s",idCoupon)
+        get_db().commit()
+
+    update_property("solde",-((cout_tot * float(tLivraison["valeurAjoute"])+session["clic"])*(100-valCoupon)/100))
+
+    # ajout d'un coupons toute les 5 commandes
+    mycursor.execute("SELECT * FROM commande WHERE user_id = %s",(user_id))
+    if len(mycursor.fetchall()) % 5 == 0:
+        # Ajout d'un coupon
+        mycursor.execute("INSERT INTO coupons(valeur,user_id) VALUES (%s,%s)",(random.randint(1,20),user_id))
 
     get_db().commit()
     flash(u'Commande ajoutée')

@@ -175,6 +175,16 @@
                     </select>
                     <br>
                     <br>
+                    {% if coupons | length != 0 %}
+                        <select  id="coupon_id" name="coupon_id" onchange="updatePrice({{ clic }},{{ prix_total }})">
+                            <option value="IGNORE">Utiliser un coupon (facultatif)</option>
+                            {% for coupon in coupons %}
+                                 <option value="{{ coupon.id }}"> Coupon {{ coupon.valeur }}%</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <br>
+                    {% endif %}
                 {% if liste_adresse | length > 0 %}
                     <select  id="adresse_fac" name="adresse_fac" required>
                         <option value="">Sélectionner l'adresse de facturation</option>
@@ -199,6 +209,13 @@
                     {% for type in type_livraison %}
                         <span class="text-white" style="display: none" id="va{{ type.id }}">{{ type.valeurAjoute }}</span>
                     {% endfor %}
+                    {% if coupons | length != 0 %}
+                        <span class="text-white" style="display: none" id="couT"></span>
+                        {% for coupon in coupons %}
+                            <span class="text-white" style="display: none" id="cou{{ coupon.id }}">{{ coupon.valeur }}</span>
+                        {% endfor %}
+                    {% endif %}
+
                     <br>
                     <p>
                         Prix total :
