@@ -22,9 +22,17 @@ def client_commande_add():
     adresse_factu = request.form.get("adresse_fac", None)
     adresse_livraison = request.form.get("adresse_livraison", None)
 
+    valCoupon = 0
+    if not idCoupon in ("IGNORE",None):
+        mycursor.execute("SELECT * FROM coupons WHERE id = %s",idCoupon)
+        valCoupon = int(mycursor.fetchone()["valeur"])
+        mycursor.execute("DELETE FROM coupons WHERE id = %s",idCoupon)
+        get_db().commit()
+
+
     # cree une ligne commande pour l'utilisateur
-    sql = "insert into commande values (null,CURDATE(),%s,1,%s,%s,%s,%s)"
-    mycursor.execute(sql, (user_id,typeLivraison,adresse_livraison,adresse_factu,session['clic']))
+    sql = "insert into commande values (null,CURDATE(),%s,1,%s,%s,%s,%s,%s)"
+    mycursor.execute(sql, (user_id,typeLivraison,adresse_livraison,adresse_factu,session['clic'],valCoupon))
     get_db().commit()
 
     # recupere id commande
@@ -59,13 +67,6 @@ def client_commande_add():
 
     # reduit solde
 
-    valCoupon = 0
-    if not idCoupon in ("IGNORE",None):
-        mycursor.execute("SELECT * FROM coupons WHERE id = %s",idCoupon)
-        valCoupon = int(mycursor.fetchone()["valeur"])
-        mycursor.execute("DELETE FROM coupons WHERE id = %s",idCoupon)
-        get_db().commit()
-
     update_property("solde",-((cout_tot * float(tLivraison["valeurAjoute"])+session["clic"])*(100-valCoupon)/100))
 
     # ajout d'un coupons toute les 5 commandes
@@ -88,7 +89,7 @@ def client_commande_show():
     sql = "select commande.id,etat.libelle,date_achat,etat_id," \
                 "count(*) as nbr_articles," \
                 "sum(quantite) as nb_tot," \
-                "sum(prix_unit*quantite)*valeurAjoute+clic as prix_total," \
+                "(sum(prix_unit*quantite)*valeurAjoute+clic)*(100-reduction)/100 as prix_total," \
                 "adresse.ville as ville " \
           "from commande " \
           "inner join ligne_commande on commande.id=ligne_commande.commande_id " \
@@ -111,7 +112,8 @@ def client_commande_show():
 
         sql="select libelle,valeurAjoute,clic, " \
             "sum(prix_unit*quantite)*(valeurAjoute-1) as supplement, " \
-            "sum(prix_unit*quantite)*valeurAjoute+clic as total " \
+            "(sum(prix_unit*quantite)*valeurAjoute+clic)*(100-reduction)/100 as total, " \
+            "reduction " \
             "from type_livraison " \
              "inner join commande on type_livraison_id=type_livraison.id " \
             "inner join ligne_commande on commande.id=ligne_commande.commande_id "\
