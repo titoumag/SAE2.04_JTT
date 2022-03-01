@@ -93,7 +93,7 @@
         <div class="row">
                 {% for article in articles  %}
                         <div class="card col-3 mt-4">
-                            <div class="card-body border-dark rounded">
+                            <div class="card-body border-dark rounded" title="{{ article.description }}">
                                 <a href="/client/article/details/{{ article.id }}">
                                 <h2 class="card-title">
                                     <span style="color: #0b2e13">{{ article.libelle }}</span><br>
