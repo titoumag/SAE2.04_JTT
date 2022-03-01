@@ -16,7 +16,8 @@ def client_article_show():  # remplace client_index
 
     debut = True
     params = []
-    sql = "SELECT id,libelle,image,stock,prix,fabricant_id,taille_id,couleur_id,type_casque_id,count(avis.user_id) as nb_avis,AVG(avis.note) as moy_notes " \
+    sql = "SELECT id,libelle,description,image,stock,prix,fabricant_id,taille_id,couleur_id,type_casque_id," \
+          "count(avis.user_id) as nb_avis,AVG(avis.note) as moy_notes " \
           "FROM casque LEFT JOIN avis ON casque.id = avis.casque_id"
     if "filter_word" in session.keys():
         sql += " WHERE libelle LIKE %s"
