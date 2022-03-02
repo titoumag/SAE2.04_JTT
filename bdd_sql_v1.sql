@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS adresse(
     ville VARCHAR(50),
     rue VARCHAR(100),
     numero int,
-    code int,
+    code char(5),
 
     primary key(id)
 );
@@ -117,7 +117,6 @@ CREATE TABLE IF NOT EXISTS casque(
    taille_id INT NOT NULL,
    couleur_id INT NOT NULL,
    type_casque_id INT NOT NULL,
-   description VARCHAR(255),
    CONSTRAINT fk_casque_fabriquant
        FOREIGN KEY(fabricant_id) REFERENCES fabricant(id),
    CONSTRAINT fk_casque_taille
@@ -196,8 +195,10 @@ CREATE TABLE IF NOT EXISTS coupons(
 );
 
 INSERT INTO adresse VALUE
-    (null,2,'Belfort','rue au hasard',10,90000),
-    (null,2,'Besancon','boulevard',5,25000);
+    (null,2,'Belfort','rue au hasard',10,'90000'),
+    (null,2,'Besancon','boulevard',5,'25000'),
+    (null,2,'Paris','rue',2,'75001'),
+    (null,2,'Bretigney','rue',3,'25250');
 
 
 INSERT INTO type_livraison(libelle,valeurAjoute) VALUES
@@ -253,48 +254,50 @@ INSERT INTO type_casque(libelle) VALUES
 ('Star Wars'),
 ('Jeu Vidéo');
 
-INSERT INTO casque(libelle,fabricant_id,taille_id,couleur_id,type_casque_id,image,stock,prix,description) VALUES
-('Casque à pointe',1,2,1,1,'casquePointe.png',5,100.99,'Donne du piquant à la vie'),
-('Casque Dragon',3,2,1,1,'casqueDragon.png',15,49.99,'FUS RO DA'),
-('Casque (Bon état)',2,2,1,3,'casqueFendu1.jpg',75,10.99,'En très bon état'),
-('Casque Allemand',1,2,2,1,'casqueFendu2.jpg',25,61.99,'Parfait pour les amateurs du reich'),
-('Casque Gamer METAL',2,2,2,2,'casqueGamer.png',50,5.99,'Enfin un casque pour les gamers métaleux'),
-('Casque Gamer Néon',4,2,3,2,'CasqueGamer1.jpg',3,13.99,'Un casque Gamer avec des néons multicolores'),
-('Casque Gamer Epic',4,2,1,2,'CasqueGamer2.jpg',10,14.99,'Un casque Gamer totalement épique pour aucune raison'),
-('Casque Gamer Disco',4,2,1,2,'CasqueGamer3.jpg',12,10.99,'Un casque Gamer capable d\'éblouir n\'importe qui'),
-('Casque Marin',5,3,4,3,'casqueMarin.jpeg',36,75.99,'Parfait pour imiter Tintin et Hadock'),
-('Casque Templier',6,2,1,1,'casqueMedieval1.jpg',54,40.99,'DEUS VULT'),
-('Haume Viking',7,3,1,1,'casqueMedieval2.jpg',60,20.99,'Parfait pour aller en Norvège'),
-('Casque Viking',7,2,1,1,'casqueMedieval3.jpg',47,23.99,'Parfait pour envhair la Grande Bretagne'),
-('Casque Chevalier',6,1,4,1,'casqueMedieval4.jpg',50,80.99,'Utilse pour des joutes'),
-('Casque Chien',9,1,5,3,'casqueAnimal1.jpg',7,10.99,'Faites parler votre animal intérieur'),
-('Casque Chantier',10,2,6,3,'casqueChantier1.jpg',32,15.99,'Pour vous protéger'),
-('Casque Contremaitre',10,2,4,3,'casqueChantier2.jpg',25,17.99,'Protège mieux que le casque Chantier'),
-('Casque Colonial',8,2,5,3,'casqueColonial.jpg',45,8.99,'Parfait pour explorer l\'Afrique'),
-('Casque GIGN',11,2,1,1,'casqueMilitaire1.jpg',37,25.99,'Ne permet pas de devenir agent du GIGN'),
-('Casque Soviétique',12,2,2,3,'casqueMilitaire2.jpg',28,18.99,'Parfait pour envahir l\'Afghanistan ou l\'Ukraine'),
-('Casque Chat',9,2,7,2,'CasqueMusique1.jpg',48,3.99,'Un casque parfait pour les chat et autres canidés'),
-('Casque Wookie',9,2,6,2,'CasqueMusique2.jpg',150,8.99,'Un casque poilant'),
-('Casque Musique Pas Fun',9,2,2,2,'CasqueMusique3.jpg',21,4.99,'Un casque sans rien de spécial'),
-('Casque de Noel',9,2,3,3,'casqueNoel.jpg',15,31.99,'Avec ce casque, vous pourrez enfin entrer par la cheminé'),
-('Casque Pompier',11,2,5,3,'casquePompier.jpg',45,50.99,'Ce casque ne vous permet pas de devenir pompier'),
-('Casque Spartiate',8,2,4,1,'casqueSparte1.jpg',28,67.99,'THIS IS SPARTA'),
-('Casque Rebelle',13,3,5,4,'CasqueStarWars1.jpeg',78,34.99,'Utile pour les conventions Geek'),
-('Casque StormTrooper',13,3,1,4,'CasqueStarWars2.jpeg',55,51.99,'Amélliore votre précision de -99%'),
-('Casque Kilo Ren',13,3,2,4,'CasqueStarWars3.jpeg',48,37.99,'Permet de perdre 5 kilos'),
-('Casque VR Sony',8,2,2,5,'casqueVR1.jpg',13,105.99,'Un casque VR par Sony'),
-('Casque LaserScope',8,2,1,5,'laserScope.jpg',28,98.99,'FIRE FIRE FIRE'),
-('Occulus Rift',8,2,2,5,'occulusRift.jpeg',27,352.99,'Un autre casque VR'),
-('PediSedate (Game Boy)',8,2,2,5,'pediSedate.jpeg',58,67.99,'Utile pour anesthésier des gens'),
-('Passoir Pastafariste',9,2,1,3,'casquePassoir.png',98,48.99,'Casque du parfait adorateur des pâtes'),
-('Picole Nationale',9,2,6,3,'casquePicole.png',45,36.99,'Casque officel des forces de l\'ordre'),
-('Casque Power Ranger',9,2,3,3,'casquePowerRanger.png',12,53.99,'Ce casque est le ranger Jaune devant, Marron derrière'),
-('Casque Romain',6,2,1,1,'casqueRomain.jpeg',68,89.99,'C\'est une antiquité qui vaut cher'),
-('Casque Samurai',5,2,1,1,'casqueSamurai.png',78,168.99,'La chute des samurais est proche'),
-('Casque Dark Vador',13,2,2,4,'casqueVador.jpg',69,75.99,'Vous allez être trop dark avec ce casque'),
-('Casque Ailettes',3,2,1,1,'casqueEpic1.png',35,258.99,'C\'est beau ça...'),
-('Casque Garde',3,2,1,1,'casqueSkyrim1.png',48,142.99,'Casque de garde'),
-('Casque Sommeil',3,2,1,1,'CasqueSkyrim2.jpeg',39,274.99,'Casque pour dormir tout en se protégant'),
-('Casque Ponpon',9,2,5,3,'CasquePonpon.jpg',39,29.99,'Casque avec ponpon'),
-('Casque Anglais',1,2,2,3,'casqueAnglais.jpg',29,139.99,'Casque officiel de la garde de la reine'),
-('Casque Invisible',8,2,3,3,'casqueInvisible.png',56,896.99,'Vous ne verrez aucune rayures dessus !');
+INSERT INTO casque(libelle,fabricant_id,taille_id,couleur_id,type_casque_id,image,stock,prix) VALUES
+('Casque à pointe',1,2,1,1,'casquePointe.png',5,100.99),
+('Casque Dragon',3,2,1,1,'casqueDragon.png',15,49.99),
+('Casque (Bon état)',2,2,1,3,'casqueFendu1.jpg',75,10.99),
+('Casque Allemand',1,2,2,1,'casqueFendu2.jpg',25,61.99),
+('Casque Gamer METAL',2,2,2,2,'casqueGamer.png',50,5.99),
+('Casque Gamer Néon',4,2,3,2,'CasqueGamer1.jpg',3,13.99),
+('Casque Gamer Epic',4,2,1,2,'CasqueGamer2.jpg',10,14.99),
+('Casque Gamer Disco',4,2,1,2,'CasqueGamer3.jpg',12,10.99),
+('Casque Marin',5,3,4,3,'casqueMarin.jpeg',36,75.99),
+('Casque Templier',6,2,1,1,'casqueMedieval1.jpg',54,40.99),
+('Haume Viking',7,3,1,1,'casqueMedieval2.jpg',60,20.99),
+('Casque Viking',7,2,1,1,'casqueMedieval3.jpg',47,23.99),
+('Casque Chevalier',6,1,4,1,'casqueMedieval4.jpg',50,80.99),
+('Casque Chien',9,1,5,3,'casqueAnimal1.jpg',7,10.99),
+('Casque Chantier',10,2,6,3,'casqueChantier1.jpg',32,15.99),
+('Casque Contremaitre',10,2,4,3,'casqueChantier2.jpg',25,17.99),
+('Casque Colonial',8,2,5,3,'casqueColonial.jpg',45,8.99),
+('Casque GIGN',11,2,1,1,'casqueMilitaire1.jpg',37,25.99),
+('Casque Soviétique',12,2,2,3,'casqueMilitaire2.jpg',28,18.99),
+('Casque Chat',9,2,7,2,'CasqueMusique1.jpg',48,3.99),
+('Casque Wookie',9,2,6,2,'CasqueMusique2.jpg',150,8.99),
+('Casque Musique Pas Fun',9,2,2,2,'CasqueMusique3.jpg',21,4.99),
+('Casque de Noel',9,2,3,3,'casqueNoel.jpg',15,31.99),
+('Casque Pompier',11,2,5,3,'casquePompier.jpg',45,50.99),
+('Casque Spartiate',8,2,4,1,'casqueSparte1.jpg',28,67.99),
+('Casque Rebelle',13,3,5,4,'CasqueStarWars1.jpeg',78,34.99),
+('Casque SotrmTrooper',13,3,1,4,'CasqueStarWars2.jpeg',55,51.99),
+('Casque Kilo Ren',13,3,2,4,'CasqueStarWars3.jpeg',48,37.99),
+('Casque VR Sony',8,2,2,5,'casqueVR1.jpg',13,105.99),
+('Casque LaserScope',8,2,1,5,'laserScope.jpg',28,98.99),
+('Occulus Rift',8,2,2,5,'occulusRift.jpeg',27,352.99),
+('PediSedate (Game Boy)',8,2,2,5,'pediSedate.jpeg',58,67.99),
+('Passoir Pastafariste',9,2,1,3,'casquePassoir.png',98,48.99),
+('Picole Nationale',9,2,6,3,'casquePicole.png',45,36.99),
+('Casque Power Ranger',9,2,3,3,'casquePowerRanger.png',12,53.99),
+('Casque Romain',6,2,1,1,'casqueRomain.jpeg',68,89.99),
+('Casque Samurai',5,2,1,1,'casqueSamurai.png',78,168.99),
+('Casque Dark Vador',13,2,2,4,'casqueVador.jpg',69,75.99),
+('Casque Ailettes',3,2,1,1,'casqueEpic1.png',35,258.99),
+('Casque Garde',3,2,1,1,'casqueSkyrim1.png',48,142.99),
+('Casque Sommeil',3,2,1,1,'CasqueSkyrim2.jpeg',39,274.99),
+('Casque Ponpon',9,2,5,3,'CasquePonpon.jpg',39,29.99),
+('Casque Anglais',1,2,2,3,'casqueAnglais.jpg',29,139.99),
+('Casque Invisible',8,2,3,3,'casqueInvisible.png',56,896.99);
+
+-- select substring(code,1,2) ,count(substring(code,1,2)) from adresse group by substring(code,1,2);
