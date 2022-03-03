@@ -1,0 +1,16 @@
+
+
+{% block title %}
+    <title>Publicité</title>
+{% endblock %}
+
+{% block body %}
+    <img alt="pub" src="{{ url_for('static', filename=image) }}"
+         style="display: block;margin: auto;height: auto;max-height: 850px;width: auto;max-width: 100%;">
+
+    <script>
+        document.body.style.backgroundImage="url({{ url_for('static', filename="favicon.ico") }})";
+    </script>
+{% endblock %}
+
+

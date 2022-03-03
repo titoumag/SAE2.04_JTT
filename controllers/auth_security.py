@@ -4,6 +4,7 @@
 from flask import Blueprint
 from flask import Flask, request, render_template, redirect, url_for, abort, flash, session, g
 from werkzeug.security import generate_password_hash, check_password_hash
+import random
 
 from connexion_db import get_db
 
@@ -51,6 +52,10 @@ def auth_signup():
 @auth_security.route('/info')
 def info():
     return render_template('info/info.html')
+
+@auth_security.route('/pub')
+def pub():
+    return render_template('info/pub.html', image="Scams/scam"+str(random.randint(1,1))+".png")
 
 
 @auth_security.route('/signup', methods=['POST'])

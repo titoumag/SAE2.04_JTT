@@ -12,25 +12,11 @@
     <h4>Notre meilleur client est : {{ user.name }} </h4>
     <h4>Il est endetté de {{ "{:,.2f} €".format(user.total) }} envers nous</h4>
     <br>
+    <br>
     <h4>Position de Pierre, notre livreur :</h4>
     {% include 'admin/dataviz/franceMap.html' %}
-
-    <script>
-        let pos = "10";
-        function updatePosOfPierre(){
-            document.getElementById(pos.toString()).style.fill = "#FFFFFF";
-            pos = (Math.floor(Math.random() * 94 + 1)).toString();
-            while(pos.length < 2){
-                pos = "0"+pos;
-            }
-            if(pos==="20"){
-                pos = "2A";
-            }
-            console.log(pos);
-            document.getElementById(pos.toString()).style.fill = "blue";
-            setTimeout(function(){updatePosOfPierre(); }, 500);
-        }
-
+    <script type="text/javascript" src="{{ url_for('static', filename='assets/js/map.js') }}"></script>
+    <script type="text/javascript">
         updatePosOfPierre();
     </script>
 {% endblock %}
