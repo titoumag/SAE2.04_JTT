@@ -129,6 +129,20 @@ def dataviz_article():
                      "GROUP BY type_casque.id")
     tableau = mycursor.fetchall()
 
+    sql = "select substring(code,1,2) as dep, count(substring(code,1,2)) as nombre " \
+          "from adresse " \
+          "group by substring(code,1,2)"
+    mycursor.execute(sql)
+    adresse=mycursor.fetchall()
+    max=0
+    for element in adresse:
+        if element['nombre']>max:
+            max=element['nombre']
+
+    lettre="FEDCBA9876543210"
+    couleur = ['#'+lettre[int(i/max*16)-1]*6 for i in range(1,max+1)]
+    print(couleur)
+
     return render_template('admin/dataviz/etat_article_vente.html',tableau=tableau, casques=casques,
-                                                                                percentages = lPercentage,
-                                                                                libelle = lLibelle,totaux=lTotaux)
+                                                        percentages = lPercentage,libelle = lLibelle,totaux=lTotaux,
+                                                    adresse=adresse,couleur=couleur)

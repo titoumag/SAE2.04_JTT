@@ -117,6 +117,7 @@ CREATE TABLE IF NOT EXISTS casque(
    taille_id INT NOT NULL,
    couleur_id INT NOT NULL,
    type_casque_id INT NOT NULL,
+   description VARCHAR(255),
    CONSTRAINT fk_casque_fabriquant
        FOREIGN KEY(fabricant_id) REFERENCES fabricant(id),
    CONSTRAINT fk_casque_taille
@@ -198,7 +199,8 @@ INSERT INTO adresse VALUE
     (null,2,'Belfort','rue au hasard',10,'90000'),
     (null,2,'Besancon','boulevard',5,'25000'),
     (null,2,'Paris','rue',2,'75001'),
-    (null,2,'Bretigney','rue',3,'25250');
+    (null,2,'Bretigney','rue',3,'25250'),
+    (null,3,'Bordeaux','avenue ...',11,'33000');
 
 
 INSERT INTO type_livraison(libelle,valeurAjoute) VALUES

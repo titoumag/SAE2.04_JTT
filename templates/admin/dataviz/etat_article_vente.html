@@ -16,10 +16,9 @@
 {% endblock %}
 
 {% block body %}
-    {% include 'admin/dataviz/franceMap.html' %}
     <br>
-    <h2>Données sur les types de casque</h2>
-        <div class="m-5">
+    <div class="border p-2 my-3">
+        <h2 class="text-center">Données sur les types de casque</h2>
         <table class="table">
             <thead class="thead-dark">
                 <tr>
@@ -48,11 +47,17 @@
             {% endif %}
             </tbody>
         </table>
-    <h2 class="text-center">Valeur du stock par type de casque</h2>
-    <canvas id="chart2"  width="400" height="400"></canvas>
+    </div>
+    <div style="display: inline-block;" class="border " width="48%" height="400px">
+        <h2 class="text-center p-2">Valeur du stock par type de casque</h2>
+        <canvas id="chart2"  ></canvas>
+    </div>
 
-    <h2 class="text-center">Répartition de la valeur du stock</h2>
-    <canvas id="chart1"  width="400" height="400"></canvas>
+    <div style="display: inline-block;" class="border w-50" height="400px" >
+        <h2 class="text-center p-2">Répartition de la valeur du stock</h2>
+        <canvas id="chart1"  ></canvas>
+    </div>
+    <br>
     <br>
 
     <script>
@@ -126,5 +131,10 @@
         },
     });
     </script>
+
+    <div class="text-center border w-50 m-auto">
+        <h2 class="text-center">Données sur les adresses clients</h2>
+        {% include 'admin/dataviz/franceMap.html' %}
+    </div>
 
 {% endblock %}
