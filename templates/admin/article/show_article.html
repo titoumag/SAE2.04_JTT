@@ -12,9 +12,9 @@
         {% for article in articles  %}
             <div class="card col-3 mt-4">
                 <div class="card-body border-dark rounded">
-                    <a href="/admin/article/details/{{ article.id }}">
+                    <a href="/admin/article/edit/{{ article.id }}">
                     <h2 class="card-title">
-                        <span style="color: #0b2e13">{{ article.libelle }}</span><br>
+                        <span class="article-title">{{ article.libelle }}</span><br>
                     </h2>
                     <div class="card-body">
                          {%  if article.image is not none %}
@@ -25,14 +25,13 @@
                     </div>
                     </a>
                     <div class="card-body">
-                            <form  action="/admin/article/edit/{{ article.id }}" method="post">
-                                <input type="hidden" name="idArticle" value="{{ article.id }}">
-                                <button class="btn btn-white float-right border-dark">
-                                    <img style="width: 30px" src="{{url_for('static', filename='images_asset/ajoutPanier.jpeg')}}" alt="ajoutStock.png">
-                                 </button>
-
-                                <h4>{{ article.prix }} €</h4>
-                            </form>
+                        <input type="hidden" name="idArticle" value="{{ article.id }}">
+                        <h4>{{ article.prix }} €</h4>
+                        <a class="img-fluid" href="/admin/article/edit/{{ article.id }}">
+                            <button class="btn btn-white float-right border-dark">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                        </a>
                     </div>
                 </div>
                 <div class="card-footer">

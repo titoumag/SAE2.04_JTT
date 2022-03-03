@@ -7,14 +7,14 @@ function updatePrice(clic,prixTot){
     }
 
 
-    if(idType==0){
+    if(idType===0){
         return;
     }
 
     let valAjout = document.getElementById("va"+idType).innerHTML;
 
     let valCoupon = 0;
-    if (idCoupon != "IGNORE"){
+    if (idCoupon !== "IGNORE"){
         valCoupon = document.getElementById("cou"+idCoupon).innerHTML;
     }
 

@@ -4,9 +4,50 @@
 {% endblock %}
 
 {% block body %}
-{#  <h2>modifier d'un article</h2>#}
-  {% if error %}
-    <p class=error><strong>Error:</strong> {{ error }}
-  {% endif %}
-
+    <h2>modifier un article</h2>
+    {% for article in article %}
+        <div class="row mt-5">
+            <img class="card-img-top rounded mx-4 d-block"  style="width:200px; height:200px; border: 1px solid black; padding: 25px;"  src="{{ url_for('static', filename = 'images/' + article['image']) }}"  alt="image  de {{ article.nom }}" >
+            <div class="w-25">
+                <form method="post" action="{{ url_for('admin_article.valid_edit_article') }}" enctype="multipart/form-data">
+                    <label for="nom">
+                        <input name="nom" type="text" value="{{ article.libelle }}">
+                    </label>
+                    <label for="stock">
+                        <input name="stock" type="number" min="0" value="{{ article.stock }}">
+                    </label>
+                    <label for="prix">
+                        <input name="prix" type="number" min="0.0" step="0.01" value="{{ article.prix }}">
+                    </label>
+                    <label for="image">
+                        <input name="image" type="file">
+                    </label>
+                    <label for="fabricant">
+                        <select name="fabricant">
+                            {% for fabricant in fabricants %}
+                                 <option value="{{ fabricant.id }}" {% if fabricant.id == article.fabricant_id %} selected {% endif %}> {{ fabricant.nom }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label for="couleur">
+                        <select name="couleur">
+                            {% for couleur in couleurs %}
+                                 <option value="{{ couleur.id }}" {% if couleur.id == article.couleur_id %} selected {% endif %}> {{ couleur.libelle }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label for="typeCasque">
+                        <select name="typeCasque">
+                            {% for type in types_casques %}
+                                 <option value="{{ type.id }}" {% if type.id == article.type_casque_id %} selected {% endif %}> {{ type.libelle }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label for="submit">
+                        <input name="submit" type="submit" value="Modifier">
+                    </label>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}

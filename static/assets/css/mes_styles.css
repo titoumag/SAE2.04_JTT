@@ -16,3 +16,9 @@ br , h2 { color: blue; }
     border-bottom-right-radius: calc(0.3rem - 1px);
     border-bottom-left-radius: calc(0.3rem - 1px);
 }
+
+.article-title{
+    color: #0b2e13;
+    height: 60px;
+    display: block;
+}

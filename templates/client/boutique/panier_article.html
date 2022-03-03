@@ -96,9 +96,7 @@
                             <div class="card-body border-dark rounded" title="{{ article.description }}">
                                 <a href="/client/article/details/{{ article.id }}">
                                 <h2 class="card-title">
-                                    <span style="color: #0b2e13">{{ article.libelle }}</span><br>
-                                    {{ article.prix }}
-                                    €
+                                    <span class="article-title">{{ article.libelle }}</span><br>
                                 </h2>
                                 <div class="card-body">
                                      {%  if article.image is not none %}
@@ -110,6 +108,7 @@
                                 </a>
                                 <div class="card-body">
                                         <form  action="/client/panier/update" method="post">
+                                            <h4 style="margin-top: -30px" >{{ article.prix }} €</h4>
                                             <input type="hidden" name="idArticle" value="{{ article.id }}">
                                             <button class="btn btn-white float-right border-dark">
                                                 <img style="width: 30px" src="{{url_for('static', filename='images_asset/ajoutPanier.jpeg')}}">
