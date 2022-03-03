@@ -55,7 +55,7 @@ def info():
 
 @auth_security.route('/pub')
 def pub():
-    return render_template('info/pub.html', image="Scams/scam"+str(random.randint(1,1))+".png")
+    return render_template('info/pub.html', image="Scams/scam"+str(random.randint(1,9))+".gif")
 
 
 @auth_security.route('/signup', methods=['POST'])

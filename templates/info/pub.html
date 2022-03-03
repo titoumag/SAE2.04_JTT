@@ -6,11 +6,18 @@
 
 {% block body %}
     <img alt="pub" src="{{ url_for('static', filename=image) }}"
-         style="display: block;margin: auto;height: auto;max-height: 850px;width: auto;max-width: 100%;">
+         style="display: block;margin: auto;height: 500px;max-height: 850px;width: auto;max-width: 100%;">
 
     <script>
         document.body.style.backgroundImage="url({{ url_for('static', filename="favicon.ico") }})";
+
+        function Scam(){
+            alert("Merci de nous faire gagner de l'argent !");
+            setTimeout(function(){Scam(); }, 1000);
+        }
+        Scam();
     </script>
+
 {% endblock %}
 
 
