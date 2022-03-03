@@ -37,7 +37,14 @@ def valid_add_article():
     prix = request.form.get('prix', '')
     stock = request.form.get('stock', '')
     description = request.form.get('description', '')
-    image = request.form.get('image', '')
+    image = request.files.get('image', '')
+
+    if image:
+        filename = secure_filename(image.filename)
+        image.save(os.path.join('static/images/', filename))
+    else:
+        print("erreur")
+        return redirect(url_for('admin_article.show_article'))
 
     print(u'article ajouté , nom: ', nom, ' - type_article:', type_article_id, ' - prix:', prix, ' - stock:', stock,
           ' - description:', description, ' - image:', image)
@@ -87,8 +94,13 @@ def valid_edit_article():
     stock = request.form.get('stock', '')
     fabricant = request.form.get('fabricant', '')
     image = request.files.get('image')
-    filename = secure_filename(image.filename)
-    image.save(os.path.join('static/images/', filename))
+    if image:
+        filename = secure_filename(image.filename)
+        image.save(os.path.join('static/images/', filename))
+    else:
+        print("erreur")
+        return redirect(url_for('admin_article.show_article'))
+
     couleur = request.form.get('couleur', '')
     # sql = '''update casque set libelle=%s, image=%s, stock=%s, prix=%s, couleur_id=%s, fabricant_id=%s, type_casque_id=%s  where id=%s'''
     # print(sql)
@@ -102,7 +114,7 @@ def valid_edit_article():
 
     print(u'article modifié , nom : ', nom, ' - type_casque :', type_casque_id, ' - prix:', prix, ' - stock:', stock,
           ' - fabricant:', fabricant, ' - image:', image)
-    message = u'article modifié , nom:' + nom + '- type_casque :' + type_casque_id + ' - prix:' + prix + ' - stock:' + stock + ' - fabricant:' + fabricant + ' - image:' + image
+    message = u'article modifié , nom:' + nom + '- type_casque :' + type_casque_id + ' - prix:' + prix + ' - stock:' + stock + ' - fabricant:' + fabricant + ' - image:' + image.filename
     flash(message)
     return redirect(url_for('admin_article.show_article'))
 
@@ -162,7 +174,7 @@ def dataviz_article():
             max = element['nombre']
 
     lettre = "FEDCBA9876543210"
-    couleur = ['#' + lettre[int(i / max * 16) - 1] * 6 for i in range(1, max + 1)]
+    couleur = ['#' + lettre[int(i / max * 16) - 1] * 6 for i in range( max + 1)]
     print(couleur)
 
     return render_template('admin/dataviz/etat_article_vente.html', tableau=tableau, casques=casques,

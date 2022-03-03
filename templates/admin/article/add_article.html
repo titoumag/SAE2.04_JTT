@@ -8,6 +8,7 @@
   <h2>ajout d'un article</h2>
   {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}
+      {# ne pas oublier : "enctype="multipart/form-data" dans la balise de formulaire #}
   {% endif %}
 
 {% endblock %}

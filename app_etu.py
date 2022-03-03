@@ -21,6 +21,7 @@ from controllers.admin_users import *
 
 app = Flask(__name__)
 app.secret_key = 'PANZERKAMPFWAGEN'
+app.config['UPLOAD_FOLDER'] = os.getcwd()+"/static/images/"
 
 
 @app.teardown_appcontext
