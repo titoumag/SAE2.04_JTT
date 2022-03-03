@@ -137,4 +137,10 @@
         {% include 'admin/dataviz/franceMap.html' %}
     </div>
 
+    <script>
+    {% for element in adresse %}
+        document.getElementById({{ element['dep'] }}).style.fill= "{{ couleur[element['nombre']] }}";
+    {% endfor %}
+    </script>
+
 {% endblock %}

@@ -778,8 +778,3 @@
 </g>
 </svg>
 
-<script>
-    {% for element in adresse %}
-        document.getElementById({{ element['dep'] }}).style.fill= "{{ couleur[element['nombre']] }}";
-    {% endfor %}
-</script>
