@@ -37,7 +37,14 @@ def valid_add_article():
     prix = request.form.get('prix', '')
     stock = request.form.get('stock', '')
     description = request.form.get('description', '')
-    image = request.form.get('image', '')
+    image = request.files.get('image', '')
+
+    if image:
+        filename = secure_filename(image.filename)
+        image.save(os.path.join('static/images/', filename))
+    else:
+        print("erreur")
+        return redirect(url_for('admin_article.show_article'))
 
     print(u'article ajouté , nom: ', nom, ' - type_article:', type_article_id, ' - prix:', prix, ' - stock:', stock,
           ' - description:', description, ' - image:', image)
@@ -82,27 +89,32 @@ def valid_edit_article():
     mycursor = get_db().cursor()
     nom = request.form['nom']
     id = request.form.get('id', '')
-    type_casque_id = request.form.get('type_casque_id', '')
+    type_casque_id = request.form.get('typeCasque', '')
     prix = request.form.get('prix', '')
     stock = request.form.get('stock', '')
     fabricant = request.form.get('fabricant', '')
     image = request.files.get('image')
-    filename = secure_filename(image.filename)
-    image.save(os.path.join('static/images/', filename))
+    if image:
+        mycursor.execute("select image from casque where id=%s",id)
+        old = mycursor.fetchone()["image"]
+        if old != "" and old != None and os.path.exists(os.path.join(os.getcwd() + "/static/images/", old)):
+            os.remove(os.path.join(os.getcwd() + "/static/images/", old))
+
+        filename = secure_filename(image.filename)
+        image.save(os.path.join('static/images/', filename))
+    else:
+        print("erreur")
+        return redirect(url_for('admin_article.show_article'))
+
     couleur = request.form.get('couleur', '')
-    # sql = '''update casque set libelle=%s, image=%s, stock=%s, prix=%s, couleur_id=%s, fabricant_id=%s, type_casque_id=%s  where id=%s'''
-    # print(sql)
+    sql = '''update casque set libelle=%s, image=%s, stock=%s, prix=%s, couleur_id=%s, fabricant_id=%s, type_casque_id=%s  where id=%s'''
 
-    print(nom, image, stock, prix, couleur, fabricant, type_casque_id, id)
-    # mycursor.execute(sql, (nom, image, stock,
-    #                        prix, couleur, fabricant,
-    #                        type_casque_id, id))
+    print(nom, image.filename, stock, prix, couleur, fabricant, type_casque_id, id)
+    mycursor.execute(sql, (nom, image.filename, stock, prix, couleur, fabricant, type_casque_id, id))
 
-    # get_db().commit()
+    get_db().commit()
 
-    print(u'article modifié , nom : ', nom, ' - type_casque :', type_casque_id, ' - prix:', prix, ' - stock:', stock,
-          ' - fabricant:', fabricant, ' - image:', image)
-    message = u'article modifié , nom:' + nom + '- type_casque :' + type_casque_id + ' - prix:' + prix + ' - stock:' + stock + ' - fabricant:' + fabricant + ' - image:' + image
+    message = u'article modifié , nom:' + nom + '- type_casque :' + type_casque_id + ' - prix:' + prix + ' - stock:' + stock + ' - fabricant:' + fabricant + ' - image:' + image.filename
     flash(message)
     return redirect(url_for('admin_article.show_article'))
 
@@ -136,6 +148,7 @@ def dataviz_article():
     for type in casques:
         maxi += float(type["prix_total"])
 
+
     for type in casques:
         lTotaux.append(float(type["prix_total"]))
         if maxi == 0.0:
@@ -143,6 +156,7 @@ def dataviz_article():
         else:
             lPercentage.append((float(type["prix_total"]) / maxi) * 100)
         lLibelle.append(type["libelle"])
+
 
     mycursor.execute("SELECT type_casque.libelle as libelle, type_casque.id as id, SUM(stock) as stockTotal,"
                      " SUM(stock*prix) as coutTotal "
@@ -162,7 +176,7 @@ def dataviz_article():
             max = element['nombre']
 
     lettre = "FEDCBA9876543210"
-    couleur = ['#' + lettre[int(i / max * 16) - 1] * 6 for i in range(1, max + 1)]
+    couleur = ['#' + lettre[int(i / max * 16) - 1] * 6 for i in range( max + 1)]
     print(couleur)
 
     return render_template('admin/dataviz/etat_article_vente.html', tableau=tableau, casques=casques,

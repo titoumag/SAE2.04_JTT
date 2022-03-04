@@ -10,6 +10,7 @@
             <img class="card-img-top rounded mx-4 d-block"  style="width:200px; height:200px; border: 1px solid black; padding: 25px;"  src="{{ url_for('static', filename = 'images/' + article['image']) }}"  alt="image  de {{ article.nom }}" >
             <div class="w-25">
                 <form method="post" action="{{ url_for('admin_article.valid_edit_article') }}" enctype="multipart/form-data">
+                    <input type="hidden" value="{{ article.id }}" name="id">
                     <label for="nom">
                         <input name="nom" type="text" value="{{ article.libelle }}">
                     </label>
