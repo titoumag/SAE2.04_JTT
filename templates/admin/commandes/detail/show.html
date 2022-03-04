@@ -1,6 +1,19 @@
 {% extends "admin/layout_admin.html" %}
 {% block body %}
-    <table class="table table-hover table-responsive">
+    <div class="row text-center">
+        <p class="col-6">
+            <strong>Adresse de livraison : </strong><br>
+            {{etat.ville}}  ({{ etat.code }}) <br>
+            {{ etat.numero }} {{ etat.rue }}
+        </p>
+        <p class="col-6">
+            <strong>Adresse de facturation : </strong><br>
+            {{ etat['af.ville'] }} ({{ etat['af.code'] }})<br>
+            {{ etat['af.numero'] }} {{ etat['af.rue'] }}
+        </p>
+    </div>
+    <table class="table">
+        <thead class="thead-dark">
         <th style="width: 300px">id_article</th>
         <th style="width: 300px">prix_unitaire</th>
         <th style="width: 300px">quantite</th>

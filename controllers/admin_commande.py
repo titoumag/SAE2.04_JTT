@@ -26,6 +26,7 @@ def admin_commande_show():
           "ORDER BY etat_id,user_id,date_achat"
     mycursor.execute(sql)
     commandes = mycursor.fetchall()
+    print(commandes)
 
     return render_template('admin/commandes/show.html', commandes=commandes)
 
@@ -48,11 +49,18 @@ def admin_commande_valider(id):
 @admin_commande.route('/admin/commande/<int:id>', methods=['get', 'post'])
 def admin_commande_details(id):
     mycursor = get_db().cursor()
-    sql = '''select commande_id, casque.libelle as libelle, prix_unit, quantite, prix_unit*quantite as prix_tot from
-     ligne_commande INNER JOIN casque on casque.id = casque_id where commande_id = %s'''
+    sql = "select commande_id, casque.libelle as libelle, prix_unit, quantite, prix_unit*quantite as prix_tot " \
+          "from ligne_commande " \
+          "INNER JOIN casque on casque.id = casque_id " \
+          "where commande_id = %s "
     mycursor.execute(sql, id)
     articles = mycursor.fetchall()
-    sql = '''select libelle from etat inner join commande on commande.etat_id=etat.id where commande.id = %s '''
+    sql = "select libelle, al.ville, al.code, al.rue,al.numero , af.ville,af.code ,af.rue,af.numero " \
+          "from etat " \
+          "inner join commande on commande.etat_id = etat.id " \
+          "INNER JOIN adresse AS al ON adresse_id_livraison=al.id " \
+          "INNER JOIN adresse AS af ON adresse_id_facturation=af.id " \
+          "where commande.id = %s "
     mycursor.execute(sql, id)
     etat = mycursor.fetchone()
     return render_template('admin/commandes/detail/show.html', articles=articles, etat=etat)
