@@ -168,3 +168,32 @@ def dataviz_article():
     return render_template('admin/dataviz/etat_article_vente.html', tableau=tableau, casques=casques,
                            percentages=lPercentage, libelle=lLibelle, totaux=lTotaux,
                            adresse=adresse, couleur=couleur)
+
+
+
+@admin_article.route('/admin/article/avis/<int:id>', methods=['GET'])
+def admin_avis(id):
+    mycursor = get_db().cursor()
+
+    mycursor.execute("SELECT * FROM casque where id = %s",(id))
+    article = mycursor.fetchone()
+
+    mycursor.execute("SELECT * FROM avis where casque_id = %s", (id))
+    commentaires = mycursor.fetchall()
+
+
+    return render_template('admin/article/show_avis.html', article=article, commentaires=commentaires)
+
+
+@admin_article.route('/admin/comment/delete', methods=['POST'])
+def admin_avis_delete():
+    mycursor = get_db().cursor()
+    article_id = request.form.get('idArticle', None)
+    userId = request.form.get('idUser', None)
+    malus = request.form.get('malus',None)
+    mycursor.execute("DELETE FROM avis WHERE casque_id=%s AND user_id=%s",(article_id,userId))
+    if malus != None:
+        mycursor.execute("INSERT INTO coupons (valeur,user_id) VALUES (%s,%s)",(-50,userId))
+    get_db().commit()
+
+    return admin_avis(article_id)

@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS couleur(
 CREATE TABLE IF NOT EXISTS casque(
    id int auto_increment,
    libelle VARCHAR(50),
-   image VARCHAR(50),
+   image VARCHAR(255),
    stock INT,
    prix DECIMAL(5,2),
    fabricant_id INT NOT NULL,

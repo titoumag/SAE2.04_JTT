@@ -22,9 +22,12 @@ def client_info_show():
     mycursor.execute(sql,(user_id))
     adresse=mycursor.fetchall()
 
+    mycursor.execute("SELECT * from coupons where user_id = %s",user_id)
+    coupons = mycursor.fetchall()
+
     if 'clic' in session:
         session['clic'] += 1
-    return render_template('/client/info/show.html',user=user,liste=adresse)
+    return render_template('/client/info/show.html',user=user,liste=adresse,coupons=coupons)
 
 @client_info.route('/client/info/edit', methods=['GET'])
 def client_info_edit():

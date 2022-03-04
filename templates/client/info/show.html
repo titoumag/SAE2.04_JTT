@@ -35,6 +35,33 @@
     </div>
     <br>
 
+    <div style="text-align: center"><h2 >Mes Coupons :</h2></div>
+    <br>
+
+    <div class="border m-auto p-3">
+        <table class="table border">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Coupons</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if coupons | length != 0 %}
+                    {% for coupon in coupons %}
+                        <tr>
+                            <td>Coupon de {{ coupon.valeur }} %</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td>Vous n'avez pas de coupons</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <br>
+
     <div style="text-align: center"><h2 >Mes adresses :</h2></div>
     <div class="border m-auto p-3">
         <table class="table border">
