@@ -8,9 +8,9 @@ def get_db():
         db = g._database = pymysql.connect(
             host="serveurmysql",
             # host="serveurmysql",
-            user="joudot",
-            password="3105",
-            database="BDD_joudot",
+            user="tmagnin4",
+            password="1005",
+            database="BDD_tmagnin4",
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )

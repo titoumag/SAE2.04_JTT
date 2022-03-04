@@ -13,7 +13,11 @@ client_commande = Blueprint('client_commande', __name__,
 def client_commande_add():
     mycursor = get_db().cursor()
     user_id = session['user_id']
-    sql = "select * from panier INNER JOIN casque ON casque.id=panier.casque_id where user_id=%s"
+    sql = "select * " \
+          "from panier " \
+          "INNER JOIN casque ON casque.id=panier.casque_id " \
+          "INNER JOIN modele ON modele.id=casque.modele_id "\
+            "where user_id=%s"
     mycursor.execute(sql, user_id)
     totPanier = mycursor.fetchall()
 
@@ -102,9 +106,12 @@ def client_commande_show():
     commandes = mycursor.fetchall()
 
     if currentCommande is not None:
-        sql = "SELECT quantite,prix_unit as prix,casque.libelle as nom,sum(prix_unit*quantite) as prix_ligne " \
+        sql = "SELECT quantite,prix_unit as prix,modele.libelle as nom,sum(prix_unit*quantite) as prix_ligne,couleur.libelle as cl, taille.libelle as tl " \
               "FROM ligne_commande " \
               "INNER JOIN casque ON casque_id = casque.id " \
+              "INNER JOIN modele ON modele.id=casque.modele_id " \
+              "INNER JOIN couleur ON couleur.id=casque.couleur_id "\
+            "INNER JOIN taille ON taille.id=casque.taille_id  "\
               "WHERE commande_id = %s " \
               "GROUP BY casque.id"
         mycursor.execute(sql, currentCommande)

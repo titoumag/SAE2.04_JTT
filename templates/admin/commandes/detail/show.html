@@ -14,13 +14,13 @@
     </div>
     <table class="table">
         <thead class="thead-dark">
-        <th style="width: 300px">id_article</th>
+        <th style="width: 400px">id_article</th>
         <th style="width: 300px">prix_unitaire</th>
         <th style="width: 300px">quantite</th>
         <th style="width: 300px">prix total article</th>
         {% for article in articles %}
             <tr>
-                <td>{{ article.libelle }}</td>
+                <td>{{ article.libelle }}  ({{ article.cl }} - {{ article.tl }})</td>
                 <td>{{ article.prix_unit }}</td>
                 <td>{{ article.quantite|int }}</td>
                 <td>{{ article.prix_tot }}</td>

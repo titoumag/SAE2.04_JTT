@@ -49,9 +49,12 @@ def admin_commande_valider(id):
 @admin_commande.route('/admin/commande/<int:id>', methods=['get', 'post'])
 def admin_commande_details(id):
     mycursor = get_db().cursor()
-    sql = "select commande_id, casque.libelle as libelle, prix_unit, quantite, prix_unit*quantite as prix_tot " \
+    sql = "select commande_id, modele.libelle as libelle, prix_unit, quantite, prix_unit*quantite as prix_tot, couleur.libelle as cl, taille.libelle as tl " \
           "from ligne_commande " \
           "INNER JOIN casque on casque.id = casque_id " \
+          "INNER JOIN modele on modele.id = casque.modele_id " \
+          "INNER JOIN couleur ON couleur.id=casque.couleur_id "\
+            "INNER JOIN taille ON taille.id=casque.taille_id  "\
           "where commande_id = %s "
     mycursor.execute(sql, id)
     articles = mycursor.fetchall()

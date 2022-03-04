@@ -16,9 +16,11 @@ def client_article_show():  # remplace client_index
 
     debut = True
     params = []
-    sql = "SELECT id,libelle,description,image,stock,prix,fabricant_id,taille_id,couleur_id,type_casque_id," \
+    sql = "SELECT modele.id,libelle,description,image,sum(stock) as stock,prix,fabricant_id,type_casque_id," \
           "count(avis.user_id) as nb_avis,AVG(avis.note) as moy_notes " \
-          "FROM casque LEFT JOIN avis ON casque.id = avis.casque_id"
+          "FROM modele " \
+          "INNER JOIN casque ON casque.modele_id=modele.id " \
+          "LEFT JOIN avis ON casque.id = avis.casque_id "
     if "filter_word" in session.keys():
         sql += " WHERE libelle LIKE %s"
         params.append("%" + session['filter_word'] + "%")
@@ -47,23 +49,32 @@ def client_article_show():  # remplace client_index
             sql += " AND prix < %s"
         params.append(session['filter_prix_max'])
 
-    sql+= " GROUP BY id"
+    sql+= " GROUP BY modele.id"
     mycursor.execute(sql, params)
     articles = mycursor.fetchall()
 
     mycursor.execute("SELECT * FROM type_casque")
     types_articles = mycursor.fetchall()
 
-    mycursor.execute("SELECT * FROM panier INNER JOIN casque ON panier.casque_id=casque.id WHERE user_id=%s",
+    mycursor.execute("SELECT * "
+                     "FROM panier "
+                     "INNER JOIN casque ON panier.casque_id=casque.id "
+                     "INNER JOIN modele ON modele.id=casque.modele_id "
+                     "INNER JOIN couleur ON couleur.id=casque.couleur_id "
+                     "INNER JOIN taille ON taille.id=casque.taille_id  "
+                     "WHERE user_id=%s",
                      session['user_id'])
     articles_panier = mycursor.fetchall()
+    print(articles_panier)
 
     sql="select sum(quantite*prix) as prix_tot " \
         "FROM panier " \
         "INNER JOIN casque on casque.id=panier.casque_id " \
+        "INNER JOIN modele ON modele.id=casque.modele_id "\
         "WHERE user_id=%s"
     mycursor.execute(sql, session['user_id'])
     prix_total = mycursor.fetchone()['prix_tot']
+
 
     mycursor.execute("select * from user where id=%s", session['user_id'])
     user=mycursor.fetchone()
@@ -88,8 +99,15 @@ def client_article_show():  # remplace client_index
 def client_article_details(id):
     mycursor = get_db().cursor()
 
-    mycursor.execute("SELECT * FROM casque where id = %s",(id))
+    mycursor.execute("SELECT * FROM modele where id = %s",(id))
     article = mycursor.fetchone()
+
+    mycursor.execute("SELECT * "
+                     "FROM casque "
+                     "INNER JOIN couleur ON couleur.id=casque.couleur_id "
+                     "INNER JOIN taille ON taille.id=casque.taille_id  "
+                     "where modele_id = %s and stock>0", (id))
+    choix = mycursor.fetchall()
 
     mycursor.execute("SELECT * FROM avis where casque_id = %s", (id))
     commentaires = mycursor.fetchall()
@@ -97,11 +115,12 @@ def client_article_details(id):
     mycursor.execute("SELECT * FROM ligne_commande INNER JOIN commande ON ligne_commande.commande_id = commande.id WHERE casque_id = %s AND user_id = %s", (id,session["user_id"]))
     commandes_articles = mycursor.fetchall()
 
-
     mycursor.execute("SELECT * FROM avis WHERE casque_id = %s AND user_id = %s",(id,session["user_id"]))
     userHasMadeAComment = mycursor.fetchall() != ()
+
+    print(choix)
 
     if 'clic' in session:
         session['clic'] += 1
     return render_template('client/boutique/article_details.html', article=article, commentaires=commentaires,
-                           commandes_articles=commandes_articles,userHasMadeAComment=userHasMadeAComment)
+                           commandes_articles=commandes_articles,userHasMadeAComment=userHasMadeAComment,choix=choix)

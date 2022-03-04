@@ -14,8 +14,8 @@
             {{ clic }}
             </strong>
         </div>
-        <div class="row align-self-right m-3">
-            <div class="col-8 border">
+        <div class="row align-self-right my-3">
+            <div class="col-8 border m-2">
 {#            {% if articlesPanier | length >= 1 %}#}
                 <h3>Liste des casques dans mon panier</h3>
                 <table class="table table-hover table-responsive">
@@ -35,7 +35,7 @@
                     {% else %}
                         {% for itemPanier in articlesPanier %}
                             <tr>
-                                <td>{{itemPanier.libelle}}</td>
+                                <td>{{itemPanier.libelle}} <br>({{ itemPanier['couleur.libelle'] }} - {{ itemPanier['taille.libelle'] }})</td>
                                 <td>{{itemPanier.quantite}}</td>
                                 <td>{{itemPanier.prix}}</td>
                                 <td>{{ "{:,.2f} €".format((itemPanier.prix   * itemPanier.quantite|int)) }}</td>
@@ -75,7 +75,7 @@
             </div>
 
 
-            <div class="col border">
+            <div class="col border m-2">
               <h3>Les filtres</h3>
               Articles dont le nom est composé par :<br>
                  {% include('client/boutique/_filtre.html') %}
@@ -104,21 +104,22 @@
                                     {% else %} <img class="card-img-top rounded mx-auto d-block"   style="width:100px;height:100px"   src="{{ url_for('static', filename='images/no_photo.jpeg')}}"  alt="image  de {{ article.nom }}" >
                                     {% endif %}
                                     <hr>
+                                    <h4 >{{ article.prix }} €</h4>
                                 </div>
                                 </a>
-                                <div class="card-body">
-                                        <form  action="/client/panier/update" method="post">
-                                            <h4 style="margin-top: -30px" >{{ article.prix }} €</h4>
-                                            <input type="hidden" name="idArticle" value="{{ article.id }}">
-                                            <button class="btn btn-white float-right border-dark">
-                                                <img style="width: 30px" src="{{url_for('static', filename='images_asset/ajoutPanier.jpeg')}}">
-                                             </button>
+{#                                <div class="card-body">#}
+{#                                        <form  action="/client/panier/update" method="post">#}
+{#                                            <h4 style="margin-top: -30px" >{{ article.prix }} €</h4>#}
+{#                                            <input type="hidden" name="idArticle" value="{{ article.id }}">#}
+{#                                            <button class="btn btn-white float-right border-dark">#}
+{#                                                <img style="width: 30px" src="{{url_for('static', filename='images_asset/ajoutPanier.jpeg')}}">#}
+{#                                             </button>#}
 
-                                            <div class="input-group input-group-sm" style="width: 4rem !important;">
-                                                <input type="number" id="input-{{ article.id }}" step="1" min="0" max="{{ article.stock }}" class="form-control" style="width: 4rem !important;" value="1" name="quantite">
-                                            </div>
-                                        </form>
-                                </div>
+{#                                            <div class="input-group input-group-sm" style="width: 4rem !important;">#}
+{#                                                <input type="number" id="input-{{ article.id }}" step="1" min="0" max="{{ article.stock }}" class="form-control" style="width: 4rem !important;" value="1" name="quantite">#}
+{#                                            </div>#}
+{#                                        </form>#}
+{#                                </div>#}
                             </div>
                             <div class="card-footer">
                             {% if article.stock is defined %}

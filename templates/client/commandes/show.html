@@ -22,7 +22,7 @@
                 <tbody>
                         {% for ligne in articles_commande %}
                             <tr>
-                                <td>{{ ligne.nom }}</td>
+                                <td>{{ ligne.nom }} ({{ ligne.cl }} - {{ ligne.tl }})</td>
                                 <td>{{ ligne.quantite }}</td>
                                 <td>{{ ligne.prix }} €</td>
                                 <td>{{ ligne.prix_ligne }} €  </td>

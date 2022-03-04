@@ -13,9 +13,11 @@ client_panier = Blueprint('client_panier', __name__,
 def client_panier_update():
     mycursor = get_db().cursor()
     idArticle = request.form.get('idArticle')
-    direction = int(request.form.get('quantite'))
-    if (direction<-5):
-        return redirect('/client/article/show')
+    direction = request.form.get('quantite')
+    if (direction==None):
+        direction=1
+    else:
+        direction=int(direction)
     user_id = session['user_id']
 
     sql = "select * from panier where casque_id=%s and user_id=%s"
@@ -70,6 +72,10 @@ def client_panier_all():
 def client_panier_add():
     mycursor = get_db().cursor()
     return redirect('/client/panier/update')
+
+
+
+
 # ANCIENNE FONCTION PLUS UTILISEE : replacée par update()
 @client_panier.route('/client/panier/delete', methods=['POST'])
 def client_panier_delete():
