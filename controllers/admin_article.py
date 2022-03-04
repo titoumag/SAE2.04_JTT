@@ -17,7 +17,7 @@ admin_article = Blueprint('admin_article', __name__,
 @admin_article.route('/admin/article/show')
 def show_article():
     mycursor = get_db().cursor()
-    sql = '''select * from casque'''
+    sql = '''select * from modele'''
     mycursor.execute(sql)
     articles = mycursor.fetchall()
     return render_template('admin/article/show_article.html', articles=articles)
@@ -71,7 +71,8 @@ def valid_add_article():
         print("erreur")
         return redirect(url_for('admin_article.show_article'))
 
-    sql = '''insert into casque(libelle, image, stock, prix, fabricant_id, taille_id, couleur_id, type_casque_id, description) value (%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
+    sql = '''insert into casque(libelle, image, stock, prix, fabricant_id, taille_id, couleur_id, type_casque_id, description) 
+    value (%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
 
     tupleAdd = (nom, filename, stock, prix, fabricant, taille, couleur, type_article_id, description)
     mycursor.execute(sql, tupleAdd)
@@ -89,11 +90,11 @@ def valid_add_article():
 def delete_article(id):
     id = str(id)
     mycursor = get_db().cursor()
-    sql = '''select image from casque where id=%s'''
+    sql = '''select image from modele where id=%s'''
     mycursor.execute(sql, id)
     image = mycursor.fetchone()['image']
 
-    sql = '''delete from casque where id=%s'''
+    sql = '''delete from modele where id=%s'''
     mycursor.execute(sql, id)
     get_db().commit()
 
@@ -180,6 +181,7 @@ def dataviz_article():
     mycursor = get_db().cursor()
     sql = "SELECT type_casque_id,type_casque.libelle as libelle,SUM(prix*stock) as prix_total " \
           "FROM casque " \
+          "INNER JOIN modele ON modele.id=casque.modele_id "\
           "INNER JOIN type_casque ON type_casque_id=type_casque.id " \
           "GROUP BY type_casque_id"
     mycursor.execute(sql)
@@ -203,7 +205,8 @@ def dataviz_article():
     mycursor.execute("SELECT type_casque.libelle as libelle, type_casque.id as id, SUM(stock) as stockTotal,"
                      " SUM(stock*prix) as coutTotal "
                      "FROM type_casque "
-                     "LEFT JOIN casque on casque.type_casque_id=type_casque.id "
+                     "LEFT JOIN modele ON modele.type_casque_id=type_casque.id "
+                     "LEFT JOIN casque on casque.modele_id=modele.id "
                      "GROUP BY type_casque.id")
     tableau = mycursor.fetchall()
 
@@ -218,7 +221,7 @@ def dataviz_article():
             maxAddress = element['nombre']
 
     lettre = "FEDCBA9876543210"
-    couleur = ['#' + lettre[int(i / maxAddress * 16) - 1] * 6 for i in range(max + 1)]
+    couleur = ['#' + lettre[int(i / maxAddress * 16) - 1] * 6 for i in range(maxAddress + 1)]
     print(couleur)
 
     return render_template('admin/dataviz/etat_article_vente.html', tableau=tableau, casques=casques,
