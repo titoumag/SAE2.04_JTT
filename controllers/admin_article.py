@@ -89,12 +89,17 @@ def valid_edit_article():
     mycursor = get_db().cursor()
     nom = request.form['nom']
     id = request.form.get('id', '')
-    type_casque_id = request.form.get('type_casque_id', '')
+    type_casque_id = request.form.get('typeCasque', '')
     prix = request.form.get('prix', '')
     stock = request.form.get('stock', '')
     fabricant = request.form.get('fabricant', '')
     image = request.files.get('image')
     if image:
+        mycursor.execute("select image from casque where id=%s",id)
+        old = mycursor.fetchone()["image"]
+        if old != "" and old != None and os.path.exists(os.path.join(os.getcwd() + "/static/images/", old)):
+            os.remove(os.path.join(os.getcwd() + "/static/images/", old))
+
         filename = secure_filename(image.filename)
         image.save(os.path.join('static/images/', filename))
     else:
@@ -102,18 +107,13 @@ def valid_edit_article():
         return redirect(url_for('admin_article.show_article'))
 
     couleur = request.form.get('couleur', '')
-    # sql = '''update casque set libelle=%s, image=%s, stock=%s, prix=%s, couleur_id=%s, fabricant_id=%s, type_casque_id=%s  where id=%s'''
-    # print(sql)
+    sql = '''update casque set libelle=%s, image=%s, stock=%s, prix=%s, couleur_id=%s, fabricant_id=%s, type_casque_id=%s  where id=%s'''
 
-    print(nom, image, stock, prix, couleur, fabricant, type_casque_id, id)
-    # mycursor.execute(sql, (nom, image, stock,
-    #                        prix, couleur, fabricant,
-    #                        type_casque_id, id))
+    print(nom, image.filename, stock, prix, couleur, fabricant, type_casque_id, id)
+    mycursor.execute(sql, (nom, image.filename, stock, prix, couleur, fabricant, type_casque_id, id))
 
-    # get_db().commit()
+    get_db().commit()
 
-    print(u'article modifié , nom : ', nom, ' - type_casque :', type_casque_id, ' - prix:', prix, ' - stock:', stock,
-          ' - fabricant:', fabricant, ' - image:', image)
     message = u'article modifié , nom:' + nom + '- type_casque :' + type_casque_id + ' - prix:' + prix + ' - stock:' + stock + ' - fabricant:' + fabricant + ' - image:' + image.filename
     flash(message)
     return redirect(url_for('admin_article.show_article'))
@@ -148,6 +148,7 @@ def dataviz_article():
     for type in casques:
         maxi += float(type["prix_total"])
 
+
     for type in casques:
         lTotaux.append(float(type["prix_total"]))
         if maxi == 0.0:
@@ -155,6 +156,7 @@ def dataviz_article():
         else:
             lPercentage.append((float(type["prix_total"]) / maxi) * 100)
         lLibelle.append(type["libelle"])
+
 
     mycursor.execute("SELECT type_casque.libelle as libelle, type_casque.id as id, SUM(stock) as stockTotal,"
                      " SUM(stock*prix) as coutTotal "
