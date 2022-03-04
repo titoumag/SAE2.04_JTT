@@ -3,6 +3,18 @@
     <div class="container-fluid">
             {% if articles_commande %}
             <h3>Recapitulatifs de la commande n°{{ commande_id }}</h3>
+            <div class="row text-center">
+                <p class="col-6">
+                    <strong>Adresse de livraison : </strong><br>
+                    {{suplementL.ville}}  ({{ suplementL.code }}) <br>
+                    {{ suplementL.numero }} {{ suplementL.rue }}
+                </p>
+                <p class="col-6">
+                    <strong>Adresse de facturation : </strong><br>
+                    {{ suplementL['af.ville'] }} ({{ suplementL['af.code'] }})<br>
+                    {{ suplementL['af.numero'] }} {{ suplementL['af.rue'] }}
+                </p>
+            </div>
             <table class="table">
                 <thead class="thead-dark">
                     <tr><th>Nom</th><th>Quantite</th><th>Prix</th><th>Prix total</th></tr>

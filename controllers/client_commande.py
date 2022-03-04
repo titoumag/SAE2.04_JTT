@@ -110,14 +110,16 @@ def client_commande_show():
         mycursor.execute(sql, currentCommande)
         articles_commande = mycursor.fetchall()
 
-        sql="select libelle,valeurAjoute,clic, " \
-            "sum(prix_unit*quantite)*(valeurAjoute-1) as supplement, " \
-            "(sum(prix_unit*quantite)*valeurAjoute+clic)*(100-reduction)/100 as total, " \
-            "reduction " \
-            "from type_livraison " \
-             "inner join commande on type_livraison_id=type_livraison.id " \
-            "inner join ligne_commande on commande.id=ligne_commande.commande_id "\
-             "WHERE commande.id = %s"
+        sql="SELECT libelle,valeurAjoute,clic,reduction, " \
+                "sum(prix_unit*quantite)*(valeurAjoute-1) AS supplement, " \
+                "(sum(prix_unit*quantite)*valeurAjoute+clic)*(100-reduction)/100 AS total, " \
+                "al.ville, al.code, al.rue,al.numero , af.ville,af.code ,af.rue,af.numero " \
+            "FROM type_livraison " \
+            "INNER JOIN commande ON type_livraison_id=type_livraison.id " \
+            "INNER JOIN ligne_commande ON commande.id=ligne_commande.commande_id "\
+            "INNER JOIN adresse AS al ON adresse_id_livraison=al.id " \
+            "INNER JOIN adresse AS af ON adresse_id_facturation=af.id " \
+            "WHERE commande.id = %s"
         mycursor.execute(sql, currentCommande)
         suplement = mycursor.fetchone()
         print(suplement)
