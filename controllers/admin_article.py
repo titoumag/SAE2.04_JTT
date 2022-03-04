@@ -100,8 +100,7 @@ def valid_edit_article():
         if old != "" and old != None and os.path.exists(os.path.join(os.getcwd() + "/static/images/", old)):
             os.remove(os.path.join(os.getcwd() + "/static/images/", old))
 
-        filename = secure_filename(image.filename)
-        image.save(os.path.join('static/images/', filename))
+        image.save(os.path.join('static/images/', old))
     else:
         print("erreur")
         return redirect(url_for('admin_article.show_article'))
