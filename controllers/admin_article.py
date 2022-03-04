@@ -1,9 +1,11 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
+import math
 import os.path
+from random import random
 
 from flask import Blueprint
-from flask import Flask, request, render_template, redirect, url_for, abort, flash, session, g
+from flask import request, render_template, redirect, url_for, flash, session
 from werkzeug.utils import secure_filename
 
 from connexion_db import get_db
@@ -18,45 +20,84 @@ def show_article():
     sql = '''select * from casque'''
     mycursor.execute(sql)
     articles = mycursor.fetchall()
-    # print(articles)
     return render_template('admin/article/show_article.html', articles=articles)
 
 
 @admin_article.route('/admin/article/add', methods=['GET'])
 def add_article():
     mycursor = get_db().cursor()
-    types_articles = None
-    return render_template('admin/article/add_article.html', types_articles=types_articles)
+
+    sql = '''select * from type_casque'''
+    mycursor.execute(sql)
+    type_casque = mycursor.fetchall()
+
+    sql = '''select * from couleur'''
+    mycursor.execute(sql)
+    colors = mycursor.fetchall()
+
+    sql = '''select * from fabricant'''
+    mycursor.execute(sql)
+    fabriquants = mycursor.fetchall()
+
+    sql = '''select * from taille'''
+    mycursor.execute(sql)
+    tailles = mycursor.fetchall()
+
+    return render_template('admin/article/add_article.html',
+                           types_casque=type_casque,
+                           couleurs=colors,
+                           fabricants=fabriquants,
+                           tailles=tailles)
 
 
 @admin_article.route('/admin/article/add', methods=['POST'])
 def valid_add_article():
+    mycursor = get_db().cursor()
+
     nom = request.form.get('nom', '')
-    type_article_id = request.form.get('type_article_id', '')
-    # type_article_id = int(type_article_id)
+    type_article_id = request.form.get('typeCasque', '')
     prix = request.form.get('prix', '')
     stock = request.form.get('stock', '')
+    fabricant = request.form.get('fabricant', '')
+    couleur = request.form.get('couleur', '')
     description = request.form.get('description', '')
+    taille = request.form.get('taille', '')
     image = request.files.get('image', '')
 
     if image:
-        filename = secure_filename(image.filename)
+        filename = str(2147483647 * random() | int) + '.png'
         image.save(os.path.join('static/images/', filename))
     else:
         print("erreur")
         return redirect(url_for('admin_article.show_article'))
 
+    sql = '''insert into casque(libelle, image, stock, prix, fabricant_id, taille_id, couleur_id, type_casque_id, description) value (%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
+
+    tupleAdd = (nom, filename, stock, prix, fabricant, taille, couleur, type_article_id, description)
+    mycursor.execute(sql, tupleAdd)
+    get_db().commit()
+
     print(u'article ajouté , nom: ', nom, ' - type_article:', type_article_id, ' - prix:', prix, ' - stock:', stock,
           ' - description:', description, ' - image:', image)
-    message = u'article ajouté , nom:' + nom + '- type_article:' + type_article_id + ' - prix:' + prix + ' - stock:' + stock + ' - description:' + description + ' - image:' + image
+    message = u'article ajouté , nom:' + nom + '- type_article:' + type_article_id + ' - prix:' + prix + ' - stock:' + stock + ' - description:' + description + ' - image:' + str(
+        image)
     flash(message)
     return redirect(url_for('admin_article.show_article'))
 
 
-@admin_article.route('/admin/article/delete', methods=['POST'])
-def delete_article():
-    # id = request.args.get('id', '')
-    id = request.form.get('id', '')
+@admin_article.route('/admin/article/delete/<int:id>', methods=['GET'])
+def delete_article(id):
+    id = str(id)
+    mycursor = get_db().cursor()
+    sql = '''select image from casque where id=%s'''
+    mycursor.execute(sql, id)
+    image = mycursor.fetchone()['image']
+
+    sql = '''delete from casque where id=%s'''
+    mycursor.execute(sql, id)
+    get_db().commit()
+
+    os.remove('static/images/' + image)
 
     print("un article supprimé, id :", id)
     flash(u'un article supprimé, id : ' + id)
@@ -94,27 +135,30 @@ def valid_edit_article():
     stock = request.form.get('stock', '')
     fabricant = request.form.get('fabricant', '')
     image = request.files.get('image')
+    description = request.files.get('description')
+
+
     if image:
-        mycursor.execute("select image from casque where id=%s",id)
+        mycursor.execute("select image from casque where id=%s", id)
         old = mycursor.fetchone()["image"]
-        if old != "" and old != None and os.path.exists(os.path.join(os.getcwd() + "/static/images/", old)):
+        if old != "" and old is not None and os.path.exists(os.path.join(os.getcwd() + "/static/images/", old)):
             os.remove(os.path.join(os.getcwd() + "/static/images/", old))
 
-        filename = secure_filename(image.filename)
-        image.save(os.path.join('static/images/', filename))
+        # filename = secure_filename(image.filename)
+        image.save(os.path.join('static/images/', old))  # filename
     else:
         print("erreur")
         return redirect(url_for('admin_article.show_article'))
 
     couleur = request.form.get('couleur', '')
-    sql = '''update casque set libelle=%s, image=%s, stock=%s, prix=%s, couleur_id=%s, fabricant_id=%s, type_casque_id=%s  where id=%s'''
+    sql = '''update casque set libelle=%s, image=%s, stock=%s, prix=%s, couleur_id=%s, fabricant_id=%s, type_casque_id=%s, description=%s where id=%s'''
 
-    print(nom, image.filename, stock, prix, couleur, fabricant, type_casque_id, id)
-    mycursor.execute(sql, (nom, image.filename, stock, prix, couleur, fabricant, type_casque_id, id))
+    print(nom, image.filename, stock, prix, couleur, fabricant, type_casque_id, description, id)
+    mycursor.execute(sql, (nom, image.filename, stock, prix, couleur, fabricant, type_casque_id, description, id))
 
     get_db().commit()
 
-    message = u'article modifié , nom:' + nom + '- type_casque :' + type_casque_id + ' - prix:' + prix + ' - stock:' + stock + ' - fabricant:' + fabricant + ' - image:' + image.filename
+    message = u'article modifié , nom:' + nom + '- type_casque :' + type_casque_id + ' - prix:' + prix + ' - stock:' + stock + ' - fabricant:' + fabricant + ' - image:' + image.filename +  ' - description: ' + description
     flash(message)
     return redirect(url_for('admin_article.show_article'))
 
@@ -145,18 +189,16 @@ def dataviz_article():
     lTotaux = []
 
     maxi = 0.0
-    for type in casques:
-        maxi += float(type["prix_total"])
+    for typeCa in casques:
+        maxi += float(typeCa["prix_total"])
 
-
-    for type in casques:
-        lTotaux.append(float(type["prix_total"]))
+    for typeC in casques:
+        lTotaux.append(float(typeC["prix_total"]))
         if maxi == 0.0:
             lPercentage.append(0.0)
         else:
-            lPercentage.append((float(type["prix_total"]) / maxi) * 100)
-        lLibelle.append(type["libelle"])
-
+            lPercentage.append((float(typeC["prix_total"]) / maxi) * 100)
+        lLibelle.append(typeC["libelle"])
 
     mycursor.execute("SELECT type_casque.libelle as libelle, type_casque.id as id, SUM(stock) as stockTotal,"
                      " SUM(stock*prix) as coutTotal "
@@ -170,13 +212,13 @@ def dataviz_article():
           "group by substring(code,1,2)"
     mycursor.execute(sql)
     adresse = mycursor.fetchall()
-    max = 0
+    maxAddress = 0
     for element in adresse:
-        if element['nombre'] > max:
-            max = element['nombre']
+        if element['nombre'] > maxAddress:
+            maxAddress = element['nombre']
 
     lettre = "FEDCBA9876543210"
-    couleur = ['#' + lettre[int(i / max * 16) - 1] * 6 for i in range( max + 1)]
+    couleur = ['#' + lettre[int(i / maxAddress * 16) - 1] * 6 for i in range(max + 1)]
     print(couleur)
 
     return render_template('admin/dataviz/etat_article_vente.html', tableau=tableau, casques=casques,

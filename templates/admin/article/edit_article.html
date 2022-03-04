@@ -14,11 +14,11 @@
                     <label for="nom">
                         <input name="nom" type="text" value="{{ article.libelle }}">
                     </label>
-                    <label for="stock">
+                    <label for="stock">stock
                         <input name="stock" type="number" min="0" value="{{ article.stock }}">
                     </label>
                     <label for="prix">
-                        <input name="prix" type="number" min="0.0" step="0.01" value="{{ article.prix }}">
+                        <input name="prix" type="number" min="0.0" step="0.01" value="{{ article.prix }}">€
                     </label>
                     <label for="image">
                         <input name="image" type="file">
@@ -43,6 +43,9 @@
                                  <option value="{{ type.id }}" {% if type.id == article.type_casque_id %} selected {% endif %}> {{ type.libelle }}</option>
                             {% endfor %}
                         </select>
+                    </label>
+                    <label for="description">Description
+                        <input name="description" type="text">
                     </label>
                     <label for="submit">
                         <input name="submit" type="submit" value="Modifier">
