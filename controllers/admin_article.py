@@ -234,7 +234,7 @@ def dataviz_article():
 def admin_avis(id):
     mycursor = get_db().cursor()
 
-    mycursor.execute("SELECT * FROM casque where id = %s",(id))
+    mycursor.execute("SELECT * FROM modele where id = %s",(id))
     article = mycursor.fetchone()
 
     mycursor.execute("SELECT * FROM avis where casque_id = %s", (id))
