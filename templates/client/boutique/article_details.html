@@ -19,17 +19,19 @@
     </div>
     <br>
 
-    <div>
-        <h2>Acheter ce produit</h2>
-        <form class=" border" action="/client/panier/update" method="post">
-            <select name="idArticle" id="spe">
-                {% for type in choix %}
-                     <option value="{{ type.id }}" > Couleur : {{ type['libelle'] }} - Taille : {{ type['taille.libelle'] }}</option>
-                {% endfor %}
-            </select><br>
-            <button class="btn btn-primary" >Acheter</button>
-        </form>
-    </div>
+    {% if choix | length != 0 %}
+        <div>
+            <h2>Acheter ce produit</h2>
+            <form class=" border" action="/client/panier/update" method="post">
+                <select name="idArticle" id="spe">
+                    {% for type in choix %}
+                         <option value="{{ type.id }}" > Couleur : {{ type['libelle'] }} - Taille : {{ type['taille.libelle'] }}</option>
+                    {% endfor %}
+                </select><br>
+                <button class="btn btn-primary" >Acheter</button>
+            </form>
+        </div>
+    {% endif %}
     <br>
 
     <div class="row" style="background-color: #ba8b00">
