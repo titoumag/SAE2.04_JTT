@@ -344,6 +344,7 @@ INSERT INTO modele(libelle,fabricant_id,type_casque_id,image,prix,description) V
 
 INSERT INTO casque(modele_id,stock,taille_id,couleur_id) VALUES
 (1, 47, 3, 1),
+(2, 50, 2, 2),
 (2, 35, 2, 6),
 (3, 49, 1, 5),
 (4, 47, 1, 4),
