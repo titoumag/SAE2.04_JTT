@@ -19,8 +19,6 @@ def get_db():
 def update_property(attribut,value):
     mycursor = get_db().cursor()
     user_id = session['user_id']
-    # if test!="":
-    #     test=" and "+test
 
     sql="select * from user where id=%s"
     print(sql)
