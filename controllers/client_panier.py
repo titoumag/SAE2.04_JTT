@@ -24,10 +24,15 @@ def client_panier_update():
     mycursor.execute(sql, (idArticle,user_id))
     res = mycursor.fetchall()
 
+    sql = "select * from casque where id=%s"
+    mycursor.execute(sql, (idArticle))
+    stock = int(mycursor.fetchone()['stock'])
+
     if len(res) == 0:
-        # sql = "select prix from casque where id=%s"
-        # mycursor.execute(sql, (idArticle))
-        # prix = mycursor.fetchone()['prix']
+        if direction > stock:
+            direction = stock
+        if direction < 0:
+            direction = 1
 
         sql="insert into panier value (null,CURDATE(),%s,%s,%s)"
         tuple=(direction,idArticle,user_id)
@@ -36,14 +41,14 @@ def client_panier_update():
 
     else:
         quantite = int(res[0]['quantite']) + direction
-        sql = "select * from casque where id=%s"
-        mycursor.execute(sql, (idArticle))
-        stock = int(mycursor.fetchone()['stock'])
+        if quantite > stock:
+            quantite = stock
+        if quantite < 0:
+            quantite=0
 
-        if (direction==-1 and quantite>0) or (direction==1 and quantite<stock+1):
-            sql="update panier set quantite=%s where casque_id=%s and user_id=%s "
-            mycursor.execute(sql, (quantite,idArticle, user_id))
-            get_db().commit()
+        sql="update panier set quantite=%s where casque_id=%s and user_id=%s "
+        mycursor.execute(sql, (quantite,idArticle, user_id))
+        get_db().commit()
 
     return redirect('/client/article/show')
 

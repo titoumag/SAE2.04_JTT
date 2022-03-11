@@ -26,10 +26,11 @@
 {#                <select name="idArticle" id="spe">#}
                     {% for type in choix %}
 {#                         <option value="{{ type.id }}" > Couleur : {{ type['libelle'] }} - Taille : {{ type['taille.libelle'] }}</option>#}
-                        <input name="idArticle" type="radio" value="{{ type.id }}" id="{{ type.id }}" >
+                        <input name="idArticle" type="radio" value="{{ type.id }}" id="{{ type.id }}" checked>
                         <label for="{{ type.id }}">Couleur : {{ type['libelle'] }} - Taille : {{ type['taille.libelle'] }}</label><br>
                     {% endfor %}
 {#                </select><br>#}
+                <label>quantite : </label> <input type="number" name="quantite" style="width: 70px" value="1"><br>
                 <button class="btn btn-primary" >Acheter</button>
             </form>
         </div>
