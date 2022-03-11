@@ -106,7 +106,11 @@ def client_article_details(id):
                      "FROM casque "
                      "INNER JOIN couleur ON couleur.id=casque.couleur_id "
                      "INNER JOIN taille ON taille.id=casque.taille_id  "
-                     "where modele_id = %s and stock>0", (id))
+                     "where modele_id = %s and stock>0 and casque.id in ("
+                         "select casque.id "
+                         "from casque "
+                         "left join panier on panier.casque_id=casque.id "
+                         "where stock>quantite or quantite is null)", (id))
     choix = mycursor.fetchall()
 
     mycursor.execute("SELECT * FROM avis where casque_id = %s", (id))
@@ -123,4 +127,5 @@ def client_article_details(id):
     if 'clic' in session:
         session['clic'] += 1
     return render_template('client/boutique/article_details.html', article=article, commentaires=commentaires,
-                           commandes_articles=commandes_articles,userHasMadeAComment=userHasMadeAComment,choix=choix)
+                           commandes_articles=commandes_articles,userHasMadeAComment=userHasMadeAComment,
+                           choix=choix)

@@ -336,10 +336,15 @@ INSERT INTO modele(libelle,fabricant_id,type_casque_id,image,prix,description) V
 ('Casque Sommeil',3,1,'CasqueSkyrim2.jpeg',274.99,'Casque pour dormir tout en se protégant'),
 ('Casque Ponpon',9,3,'CasquePonpon.jpg',29.99,'Casque avec ponpon'),
 ('Casque Anglais',1,3,'casqueAnglais.jpg',139.99,'Casque officiel de la garde de la reine'),
-('Casque Invisible',8,3,'casqueInvisible.png',896.99,'Vous ne verrez aucune rayures dessus !');
+('Casque Invisible',8,3,'casqueInvisible.png',896.99,'Vous ne verrez aucune rayures dessus !'),
+('Casque Batman',9,3,'casqueBatman.jpg',68.99,'Le casque n\'est pas livré avec la cape'),
+('Casque Politiquement Incorrect',1,1,'casqueIncorrect.jpg',85.99,'Merci de ne pas contacter la police'),
+('Casque Russe',12,1,'casqueRusse.jpg',580.99,'Nous n\'avons aucun lien avec le Kremelin'),
+('Casque Astronaute',13,3,'casqueAstronaute.jpg',121.99,'Pour vous couper du monde et partir très loin (de Bapstiste)');
 
 INSERT INTO casque(modele_id,stock,taille_id,couleur_id) VALUES
 (1, 47, 3, 1),
+(2, 50, 2, 2),
 (2, 35, 2, 6),
 (3, 49, 1, 5),
 (4, 47, 1, 4),
@@ -382,6 +387,8 @@ INSERT INTO casque(modele_id,stock,taille_id,couleur_id) VALUES
 (41, 40, 1, 4),
 (42, 33, 1, 6),
 (43, 47, 1, 7),
-(44, 42, 3, 5);
-
--- select substring(code,1,2) ,count(substring(code,1,2)) from adresse group by substring(code,1,2);
+(44, 42, 3, 5),
+(45, 35, 2, 2),
+(46, 8, 3, 1),
+(47, 57, 3, 1),
+(48, 32, 2, 1);

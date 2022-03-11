@@ -8,9 +8,9 @@ def get_db():
         db = g._database = pymysql.connect(
             host="serveurmysql",
             # host="serveurmysql",
-            user="tmagnin4",
-            password="1005",
-            database="BDD_tmagnin4",
+            user="joudot",
+            password="3105",
+            database="BDD_joudot",
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
@@ -19,8 +19,6 @@ def get_db():
 def update_property(attribut,value):
     mycursor = get_db().cursor()
     user_id = session['user_id']
-    # if test!="":
-    #     test=" and "+test
 
     sql="select * from user where id=%s"
     print(sql)

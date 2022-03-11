@@ -19,48 +19,51 @@
     </div>
     <br>
 
-    <div>
-        <h2>Acheter ce produit</h2>
-        <form class=" border" action="/client/panier/update" method="post">
-            <select name="idArticle" id="spe">
-                {% for type in choix %}
-                     <option value="{{ type.id }}" > Couleur : {{ type['libelle'] }} - Taille : {{ type['taille.libelle'] }}</option>
-                {% endfor %}
-            </select><br>
-            <button class="btn btn-primary" >Acheter</button>
-        </form>
-    </div>
+    {% if choix | length != 0 %}
+        <div>
+            <h2>Acheter ce produit</h2>
+            <form class="border p-3" action="/client/panier/update" method="post">
+{#                <select name="idArticle" id="spe">#}
+                    {% for type in choix %}
+{#                         <option value="{{ type.id }}" > Couleur : {{ type['libelle'] }} - Taille : {{ type['taille.libelle'] }}</option>#}
+                        <input name="idArticle" type="radio" value="{{ type.id }}" id="{{ type.id }}" >
+                        <label for="{{ type.id }}">Couleur : {{ type['libelle'] }} - Taille : {{ type['taille.libelle'] }}</label><br>
+                    {% endfor %}
+{#                </select><br>#}
+                <button class="btn btn-primary" >Acheter</button>
+            </form>
+        </div>
+    {% else %}
+        <h4 class="border text-center p-2">Cet article n'est plus disponible en stock ou est dans votre panier</h4>
+    {% endif %}
     <br>
 
-    <div class="row" style="background-color: #ba8b00">
+    <div class="p-4" style="background-color: #ba8b00">
         {% if commandes_articles | length > 0 %}
-            <div class="col-12">
-                 Vous avez commandé <strong>{{ commandes_articles | length }} </strong>fois  ce produit
-            </div>
+            <div>Vous avez commandé <strong>{{ commandes_articles | length }} </strong>fois  ce produit</div>
+            <hr>
 
             {% if userHasMadeAComment %}
                 Vous avez déja fait un commentaire
             {% else %}
             <form  action="/client/comment/add"  method="post">
-                <div class="col">
-                  <label for="inputAvis" class="form-label">Mettez un commentaire sur cet article : </label>
-                     <textarea name="commentaire" class="form-control" aria-label="Donnez votre avis" id="inputAvis"  placeholder="Donnez votre avis"></textarea>
-                </div>
-                <div class="col-12">
-                    <label for="inputNote" class="form-label">Donnez une note à cet article </label>
-                    <input type="number" name="note" id="inputNote" step="0.1" min="0" max="5" class="form-control" style="width: 8rem !important;" value="" >
-                </div>
+
+                <label for="inputAvis" class="form-label">Mettez un commentaire sur cet article : </label>
+                <textarea name="commentaire" class="form-control w-50" id="inputAvis"  placeholder="Donnez votre avis"></textarea><br>
+
+                <label for="inputNote" class="form-label">Donnez une note à cet article </label>
+                <input type="number" name="note" id="inputNote" step="0.1" min="0" max="5" class="form-control w-25">
+
                 <input type="hidden" name="idUser" value="{{ session['user_id'] }}">
-                <input type="hidden" name="idArticle" value="{{ article.id }}">
-                <form  action="/client/comment/add" style="display: inline-block;"  method="post" >
-                        <button class="btn btn-primary" > Ajouter un avis </button>
-                </form>
+                <input type="hidden" name="idArticle" value="{{ article.id }}"><br>
+
+                <button class="btn btn-primary"> Ajouter un avis </button>
             </form>
             {% endif %}
 
 
         {% else %}
-            vous n'avez jamais acheté ce produit
+            <div class="p-3 m-auto">Vous n'avez jamais acheté ce produit</div>
         {% endif %}
 
     </div>
@@ -99,7 +102,7 @@
                     </tr>
                 {% endfor %}
             {% else %}
-                <tr class="table-warning"><td>Pas de commentaire</td><td></td><td></td></tr>
+                <tr class="table-warning"><td>Pas de commentaire</td><td></td><td></td><td></td></tr>
             {% endif %}
             </tbody>
         </table>
