@@ -27,7 +27,7 @@
                     {% for type in choix %}
 {#                         <option value="{{ type.id }}" > Couleur : {{ type['libelle'] }} - Taille : {{ type['taille.libelle'] }}</option>#}
                         <input name="idArticle" type="radio" value="{{ type.id }}" id="{{ type.id }}" checked>
-                        <label for="{{ type.id }}">Couleur : {{ type['libelle'] }} - Taille : {{ type['taille.libelle'] }}</label><br>
+                        <label for="{{ type.id }}">Couleur : {{ type['libelle'] }} - Taille : {{ type['taille.libelle'] }}</label> (Stock : {{ type.stock }})<br>
                     {% endfor %}
 {#                </select><br>#}
                 <label>quantite : </label> <input type="number" name="quantite" style="width: 70px" value="1"><br>
