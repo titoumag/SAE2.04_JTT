@@ -243,6 +243,7 @@ INSERT INTO type_livraison(libelle,valeurAjoute) VALUES
 ('Supplément McDonald',1.2),
 ('Livraison Express Pierre',1.5),
 ('Garder Baptiste pour une reduction',0.5),
+("Livré par l'armée russe ☭",2.0),
 ('Livraison par le gérant de eCasques',5.0);
 
 insert into etat values
@@ -309,9 +310,9 @@ INSERT INTO modele(libelle,fabricant_id,type_casque_id,image,prix,description) V
 ('Casque Chien',9,3,'casqueAnimal1.jpg',10.99,'Faites parler votre animal intérieur'),
 ('Casque Chantier',10,3,'casqueChantier1.jpg',15.99,'Pour vous protéger'),
 ('Casque Contremaitre',10,3,'casqueChantier2.jpg',17.99,'Protège mieux que le casque Chantier'),
-('Casque Colonial',8,3,'casqueColonial.jpg',8.99,'Parfait pour explorer l\'Afrique'),
+('Casque Colonial',8,3,'casqueColonial.jpg',8.99,"Parfait pour explorer l\'Afrique"),
 ('Casque GIGN',11,1,'casqueMilitaire1.jpg',25.99,'Ne permet pas de devenir agent du GIGN'),
-('Casque Soviétique',12,3,'casqueMilitaire2.jpg',18.99,'Parfait pour envahir l\'Afghanistan ou l\'Ukraine'),
+('☭ Casque Soviétique ☭',12,3,'casqueMilitaire2.jpg',18.99,"Parfait pour envahir l\'Afghanistan ou l\'Ukraine"),
 ('Casque Chat',9,2,'CasqueMusique1.jpg',3.99,'Un casque parfait pour les chat et autres canidés'),
 ('Casque Wookie',9,2,'CasqueMusique2.jpg',8.99,'Un casque poilant'),
 ('Casque Musique Pas Fun',9,2,'CasqueMusique3.jpg',4.99,'Un casque sans rien de spécial'),
@@ -337,9 +338,9 @@ INSERT INTO modele(libelle,fabricant_id,type_casque_id,image,prix,description) V
 ('Casque Ponpon',9,3,'CasquePonpon.jpg',29.99,'Casque avec ponpon'),
 ('Casque Anglais',1,3,'casqueAnglais.jpg',139.99,'Casque officiel de la garde de la reine'),
 ('Casque Invisible',8,3,'casqueInvisible.png',896.99,'Vous ne verrez aucune rayures dessus !'),
-('Casque Batman',9,3,'casqueBatman.jpg',68.99,'Le casque n\'est pas livré avec la cape'),
+('Casque Batman',9,3,'casqueBatman.jpg',68.99,"Le casque n\'est pas livré avec la cape"),
 ('Casque Politiquement Incorrect',1,1,'casqueIncorrect.jpg',85.99,'Merci de ne pas contacter la police'),
-('Casque Russe',12,1,'casqueRusse.jpg',580.99,'Nous n\'avons aucun lien avec le Kremelin'),
+('☭ Casque Russe ☭',12,1,'casqueRusse.jpg',580.99,"Nous n\'avons aucun lien avec le Kremelin"),
 ('Casque Astronaute',13,3,'casqueAstronaute.jpg',121.99,'Pour vous couper du monde et partir très loin (de Bapstiste)');
 
 INSERT INTO casque(modele_id,stock,taille_id,couleur_id) VALUES

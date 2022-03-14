@@ -147,7 +147,8 @@ def valid_edit_article():
     stock = request.form.get('stock', '')
     fabricant = request.form.get('fabricant', '')
     image = request.files.get('image')
-    description = request.files.get('description')
+    description = request.form.get('description')
+
 
     if image:
         mycursor.execute("select image from modele where id=%s", id)
@@ -157,19 +158,18 @@ def valid_edit_article():
 
         # filename = secure_filename(image.filename)
         image.save(os.path.join('static/images/', old))  # filename
+
+        sql = '''update modele set libelle=%s, image=%s, prix=%s, fabricant_id=%s, type_casque_id=%s, description=%s where id=%s'''
+        mycursor.execute(sql, (nom, image.filename, prix, fabricant, type_casque_id, description, id))
     else:
-        print("erreur")
-        return redirect(url_for('admin_article.show_article'))
+        sql = '''update modele set libelle=%s,  prix=%s, fabricant_id=%s, type_casque_id=%s, description=%s where id=%s'''
+        mycursor.execute(sql, (nom, prix, fabricant, type_casque_id, description, id))
 
-    couleur = request.form.get('couleur', '')
-    sql = '''update modele set libelle=%s, image=%s, prix=%s, fabricant_id=%s, type_casque_id=%s, description=%s where id=%s'''
-
-    print(nom, image.filename, prix, couleur, fabricant, type_casque_id, description, id)
-    mycursor.execute(sql, (nom, image.filename, stock, prix, couleur, fabricant, type_casque_id, description, id))
+    print(nom, image.filename, prix, fabricant, type_casque_id, description, id)
 
     get_db().commit()
 
-    message = u'article modifié , nom:' + nom + '- type_casque :' + type_casque_id + ' - prix:' + prix + ' - stock:' + stock + ' - fabricant:' + fabricant + ' - image:' + image.filename + ' - description: ' + description
+    message = u'article modifié , nom:' + nom + '- type_casque :' + type_casque_id + ' - prix:' + prix + ' - fabricant:' + fabricant  + ' - description: ' + description
     flash(message)
     return redirect(url_for('admin_article.show_article'))
 
