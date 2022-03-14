@@ -59,22 +59,20 @@ def valid_add_article():
     prix = request.form.get('prix', '')
     stock = request.form.get('stock', '')
     fabricant = request.form.get('fabricant', '')
-    couleur = request.form.get('couleur', '')
     description = request.form.get('description', '')
-    taille = request.form.get('taille', '')
     image = request.files.get('image', '')
 
     if image:
-        filename = str(2147483647 * random() | int) + '.png'
+        filename = str(int(2147483647 * random()) + '.png')
         image.save(os.path.join('static/images/', filename))
     else:
         print("erreur")
         return redirect(url_for('admin_article.show_article'))
 
-    sql = '''insert into casque(libelle, image, stock, prix, fabricant_id, taille_id, couleur_id, type_casque_id, description) 
-    value (%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
+    sql = '''insert into modele(libelle, image, prix, fabricant_id, type_casque_id, description) 
+    value (%s,%s,%s,%s,%s,%s)'''
 
-    tupleAdd = (nom, filename, stock, prix, fabricant, taille, couleur, type_article_id, description)
+    tupleAdd = (nom, filename, stock, prix, fabricant, type_article_id, description)
     mycursor.execute(sql, tupleAdd)
     get_db().commit()
 
@@ -108,7 +106,7 @@ def delete_article(id):
 @admin_article.route('/admin/article/edit/<int:id>', methods=['GET'])
 def edit_article(id):
     mycursor = get_db().cursor()
-    sql = '''select * from casque where id=%s'''
+    sql = '''select * from modele where id=%s'''
     mycursor.execute(sql, id)
     article = mycursor.fetchall()
     sql = '''select * from type_casque'''
@@ -120,10 +118,23 @@ def edit_article(id):
     sql = '''select * from couleur'''
     mycursor.execute(sql)
     couleurs = mycursor.fetchall()
+    sql = '''select * from taille'''
+    mycursor.execute(sql)
+    tailles = mycursor.fetchall()
+    sql = '''select * from casque where modele_id=%s'''
+    mycursor.execute(sql, id)
+    casques = mycursor.fetchall()
     print(article)
+
     return render_template('admin/article/edit_article.html', article=article,
                            types_casques=types_casques, fabricants=fabricants,
-                           couleurs=couleurs)
+                           couleurs=couleurs, casques=casques, tailles=tailles)
+
+
+@admin_article.route('/admin/article/casque/delete/<int:idDel>', methods=['GET'])
+def admin_delete_exemplaires(idDel):
+    print(idDel)
+    return render_template(url_for(admin_article), id=idDel)
 
 
 @admin_article.route('/admin/article/edit', methods=['POST'])
@@ -138,9 +149,8 @@ def valid_edit_article():
     image = request.files.get('image')
     description = request.files.get('description')
 
-
     if image:
-        mycursor.execute("select image from casque where id=%s", id)
+        mycursor.execute("select image from modele where id=%s", id)
         old = mycursor.fetchone()["image"]
         if old != "" and old is not None and os.path.exists(os.path.join(os.getcwd() + "/static/images/", old)):
             os.remove(os.path.join(os.getcwd() + "/static/images/", old))
@@ -152,14 +162,14 @@ def valid_edit_article():
         return redirect(url_for('admin_article.show_article'))
 
     couleur = request.form.get('couleur', '')
-    sql = '''update casque set libelle=%s, image=%s, stock=%s, prix=%s, couleur_id=%s, fabricant_id=%s, type_casque_id=%s, description=%s where id=%s'''
+    sql = '''update modele set libelle=%s, image=%s, prix=%s, fabricant_id=%s, type_casque_id=%s, description=%s where id=%s'''
 
-    print(nom, image.filename, stock, prix, couleur, fabricant, type_casque_id, description, id)
+    print(nom, image.filename, prix, couleur, fabricant, type_casque_id, description, id)
     mycursor.execute(sql, (nom, image.filename, stock, prix, couleur, fabricant, type_casque_id, description, id))
 
     get_db().commit()
 
-    message = u'article modifié , nom:' + nom + '- type_casque :' + type_casque_id + ' - prix:' + prix + ' - stock:' + stock + ' - fabricant:' + fabricant + ' - image:' + image.filename +  ' - description: ' + description
+    message = u'article modifié , nom:' + nom + '- type_casque :' + type_casque_id + ' - prix:' + prix + ' - stock:' + stock + ' - fabricant:' + fabricant + ' - image:' + image.filename + ' - description: ' + description
     flash(message)
     return redirect(url_for('admin_article.show_article'))
 
@@ -181,7 +191,7 @@ def dataviz_article():
     mycursor = get_db().cursor()
     sql = "SELECT type_casque_id,type_casque.libelle as libelle,SUM(prix*stock) as prix_total " \
           "FROM casque " \
-          "INNER JOIN modele ON modele.id=casque.modele_id "\
+          "INNER JOIN modele ON modele.id=casque.modele_id " \
           "INNER JOIN type_casque ON type_casque_id=type_casque.id " \
           "GROUP BY type_casque_id"
     mycursor.execute(sql)
@@ -229,17 +239,15 @@ def dataviz_article():
                            adresse=adresse, couleur=couleur)
 
 
-
 @admin_article.route('/admin/article/avis/<int:id>', methods=['GET'])
 def admin_avis(id):
     mycursor = get_db().cursor()
 
-    mycursor.execute("SELECT * FROM modele where id = %s",(id))
+    mycursor.execute("SELECT * FROM modele where id = %s", id)
     article = mycursor.fetchone()
 
-    mycursor.execute("SELECT * FROM avis where casque_id = %s", (id))
+    mycursor.execute("SELECT * FROM avis where casque_id = %s", id)
     commentaires = mycursor.fetchall()
-
 
     return render_template('admin/article/show_avis.html', article=article, commentaires=commentaires)
 
@@ -249,10 +257,10 @@ def admin_avis_delete():
     mycursor = get_db().cursor()
     article_id = request.form.get('idArticle', None)
     userId = request.form.get('idUser', None)
-    malus = request.form.get('malus',None)
-    mycursor.execute("DELETE FROM avis WHERE casque_id=%s AND user_id=%s",(article_id,userId))
-    if malus != None:
-        mycursor.execute("INSERT INTO coupons (valeur,user_id) VALUES (%s,%s)",(-50,userId))
+    malus = request.form.get('malus', None)
+    mycursor.execute("DELETE FROM avis WHERE casque_id=%s AND user_id=%s", (article_id, userId))
+    if malus is not None:
+        mycursor.execute("INSERT INTO coupons (valeur,user_id) VALUES (%s,%s)", (-50, userId))
     get_db().commit()
 
     return admin_avis(article_id)
