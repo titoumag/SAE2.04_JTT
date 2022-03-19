@@ -49,7 +49,7 @@ def client_article_show():  # remplace client_index
             sql += " AND prix < %s"
         params.append(session['filter_prix_max'])
 
-    sql+= " GROUP BY modele.id"
+    sql += " GROUP BY modele.id"
     mycursor.execute(sql, params)
     articles = mycursor.fetchall()
 
@@ -67,39 +67,38 @@ def client_article_show():  # remplace client_index
     articles_panier = mycursor.fetchall()
     print(articles_panier)
 
-    sql="select sum(quantite*prix) as prix_tot " \
-        "FROM panier " \
-        "INNER JOIN casque on casque.id=panier.casque_id " \
-        "INNER JOIN modele ON modele.id=casque.modele_id "\
-        "WHERE user_id=%s"
+    sql = "select sum(quantite*prix) as prix_tot " \
+          "FROM panier " \
+          "INNER JOIN casque on casque.id=panier.casque_id " \
+          "INNER JOIN modele ON modele.id=casque.modele_id " \
+          "WHERE user_id=%s"
     mycursor.execute(sql, session['user_id'])
     prix_total = mycursor.fetchone()['prix_tot']
 
-
     mycursor.execute("select * from user where id=%s", session['user_id'])
-    user=mycursor.fetchone()
+    user = mycursor.fetchone()
 
     mycursor.execute("SELECT * FROM type_livraison")
     type_livraison = mycursor.fetchall()
 
     mycursor.execute("SELECT * FROM adresse WHERE user_id=%s", session['user_id'])
-    adresse= mycursor.fetchall()
+    adresse = mycursor.fetchall()
 
-    mycursor.execute("SELECT * FROM coupons WHERE user_id=%s",session["user_id"])
+    mycursor.execute("SELECT * FROM coupons WHERE user_id=%s", session["user_id"])
     coupons = mycursor.fetchall()
 
     if 'clic' in session:
         session['clic'] += 1
     return render_template('client/boutique/panier_article.html', articles=articles, articlesPanier=articles_panier,
-                           prix_total=prix_total, itemsFiltre=types_articles,user=user,type_livraison=type_livraison,
-                           clic=session['clic'],liste_adresse=adresse,coupons=coupons)
+                           prix_total=prix_total, itemsFiltre=types_articles, user=user, type_livraison=type_livraison,
+                           clic=session['clic'], liste_adresse=adresse, coupons=coupons)
 
 
 @client_article.route('/client/article/details/<int:id>', methods=['GET'])
 def client_article_details(id):
     mycursor = get_db().cursor()
 
-    mycursor.execute("SELECT * FROM modele where id = %s",(id))
+    mycursor.execute("SELECT * FROM modele where id = %s", id)
     article = mycursor.fetchone()
 
     mycursor.execute("SELECT * "
@@ -107,19 +106,21 @@ def client_article_details(id):
                      "INNER JOIN couleur ON couleur.id=casque.couleur_id "
                      "INNER JOIN taille ON taille.id=casque.taille_id  "
                      "where modele_id = %s and stock>0 and casque.id in ("
-                         "select casque.id "
-                         "from casque "
-                         "left join panier on panier.casque_id=casque.id "
-                         "where stock>quantite or quantite is null)", (id))
+                     "select casque.id "
+                     "from casque "
+                     "left join panier on panier.casque_id=casque.id "
+                     "where stock>quantite or quantite is null)", id)
     choix = mycursor.fetchall()
 
-    mycursor.execute("SELECT * FROM avis where casque_id = %s", (id))
+    mycursor.execute("SELECT * FROM avis where casque_id = %s", id)
     commentaires = mycursor.fetchall()
 
-    mycursor.execute("SELECT * FROM ligne_commande INNER JOIN commande ON ligne_commande.commande_id = commande.id WHERE casque_id = %s AND user_id = %s", (id,session["user_id"]))
+    mycursor.execute(
+        "SELECT * FROM ligne_commande INNER JOIN commande ON ligne_commande.commande_id = commande.id WHERE casque_id = %s AND user_id = %s",
+        (id, session["user_id"]))
     commandes_articles = mycursor.fetchall()
 
-    mycursor.execute("SELECT * FROM avis WHERE casque_id = %s AND user_id = %s",(id,session["user_id"]))
+    mycursor.execute("SELECT * FROM avis WHERE casque_id = %s AND user_id = %s", (id, session["user_id"]))
     userHasMadeAComment = mycursor.fetchall() != ()
 
     print(choix)
@@ -127,5 +128,5 @@ def client_article_details(id):
     if 'clic' in session:
         session['clic'] += 1
     return render_template('client/boutique/article_details.html', article=article, commentaires=commentaires,
-                           commandes_articles=commandes_articles,userHasMadeAComment=userHasMadeAComment,
+                           commandes_articles=commandes_articles, userHasMadeAComment=userHasMadeAComment,
                            choix=choix)

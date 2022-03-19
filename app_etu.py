@@ -1,9 +1,5 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
-import os
-
-from flask import Flask, request, render_template, redirect, url_for, abort, flash, session, g
-from flask import Blueprint
 
 from controllers.mails import *
 from controllers.auth_security import *
@@ -14,6 +10,7 @@ from controllers.client_commande import *
 from controllers.client_commentaire import *
 from controllers.client_info import *
 
+from controllers.admin_casque import *
 from controllers.admin_article import *
 from controllers.admin_commande import *
 from controllers.admin_main import *
@@ -68,6 +65,7 @@ app.register_blueprint(client_panier)
 app.register_blueprint(client_info)
 
 app.register_blueprint(admin_article)
+app.register_blueprint(admin_casque)
 app.register_blueprint(admin_commande)
 app.register_blueprint(admin_main)
 app.register_blueprint(admin_users)

@@ -22,3 +22,16 @@ br , h2 { color: blue; }
     height: 60px;
     display: block;
 }
+
+
+@media(max-width: 1000px){
+    .w-190{
+        width: 190%;
+    }
+}
+
+@media(min-width: 1000px){
+    .w-190{
+        width: 90%;
+    }
+}

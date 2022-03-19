@@ -57,13 +57,12 @@ def valid_add_article():
     nom = request.form.get('nom', '')
     type_article_id = request.form.get('typeCasque', '')
     prix = request.form.get('prix', '')
-    stock = request.form.get('stock', '')
     fabricant = request.form.get('fabricant', '')
     description = request.form.get('description', '')
     image = request.files.get('image', '')
 
     if image:
-        filename = str(int(2147483647 * random()) + '.png')
+        filename = str(int(2147483647 * random())) + '.png'
         image.save(os.path.join('static/images/', filename))
     else:
         print("erreur")
@@ -72,13 +71,13 @@ def valid_add_article():
     sql = '''insert into modele(libelle, image, prix, fabricant_id, type_casque_id, description) 
     value (%s,%s,%s,%s,%s,%s)'''
 
-    tupleAdd = (nom, filename, stock, prix, fabricant, type_article_id, description)
+    tupleAdd = (nom, filename, prix, fabricant, type_article_id, description)
     mycursor.execute(sql, tupleAdd)
     get_db().commit()
 
-    print(u'article ajouté , nom: ', nom, ' - type_article:', type_article_id, ' - prix:', prix, ' - stock:', stock,
+    print(u'article ajouté , nom: ', nom, ' - type_article:', type_article_id, ' - prix:', prix,
           ' - description:', description, ' - image:', image)
-    message = u'article ajouté , nom:' + nom + '- type_article:' + type_article_id + ' - prix:' + prix + ' - stock:' + stock + ' - description:' + description + ' - image:' + str(
+    message = u'article ajouté , nom:' + nom + '- type_article:' + type_article_id + ' - prix:' + prix + ' - description:' + description + ' - image:' + str(
         image)
     flash(message)
     return redirect(url_for('admin_article.show_article'))
@@ -115,61 +114,58 @@ def edit_article(id):
     sql = '''select id, nom from fabricant'''
     mycursor.execute(sql)
     fabricants = mycursor.fetchall()
-    sql = '''select * from couleur'''
-    mycursor.execute(sql)
-    couleurs = mycursor.fetchall()
-    sql = '''select * from taille'''
-    mycursor.execute(sql)
-    tailles = mycursor.fetchall()
     sql = '''select * from casque where modele_id=%s'''
     mycursor.execute(sql, id)
     casques = mycursor.fetchall()
+
+    sql = '''select * from taille'''
+    mycursor.execute(sql)
+    tailles = mycursor.fetchall()
+
+    sql = '''select * from couleur'''
+    mycursor.execute(sql)
+    couleurs = mycursor.fetchall()
+
     print(article)
 
     return render_template('admin/article/edit_article.html', article=article,
                            types_casques=types_casques, fabricants=fabricants,
-                           couleurs=couleurs, casques=casques, tailles=tailles)
-
-
-@admin_article.route('/admin/article/casque/delete/<int:idDel>', methods=['GET'])
-def admin_delete_exemplaires(idDel):
-    print(idDel)
-    return render_template(url_for(admin_article), id=idDel)
+                           casques=casques, tailles=tailles, couleurs=couleurs)
 
 
 @admin_article.route('/admin/article/edit', methods=['POST'])
 def valid_edit_article():
     mycursor = get_db().cursor()
-    nom = request.form['nom']
-    id = request.form.get('id', '')
+    nom = request.form.get('nom')
+    id = request.form.get('id')
+    print('salut')
+    print(id)
     type_casque_id = request.form.get('typeCasque', '')
     prix = request.form.get('prix', '')
-    stock = request.form.get('stock', '')
     fabricant = request.form.get('fabricant', '')
     image = request.files.get('image')
     description = request.form.get('description')
-
-
+    print(description)
+    mycursor.execute("select image from modele where id=%s", id)
+    imageName = mycursor.fetchall()
+    imageName = imageName[0]['image']
     if image:
-        mycursor.execute("select image from modele where id=%s", id)
-        old = mycursor.fetchone()["image"]
-        if old != "" and old is not None and os.path.exists(os.path.join(os.getcwd() + "/static/images/", old)):
-            os.remove(os.path.join(os.getcwd() + "/static/images/", old))
+        if imageName != "" and imageName is not None and os.path.exists(
+                os.path.join(os.getcwd() + "/static/images/", imageName)):
+            os.remove(os.path.join(os.getcwd() + "/static/images/", imageName))
 
         # filename = secure_filename(image.filename)
-        image.save(os.path.join('static/images/', old))  # filename
+        image.save(os.path.join('static/images/', imageName))  # filename
+        imageName = image.filename
 
-        sql = '''update modele set libelle=%s, image=%s, prix=%s, fabricant_id=%s, type_casque_id=%s, description=%s where id=%s'''
-        mycursor.execute(sql, (nom, image.filename, prix, fabricant, type_casque_id, description, id))
-    else:
-        sql = '''update modele set libelle=%s,  prix=%s, fabricant_id=%s, type_casque_id=%s, description=%s where id=%s'''
-        mycursor.execute(sql, (nom, prix, fabricant, type_casque_id, description, id))
+    sql = '''update modele set libelle=%s, image=%s, prix=%s, fabricant_id=%s, type_casque_id=%s, description=%s where id=%s'''
 
-    print(nom, image.filename, prix, fabricant, type_casque_id, description, id)
+    print(nom, imageName, prix, fabricant, type_casque_id, description, id)
+    mycursor.execute(sql, (nom, imageName, prix, fabricant, type_casque_id, description, id))
 
     get_db().commit()
 
-    message = u'article modifié , nom:' + nom + '- type_casque :' + type_casque_id + ' - prix:' + prix + ' - fabricant:' + fabricant  + ' - description: ' + description
+    message = u'article modifié , nom:' + nom + '- type_casque :' + type_casque_id + ' - prix:' + prix + ' - fabricant:' + fabricant + ' - image:' + imageName + ' - description: ' + description
     flash(message)
     return redirect(url_for('admin_article.show_article'))
 

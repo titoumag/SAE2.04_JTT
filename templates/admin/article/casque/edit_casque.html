@@ -1,0 +1,37 @@
+{% extends 'admin/layout_admin.html' %}
+{% block title %}
+    <title>modifier un exemplaire</title>
+{% endblock %}
+
+{% block body %}
+    <h2>modifier un exemplaire</h2>
+        <div class="row mt-5">
+            <img class="card-img-top rounded mx-4 d-block"  style="width:200px; height:200px; border: 1px solid black; padding: 25px;"  src="{{ url_for('static', filename = 'images/' + article["image"]) }}"  alt="image  de {{ article["libelle"] }}" >
+            <div class="w-25">
+                <form class="w-190" method="post" action="{{ url_for('admin_casque.valid_edit_casque') }}" enctype="multipart/form-data">
+                    <input type="hidden" value="{{ casque.id }}" name="id">
+                    <input type="hidden" value="{{ casque.modele_id }}" name="idModele">
+                    <label for="stock">Stock :
+                        <input name="stock" type="number" min="0.0" step="0.01" value="{{ casque.stock }}">
+                    </label>
+                    <label for="idTaille">taille :
+                        <select name="idTaille">
+                            {% for taille in tailles %}
+                                 <option value="{{ taille.id }}" {% if taille.id == casque.taille_id %} selected {% endif %}> {{ taille.libelle }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label for="idCouleur"> couleur :
+                        <select name="idCouleur">
+                            {% for couleur in couleurs %}
+                                 <option value="{{ couleur.id }}" {% if couleur.id == casque.couleur_id %} selected {% endif %}> {{ couleur.libelle }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label for="submit">
+                        <input name="submit" type="submit" value="Modifier">
+                    </label>
+                </form>
+            </div>
+        </div>
+{% endblock %}
