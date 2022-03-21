@@ -3,7 +3,6 @@
 
 from flask import Blueprint
 from flask import request, render_template, redirect, url_for, flash
-
 from connexion_db import get_db
 
 admin_casque = Blueprint('admin_casque', __name__,
@@ -16,7 +15,7 @@ def add_casque(id):
 
     sql = '''select id, image from modele where id=%s'''
     mycursor.execute(sql, id)
-    article = mycursor.fetchall()[0]
+    article = mycursor.fetchone()
 
     sql = '''select * from couleur'''
     mycursor.execute(sql)
@@ -36,15 +35,23 @@ def valid_add_casque():
     id_modele = request.form.get('id')
     stock = request.form.get('stock')
     taille = request.form.get('taille')
-    print(taille)
     couleur = request.form.get('couleur')
-    print(couleur)
 
-    sql = '''insert into casque(modele_id, stock, taille_id, couleur_id)
-    value (%s,%s,%s,%s)'''
+    sql = '''select * from casque where couleur_id=%s and taille_id=%s and modele_id=%s'''
+    mycursor.execute(sql, (couleur, taille, id_modele))
+    casque = mycursor.fetchone()
 
-    tupleAdd = (id_modele, stock, taille, couleur)
-    mycursor.execute(sql, tupleAdd)
+    if casque:
+
+        sql = '''update casque set stock=stock+%s where id=%s'''
+        mycursor.execute(sql, (stock, casque['id']))
+
+    else:
+        sql = '''insert into casque(modele_id, stock, taille_id, couleur_id)
+                value (%s,%s,%s,%s)'''
+        tupleAdd = (id_modele, stock, taille, couleur)
+        mycursor.execute(sql, tupleAdd)
+
     get_db().commit()
 
     message = u'casque ajouté , modele_id:' + id_modele + '- stock:' + stock + ' - couleur:' + couleur + ' - taille:' + taille
@@ -55,12 +62,15 @@ def valid_add_casque():
 @admin_casque.route('/admin/article/casque/edit/<int:id>', methods=['GET'])
 def edit_casque(id):
     mycursor = get_db().cursor()
+
     sql = '''select * from taille'''
     mycursor.execute(sql)
     tailles = mycursor.fetchall()
+
     sql = '''select * from couleur'''
     mycursor.execute(sql)
     couleurs = mycursor.fetchall()
+
     sql = '''select * from casque where id=%s'''
     mycursor.execute(sql, id)
     casque = mycursor.fetchall()[0]
@@ -68,7 +78,7 @@ def edit_casque(id):
     sql = '''select libelle, image from modele where id=%s'''
     mycursor.execute(sql, int(casque['modele_id']))
     article = mycursor.fetchall()[0]
-    print(casque)
+
     return render_template('admin/article/casque/edit_casque.html', tailles=tailles, couleurs=couleurs, casque=casque, article=article)
 
 
@@ -81,6 +91,7 @@ def valid_edit_casque():
     couleur_id = request.form.get('idCouleur')
 
     mycursor = get_db().cursor()
+
     sql = '''update casque set stock=%s, taille_id=%s, couleur_id=%s where id=%s'''
     mycursor.execute(sql, (stock, taille_id, couleur_id, id))
     get_db().commit()
@@ -98,7 +109,7 @@ def admin_delete_exemplaires(idDel, idArt):
     mycursor.execute(sql, idDel)
     get_db().commit()
 
-    print("un exemplaire supprimé, id :", idDel)
+    # print("un exemplaire supprimé, id :", idDel)
     flash(u'un exemplaire supprimé, id : ' + str(idDel))
 
     return redirect('/admin/article/edit/' + str(idArt))

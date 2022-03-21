@@ -126,8 +126,6 @@ def edit_article(id):
     mycursor.execute(sql)
     couleurs = mycursor.fetchall()
 
-    print(article)
-
     return render_template('admin/article/edit_article.html', article=article,
                            types_casques=types_casques, fabricants=fabricants,
                            casques=casques, tailles=tailles, couleurs=couleurs)
@@ -138,14 +136,13 @@ def valid_edit_article():
     mycursor = get_db().cursor()
     nom = request.form.get('nom')
     id = request.form.get('id')
-    print('salut')
-    print(id)
+
     type_casque_id = request.form.get('typeCasque', '')
     prix = request.form.get('prix', '')
     fabricant = request.form.get('fabricant', '')
     image = request.files.get('image')
     description = request.form.get('description')
-    print(description)
+
     mycursor.execute("select image from modele where id=%s", id)
     imageName = mycursor.fetchall()
     imageName = imageName[0]['image']
@@ -160,7 +157,7 @@ def valid_edit_article():
 
     sql = '''update modele set libelle=%s, image=%s, prix=%s, fabricant_id=%s, type_casque_id=%s, description=%s where id=%s'''
 
-    print(nom, imageName, prix, fabricant, type_casque_id, description, id)
+
     mycursor.execute(sql, (nom, imageName, prix, fabricant, type_casque_id, description, id))
 
     get_db().commit()

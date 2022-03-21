@@ -2,3 +2,4 @@ venv
 .idea
 __pycache__
 connexion_db.py
+app_etu.py
