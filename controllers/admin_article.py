@@ -87,18 +87,26 @@ def valid_add_article():
 def delete_article(id):
     id = str(id)
     mycursor = get_db().cursor()
-    sql = '''select image from modele where id=%s'''
+
+    sql = '''select count(id) as countC from casque where modele_id=%s'''
     mycursor.execute(sql, id)
-    image = mycursor.fetchone()['image']
+    countC = mycursor.fetchone()
+    if countC['countC'] > 0:
+        flash('il y a des exemplaires dans se modèle de casque : vous ne pouvez pas le supprimer')
+    else:
+        sql = '''select image from modele where id=%s'''
+        mycursor.execute(sql, id)
+        image = mycursor.fetchone()['image']
 
-    sql = '''delete from modele where id=%s'''
-    mycursor.execute(sql, id)
-    get_db().commit()
+        sql = '''delete from modele where id=%s'''
+        mycursor.execute(sql, id)
+        get_db().commit()
 
-    os.remove('static/images/' + image)
+        os.remove('static/images/' + image)
 
-    print("un article supprimé, id :", id)
-    flash(u'un article supprimé, id : ' + id)
+        print("un article supprimé, id :", id)
+        flash(u'un article supprimé, id : ' + id)
+
     return redirect(url_for('admin_article.show_article'))
 
 

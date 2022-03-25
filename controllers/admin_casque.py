@@ -104,12 +104,17 @@ def valid_edit_casque():
 
 @admin_casque.route('/admin/article/casque/delete/<int:idDel>.<int:idArt>', methods=['GET'])
 def admin_delete_exemplaires(idDel, idArt):
-    sql = '''delete from casque where id=%s'''
     mycursor = get_db().cursor()
+    sql = '''select count(commande_id) as countC from ligne_commande where casque_id=%s'''
     mycursor.execute(sql, idDel)
-    get_db().commit()
+    countC = mycursor.fetchone()
+    if countC['countC'] > 0:
+        flash('il y a des exemplaires dans des commandes : vous ne pouvez pas le supprimer')
+    else:
+        sql = '''delete from casque where id=%s'''
+        mycursor.execute(sql, idDel)
+        get_db().commit()
 
-    # print("un exemplaire supprimé, id :", idDel)
     flash(u'un exemplaire supprimé, id : ' + str(idDel))
 
     return redirect('/admin/article/edit/' + str(idArt))
