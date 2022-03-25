@@ -20,7 +20,7 @@ def client_article_show():  # remplace client_index
           "count(avis.user_id) as nb_avis,AVG(avis.note) as moy_notes " \
           "FROM modele " \
           "INNER JOIN casque ON casque.modele_id=modele.id " \
-          "LEFT JOIN avis ON casque.id = avis.casque_id "
+          "LEFT JOIN avis ON modele.id = avis.casque_id "
     if "filter_word" in session.keys():
         sql += " WHERE libelle LIKE %s"
         params.append("%" + session['filter_word'] + "%")
