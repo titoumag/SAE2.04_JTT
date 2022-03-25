@@ -116,7 +116,10 @@ def client_article_details(id):
     commentaires = mycursor.fetchall()
 
     mycursor.execute(
-        "SELECT * FROM ligne_commande INNER JOIN commande ON ligne_commande.commande_id = commande.id WHERE casque_id = %s AND user_id = %s",
+        "SELECT * FROM ligne_commande INNER JOIN commande ON ligne_commande.commande_id = commande.id "
+        " INNER JOIN casque c on ligne_commande.casque_id = c.id"
+        " INNER JOIN modele m ON m.id = c.modele_id "
+        "WHERE m.id = %s AND user_id = %s",
         (id, session["user_id"]))
     commandes_articles = mycursor.fetchall()
 

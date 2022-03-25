@@ -199,7 +199,7 @@ CREATE TABLE IF NOT EXISTS avis(
     note INT,
     PRIMARY KEY(casque_id,user_id),
    CONSTRAINT fk_avis_casque
-       FOREIGN KEY(casque_id) REFERENCES casque(id),
+       FOREIGN KEY(casque_id) REFERENCES modele(id),
    CONSTRAINT fk_avis_user
        FOREIGN KEY(user_id) REFERENCES user(id)
 )character set 'utf8';
