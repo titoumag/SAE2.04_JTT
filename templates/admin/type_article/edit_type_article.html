@@ -5,23 +5,15 @@
 {% endblock %}
 
 {% block body %}
-  {% if error %}
-    <p class=error><strong>Error:</strong> {{ error }}
-  {% endif %}
-  <form method="post" action="/admin/type-article/edit">
-    <fieldset>
-        <legend> Modifier un type d'article</legend>
-        <div class="mb-3">
-        <input type="hidden" name="id" size="18" value="{{ type_article.id }}" id="id">
-        <label for="libelle">libellé</label><br>
-
-        <input class="form-select" type="text" name="libelle" size="18" value="{{ type_article.libelle }}" id="libelle"><br>
-        </div>
-        <div class="col-12">
-        <button class="btn btn-primary" type="submit">Valider</button>
-        </div>
-{#        <input type="submit" value="Modifier" name="Modifier" >#}
-
-    </fieldset>
-  </form>
+    <h2>modifier un type d'article</h2>
+    <form class="w-190" method="post" action="{{ url_for('admin_type_casque.valid_edit_type_casque') }}">
+        <input name="id" type="hidden" value="{{ typeCasque.id }}">
+        <label for="libelle">Libelle :
+            <input name="libelle" type="text" value="{{ typeCasque.libelle }}">
+        </label>
+        <label for="submit">
+            <input name="submit" type="submit" value="Ajouter">
+            <a href="{{ url_for('admin_type_casque.show_type_article') }}"><button class="btn btn-secondary">annuler</button></a>
+        </label>
+    </form>
 {% endblock %}

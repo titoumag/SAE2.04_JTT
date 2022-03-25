@@ -26,13 +26,6 @@
                         {% endfor %}
                     </select>
                 </label>
-{#                <label for="couleur">#}
-{#                    <select name="couleur">#}
-{#                        {% for couleur in couleurs %}#}
-{#                             <option value="{{ couleur.id }}"> {{ couleur.libelle }}</option>#}
-{#                        {% endfor %}#}
-{#                    </select>#}
-{#                </label>#}
                 <label for="typeCasque">Type de casque :
                     <select name="typeCasque">
                         {% for type in types_casque %}
@@ -40,18 +33,12 @@
                         {% endfor %}
                     </select>
                 </label>
-{#                <label for="taille">Taille :#}
-{#                    <select name="taille">#}
-{#                        {% for taille in tailles %}#}
-{#                            <option value="{{ taille.id }}"> {{ taille.libelle }}</option>#}
-{#                        {% endfor %}#}
-{#                    </select>#}
-{#                </label>#}
                 <label for="description">description :
                     <input name="description" type="text">
                 </label>
                 <label for="submit">
                     <input name="submit" type="submit" value="Ajouter">
+                    <a href="{{ url_for('admin_article.show_article') }}"><button class="btn btn-secondary">annuler</button></a>
                 </label>
             </form>
         </div>

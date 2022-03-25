@@ -5,9 +5,16 @@
 {% endblock %}
 
 {% block body %}
-{#  <h2>ajout d'un type d'article</h2>#}
-  {% if error %}
-    <p class=error><strong>Error:</strong> {{ error }}
-  {% endif %}
+    <h2>ajout d'un type d'article</h2>
+
+    <form class="w-190" method="post" action="{{ url_for('admin_type_casque.valid_add_type_casque') }}">
+        <label for="libelle">Libelle :
+            <input name="libelle" type="text">
+        </label>
+        <label for="submit">
+            <input name="submit" type="submit" value="Ajouter">
+            <a href="{{ url_for('admin_type_casque.show_type_article') }}"><button class="btn btn-secondary">annuler</button></a>
+        </label>
+    </form>
 
 {% endblock %}

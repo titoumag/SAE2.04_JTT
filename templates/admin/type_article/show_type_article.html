@@ -6,8 +6,37 @@
 
 {% block body %}
 <h3>Types d'article</h3>
-<a class="btn btn-outline-success" href="/admin/type-article/add">ajouter un type d'article</a>
+<a class="btn btn-outline-success" href="/admin/type_article/add">ajouter un type d'article</a>
 <br><br>
+<table class="table table-hover table-responsive">
+    <th style="width: 300px">libelle</th>
+    <th style="width: 300px">opérations</th>
+
+    {% if typeCasques | length == 0 %}
+        <tr>
+            <td>Aucun type de casque enregistré</td>
+            <td></td>
+        </tr>
+    {% else %}
+        {% for typeCasque in typeCasques %}
+            <tr>
+                <td>{{ typeCasque.libelle }}</td>
+                <td>
+                    <a class="img-fluid" href="/admin/type_article/edit/{{ typeCasque.id }}">
+                        <button class="btn btn-white float-right border-dark">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                    </a>
+                    <a class="img-fluid" href="/admin/type_article/delete/{{ typeCasque.id }}">
+                        <button class="btn btn-white float-right border-dark">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+</table>
 
 
 {% endblock %}

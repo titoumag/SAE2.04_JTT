@@ -26,7 +26,6 @@ def admin_commande_show():
           "ORDER BY etat_id,user_id,date_achat"
     mycursor.execute(sql)
     commandes = mycursor.fetchall()
-    print(commandes)
 
     return render_template('admin/commandes/show.html', commandes=commandes)
 
@@ -37,7 +36,7 @@ def admin_commande_valider(id):
     sql = '''UPDATE commande SET etat_id=2 WHERE commande.id=%s'''
     mycursor.execute(sql, id)
 
-    mycursor.execute("SELECT * FROM commande WHERE id = %s",(id))
+    mycursor.execute("SELECT * FROM commande WHERE id = %s", id)
     commande = mycursor.fetchone()
     mycursor.execute(
         "INSERT INTO mails(sender_id,receiver_id,objetMail,texteMail,dateEnvoi) VALUES (%s,%s,%s,%s,CURDATE())",
@@ -53,8 +52,8 @@ def admin_commande_details(id):
           "from ligne_commande " \
           "INNER JOIN casque on casque.id = casque_id " \
           "INNER JOIN modele on modele.id = casque.modele_id " \
-          "INNER JOIN couleur ON couleur.id=casque.couleur_id "\
-            "INNER JOIN taille ON taille.id=casque.taille_id  "\
+          "INNER JOIN couleur ON couleur.id=casque.couleur_id " \
+          "INNER JOIN taille ON taille.id=casque.taille_id  " \
           "where commande_id = %s "
     mycursor.execute(sql, id)
     articles = mycursor.fetchall()
