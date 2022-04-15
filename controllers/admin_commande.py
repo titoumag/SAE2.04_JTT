@@ -16,7 +16,7 @@ def admin_index():
 @admin_commande.route('/admin/commande/show', methods=['get', 'post'])
 def admin_commande_show():
     mycursor = get_db().cursor()
-    sql = "SELECT commande.id, username, SUM(quantite) as commande_quantite,SUM(quantite*prix_unit)*valeurAjoute+clic as prix_tot, etat_id, date_achat,etat.libelle " \
+    sql = "SELECT commande.id, username, SUM(quantite) as commande_quantite,(SUM(quantite*prix_unit)*valeurAjoute+clic)*(100-reduction)/100 as prix_tot, etat_id, date_achat,etat.libelle " \
           "FROM ligne_commande " \
           "INNER JOIN commande on commande.id=ligne_commande.commande_id " \
           "INNER JOIN user on user.id = commande.user_id " \
@@ -65,4 +65,13 @@ def admin_commande_details(id):
           "where commande.id = %s "
     mycursor.execute(sql, id)
     etat = mycursor.fetchone()
-    return render_template('admin/commandes/detail/show.html', articles=articles, etat=etat)
+
+    mycursor = get_db().cursor()
+    sql = ''' SELECT clic,reduction, libelle,valeurAjoute FROM commande
+            INNER JOIN type_livraison ON type_livraison.id=type_livraison_id
+            WHERE commande.id=%s
+            '''
+    mycursor.execute(sql,id)
+    suplement = mycursor.fetchone()
+    return render_template('admin/commandes/detail/show.html', articles=articles, etat=etat,supplement=suplement)
+

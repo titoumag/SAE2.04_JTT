@@ -26,6 +26,24 @@
                 <td>{{ article.prix_tot }}</td>
             </tr>
         {% endfor %}
+        <tr class="table-info">
+            <td>Nombre de clics : </td>
+            <td></td>
+            <td></td>
+            <td>{{supplement.clic}}</td>
+        </tr>
+        <tr class="table-info">
+            <td>Reduction : </td>
+            <td></td>
+            <td></td>
+            <td>{{supplement.reduction}}</td>
+        </tr>
+        <tr class="table-info">
+            <td>Type de livraison : </td>
+            <td></td>
+            <td>{{supplement.libelle}}</td>
+            <td>{{supplement.valeurAjoute}}</td>
+        </tr>
     </table>
     <div>Etat de la commande : {{ etat.libelle }}</div>
     <div class=""> </div>

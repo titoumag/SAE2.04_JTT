@@ -16,7 +16,7 @@
     <fieldset>
         <label for="objet">Objet</label><br>
         <input id="objet" type="text" name="objet" size="255" value="" required placeholder="Saisir l'objet du mail"><br>
-        <label for="receiver_id">Type</label><br>
+        <label for="receiver_id">Destinataire</label><br>
         <select  id="receiver_id" name="receiver_id" required>
             <option value="">Sélectionner le destinataire</option>
             {% for user in users %}
